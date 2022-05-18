@@ -96,7 +96,7 @@
 				this.moveSettings = this.moveSettings;
 			}
 			this.move();
-			VS.Event.removeTicker(this.ticker);
+			VS.Event.removeTicker(this.aPathfinderTicker);
 		}
 
 		prototypeDiob.constructor.prototype.goTo = function(pX, pY, pDiagonal = false, pExclude = []) {
@@ -110,7 +110,7 @@
 					this.easystar.setIterationsPerCalculation(1000);
 				}
 
-				if (!this.ticker) this.ticker = VS.newObject();
+				if (!this.aPathfinderTicker) this.aPathfinderTicker = VS.newObject();
 				
 				const currentTile = VS.Map.getLocByPos(Math.round(Math.max(this.xPos, 0) + this.xOrigin), Math.round(Math.max(this.yPos, 0) + this.yOrigin), this.mapName);
 
@@ -128,13 +128,12 @@
 					this.moveSettings = { 'stepSlide': true, 'stepGlide': true, 'stepSize': 2 };
 				}
 				
-				if (!this.ticker.onTick) {
-					this.ticker.onTick = (pT) => {
+				if (!this.aPathfinderTicker.onTick) {
+					this.aPathfinderTicker.onTick = (pT) => {
 						// if (VS.global.aPathfinder.paused) return;
 						self.easystar.calculate();
 						if ((self.aPathfinderPath && self.aPathfinderPath.length) || self.aPathfinderMoving) {
 							const coords = { 'x': Math.round(Math.max(self.xPos, 0) + self.xOrigin), 'y': Math.round(Math.max(self.yPos, 0) + self.yOrigin) };
-							const speed = VS.global.aPathfinder.clamp((self.moveSettings ? self.moveSettings.stepSize : 1) * ((codeType === 'local' || codeType === 'client') ? VS.Client.timeScale : 1), 0.01, 3);
 							if (!this.aPathfinderMoving) {
 								const node = self.aPathfinderPath.shift();
 								const formattedNode = { 'x': (node.x * TILE_SIZE.width) - TILE_SIZE.width / 2, 'y': (node.y * TILE_SIZE.height) - TILE_SIZE.height / 2 };
@@ -158,8 +157,8 @@
 								self.aPathfinderTrajectory.angle = VS.global.aPathfinder.getAngle(coords, formattedNode);
 								self.aPathfinderTrajectory.currentNode = formattedNode;
 								self.aPathfinderTrajectory.destNode = { 'x': node.x, 'y': node.y };
-								self.aPathfinderTrajectory.x = speed * Math.cos(self.aPathfinderTrajectory.angle);
-								self.aPathfinderTrajectory.y = speed * Math.sin(self.aPathfinderTrajectory.angle);
+								self.aPathfinderTrajectory.x = Math.cos(self.aPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
+								self.aPathfinderTrajectory.y = Math.sin(self.aPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
 								self.dir = VS.global.aPathfinder.getDirFromAngle(self.aPathfinderTrajectory.angle);
 								self.movePos(self.aPathfinderTrajectory.x, self.aPathfinderTrajectory.y);
 								self.aPathfinderMoving = true;
@@ -197,8 +196,8 @@
 									}
 								} else {
 									self.aPathfinderTrajectory.angle = VS.global.aPathfinder.getAngle(coords, self.aPathfinderTrajectory.currentNode);
-									self.aPathfinderTrajectory.x = speed * Math.cos(self.aPathfinderTrajectory.angle);
-									self.aPathfinderTrajectory.y = speed * Math.sin(self.aPathfinderTrajectory.angle);
+									self.aPathfinderTrajectory.x = Math.cos(self.aPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
+									self.aPathfinderTrajectory.y = Math.sin(self.aPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
 									self.dir = VS.global.aPathfinder.getDirFromAngle(-self.aPathfinderTrajectory.angle);
 									self.movePos(self.aPathfinderTrajectory.x, self.aPathfinderTrajectory.y);
 									self.aPathfinderMoving = true;
@@ -208,7 +207,7 @@
 					};
 				}
 
-				VS.Event.addTicker(this.ticker);
+				VS.Event.addTicker(this.aPathfinderTicker);
 
 				// Reset the walkable tiles
 				this.easystar.setAcceptableTiles([0]);
