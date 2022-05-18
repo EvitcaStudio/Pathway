@@ -142,8 +142,8 @@
 									const nextTile = VS.Map.getLocByPos(formattedNode.x, formattedNode.y, self.mapName);
 									const nextPathInTileVisual = VS.newDiob('Overlay');
 									nextPathInTileVisual.atlasName = '';
-									nextPathInTileVisual.width = 48;
-									nextPathInTileVisual.height = 48;
+									nextPathInTileVisual.width = TILE_SIZE.width;
+									nextPathInTileVisual.height = TILE_SIZE.height;
 									nextPathInTileVisual.color = { 'tint': 0xFFFFFF };
 									nextPathInTileVisual.alpha = 0.3;
 									nextPathInTileVisual.plane = 0;
@@ -252,8 +252,8 @@
 				if (VS.global.aPathfinder.debugging) {
 					const endTileInPathVisual = VS.newDiob('Overlay');
 					endTileInPathVisual.atlasName = '';
-					endTileInPathVisual.width = 48;
-					endTileInPathVisual.height = 48;
+					endTileInPathVisual.width = TILE_SIZE.width;
+					endTileInPathVisual.height = TILE_SIZE.height;
 					endTileInPathVisual.color = { 'tint': 0x111111 };
 					endTileInPathVisual.alpha = 0.7;
 					endTileInPathVisual.plane = 0;
