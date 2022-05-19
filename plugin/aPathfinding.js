@@ -79,13 +79,12 @@
 			}
 
 			if (!this.aPathfinderTrajectory) {
-				this.aPathfinderTrajectory = { 'angle': 0, 'x': 0, 'y': 0, 'currentNode': null, 'destNode': null }
+				this.aPathfinderTrajectory = { 'angle': 0, 'x': 0, 'y': 0, 'currentNodePos': null }
 			} else {
 				this.aPathfinderTrajectory.x = 0;
 				this.aPathfinderTrajectory.y = 0;
 				this.aPathfinderTrajectory.angle = 0;
-				this.aPathfinderTrajectory.currentNode = null;
-				this.aPathfinderTrajectory.destNode = null;
+				this.aPathfinderTrajectory.currentNodePos = null;
 			}
 
 			this.aPathfinderPath = [];
@@ -136,10 +135,10 @@
 							const coords = { 'x': Math.round(Math.max(self.xPos, 0) + self.xOrigin), 'y': Math.round(Math.max(self.yPos, 0) + self.yOrigin) };
 							if (!this.aPathfinderMoving) {
 								const node = self.aPathfinderPath.shift();
-								const formattedNode = { 'x': (node.x * TILE_SIZE.width) - TILE_SIZE.width / 2, 'y': (node.y * TILE_SIZE.height) - TILE_SIZE.height / 2 };
+								const nodePos = { 'x': (node.x * TILE_SIZE.width) - TILE_SIZE.width / 2, 'y': (node.y * TILE_SIZE.height) - TILE_SIZE.height / 2 };
 								// Show the next tile in the path to move to
 								if (VS.global.aPathfinder.debugging) {
-									const nextTile = VS.Map.getLocByPos(formattedNode.x, formattedNode.y, self.mapName);
+									const nextTile = VS.Map.getLocByPos(nodePos.x, nodePos.y, self.mapName);
 									const nextPathInTileVisual = VS.newDiob('Overlay');
 									nextPathInTileVisual.atlasName = '';
 									nextPathInTileVisual.width = TILE_SIZE.width;
@@ -154,12 +153,11 @@
 									}, debuggerDuration);
 								}
 
-								self.aPathfinderTrajectory.angle = VS.global.aPathfinder.getAngle(coords, formattedNode);
-								self.aPathfinderTrajectory.currentNode = formattedNode;
-								self.aPathfinderTrajectory.destNode = { 'x': node.x, 'y': node.y };
+								self.aPathfinderTrajectory.angle = VS.global.aPathfinder.getAngle(coords, nodePos);
+								self.aPathfinderTrajectory.currentNodePos = nodePos;
 								self.aPathfinderTrajectory.x = Math.cos(self.aPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
 								self.aPathfinderTrajectory.y = Math.sin(self.aPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
-								self.dir = VS.global.aPathfinder.getDirFromAngle(self.aPathfinderTrajectory.angle);
+								self.dir = VS.global.aPathfinder.getDirFromAngle(-self.aPathfinderTrajectory.angle);
 								self.movePos(self.aPathfinderTrajectory.x, self.aPathfinderTrajectory.y);
 								self.aPathfinderMoving = true;
 
@@ -182,11 +180,9 @@
 									}, debuggerDuration);
 								}
 							} else {
-								const destTile = VS.Map.getLoc(self.aPathfinderTrajectory.destNode.x, self.aPathfinderTrajectory.destNode.y, self.mapName);
-								const distance = Math.round(VS.global.aPathfinder.getDistance(coords.x, coords.y, destTile.xPos + TILE_SIZE.width / 2, destTile.yPos + TILE_SIZE.height / 2));
-								if (distance <= 10) {
+								const distance = Math.round(VS.global.aPathfinder.getDistance(coords, self.aPathfinderTrajectory.currentNodePos));
+								if (distance <= (self.moveSettings.stepSize * 4)) {
 									self.aPathfinderMoving = false;
-								
 									if (!self.aPathfinderPath.length) {
 										if (self.onPathComplete && typeof(self.onPathComplete) === 'function') {
 											// Passes the ID so that the developer can use it for tracking
@@ -195,7 +191,7 @@
 										self.cancelMove();
 									}
 								} else {
-									self.aPathfinderTrajectory.angle = VS.global.aPathfinder.getAngle(coords, self.aPathfinderTrajectory.currentNode);
+									self.aPathfinderTrajectory.angle = VS.global.aPathfinder.getAngle(coords, self.aPathfinderTrajectory.currentNodePos);
 									self.aPathfinderTrajectory.x = Math.cos(self.aPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
 									self.aPathfinderTrajectory.y = Math.sin(self.aPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
 									self.dir = VS.global.aPathfinder.getDirFromAngle(-self.aPathfinderTrajectory.angle);
@@ -323,15 +319,15 @@
 			return Math.atan2(y, x) - Math.PI;
 		}
 
-		aPathfinder.getDistance = function getDistance(x1, y1, x2, y2){
-			let y = x2 - x1;
-			let x = y2 - y1;
+		aPathfinder.getDistance = (pStartPoint, pEndPoint) => {
+			const y = (pStartPoint.y - pEndPoint.y);
+			const x = (pStartPoint.x - pEndPoint.x);
 			return Math.sqrt(x * x + y * y);
 		}
 
 		aPathfinder.getDirFromAngle = function (pAngle) {
 			const degree = Math.floor(((pAngle * (180 / Math.PI)) / 45) + 0.5);
-			const compassDirections = ['east', 'southeast', 'north', 'southwest', 'west', 'northwest', 'south', 'northeast'];
+			const compassDirections = ['east', 'northeast', 'north', 'northwest', 'west', 'southwest', 'south', 'southeast'];
 			return compassDirections[(degree % 8)];
 		}
 
