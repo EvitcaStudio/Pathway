@@ -100,6 +100,7 @@
 
 		prototypeDiob.constructor.prototype.goTo = function(pX, pY, pDiagonal = false, pExclude = []) {
 			if (this && this.mapName) {
+				const TILE_SIZE = VS.World.getTileSize();
 				const mapSize = VS.Map.getMapSize(this.mapName);
 				const debuggerDuration = 3000;
 				const self = this;
@@ -181,7 +182,7 @@
 								}
 							} else {
 								const distance = Math.round(VS.global.aPathfinder.getDistance(coords, self.aPathfinderTrajectory.currentNodePos));
-								if (distance <= (self.moveSettings.stepSize * 4)) {
+								if (distance <= 10) {
 									self.aPathfinderMoving = false;
 									if (!self.aPathfinderPath.length) {
 										if (self.onPathComplete && typeof(self.onPathComplete) === 'function') {
