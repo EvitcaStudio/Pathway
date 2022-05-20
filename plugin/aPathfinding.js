@@ -44,27 +44,13 @@
 				VS.Client.timeScale = 1;
 			}
 
-			if (!aPathfinder.onWindowBlurSet) {
-				aPathfinder._onWindowBlur = VS.Client.onWindowBlur;
-				aPathfinder.onWindowBlurSet = true;
-				VS.Client.onWindowBlur = function() {
-					this.aPathfinder.paused = true;
-					if (this.aPathfinder._onWindowBlur) {
-						this.aPathfinder._onWindowBlur.apply(this, arguments);
-					}
-				}
-			}
+			VS.global.aListener.addEventListener(VS.Client, 'onWindowBlur', function() {
+				this.aPathfinder.paused = true;
+			});
 
-			if (!aPathfinder.onWindowFocusSet) {
-				aPathfinder._onWindowFocus = VS.Client.onWindowFocus;
-				aPathfinder.onWindowFocusSet = true;
-				VS.Client.onWindowFocus = function() {
-					this.aPathfinder.paused = false;
-					if (this.aPathfinder._onWindowFocus) {
-						this.aPathfinder._onWindowFocus.apply(this, arguments);
-					}
-				}
-			}
+			VS.global.aListener.addEventListener(VS.Client, 'onWindowFocus', function() {
+				this.aPathfinder.paused = false;
+			});
 		}
 
 		VS.global.aPathfinder = aPathfinder;
