@@ -65,28 +65,39 @@
 			}
 
 			if (!this.aPathfinderTrajectory) {
-				this.aPathfinderTrajectory = { 'angle': 0, 'x': 0, 'y': 0, 'currentNodePos': null }
+				this.aPathfinderTrajectory = { angle: 0, x: 0, y: 0, nextNodePos: null, lastTime: 0, deltaTime: 0, elapsedMS: 0 };
 			} else {
 				this.aPathfinderTrajectory.x = 0;
 				this.aPathfinderTrajectory.y = 0;
 				this.aPathfinderTrajectory.angle = 0;
-				this.aPathfinderTrajectory.currentNodePos = null;
+				this.aPathfinderTrajectory.lastTime = 0;
+				this.aPathfinderTrajectory.deltaTime = 0;
+				this.aPathfinderTrajectory.elapsedMS = 0;
+				this.aPathfinderTrajectory.nextNodePos = null;
 			}
 
 			this.aPathfinderPath = [];
 			this.aPathfinderPathReversed = [];
 			this.aPathfinderMoving = false;
+
 			if (this.moveSettings) {
 				this.moveSettings.stepSlide = false;
 				this.moveSettings = this.moveSettings;
 			}
+
+			// Restore the original stepSize
+			if (this.aPathfinderOriginalStepSize) this.moveSettings.stepSize = this.aPathfinderOriginalStepSize;
+
 			this.move();
-			VS.Event.removeTicker(this.aPathfinderTicker);
+			clearInterval(this.aPathfinderTrajectory.interval);
 		}
 
 		prototypeDiob.constructor.prototype.goTo = function(pX, pY, pDiagonal = false, pExclude = []) {
-			if (this && this.mapName) {
+			if (this && this.mapName && this.xPos !== 10000 && this.yPos !== 10000) {
 				const TILE_SIZE = VS.World.getTileSize();
+				const TICK_FPS = VS.Client.maxFPS ? (1000 / VS.Client.maxFPS) : 16.67;
+				const MAX_ELAPSED_MS = TICK_FPS * 4;
+				const TIME_SCALE = (VS.Client.timeScale ? VS.Client.timeScale : 1);
 				const mapSize = VS.Map.getMapSize(this.mapName);
 				const debuggerDuration = 3000;
 				const self = this;
@@ -95,10 +106,8 @@
 					this.easystar = new EasyStar.js();
 					this.easystar.setIterationsPerCalculation(1000);
 				}
-
-				if (!this.aPathfinderTicker) this.aPathfinderTicker = VS.newObject();
 				
-				const currentTile = VS.Map.getLocByPos(Math.round(Math.max(this.xPos, 0) + this.xOrigin), Math.round(Math.max(this.yPos, 0) + this.yOrigin), this.mapName);
+				const currentTile = VS.Map.getLocByPos(Math.round(this.xPos + this.xOrigin), Math.round(this.yPos + this.yOrigin), this.mapName);
 
 				if (!pExclude.includes(currentTile)) {
 					pExclude.push(currentTile);
@@ -111,86 +120,105 @@
 					this.moveSettings.stepGlide = true;
 					this.moveSettings = this.moveSettings;
 				} else {
-					this.moveSettings = { 'stepSlide': true, 'stepGlide': true, 'stepSize': 2 };
+					this.moveSettings = { stepSlide: true, stepGlide: true, stepSize: 2 };
 				}
-				
-				if (!this.aPathfinderTicker.onTick) {
-					this.aPathfinderTicker.onTick = (pT) => {
-						// if (VS.global.aPathfinder.paused) return;
-						self.easystar.calculate();
-						if ((self.aPathfinderPath && self.aPathfinderPath.length) || self.aPathfinderMoving) {
-							const coords = { 'x': Math.round(Math.max(self.xPos, 0) + self.xOrigin), 'y': Math.round(Math.max(self.yPos, 0) + self.yOrigin) };
-							if (!this.aPathfinderMoving) {
-								const node = self.aPathfinderPath.shift();
-								const nodePos = { 'x': (node.x * TILE_SIZE.width) - TILE_SIZE.width / 2, 'y': (node.y * TILE_SIZE.height) - TILE_SIZE.height / 2 };
-								// Show the next tile in the path to move to
-								if (VS.global.aPathfinder.debugging) {
-									const nextTile = VS.Map.getLocByPos(nodePos.x, nodePos.y, self.mapName);
-									const nextPathInTileVisual = VS.newDiob('Overlay');
-									nextPathInTileVisual.atlasName = '';
-									nextPathInTileVisual.width = TILE_SIZE.width;
-									nextPathInTileVisual.height = TILE_SIZE.height;
-									nextPathInTileVisual.color = { 'tint': 0xFFFFFF };
-									nextPathInTileVisual.alpha = 0.3;
-									nextPathInTileVisual.plane = 0;
-									nextPathInTileVisual.setTransition({ 'alpha': 0 }, -1, debuggerDuration);
-									nextTile.addOverlay(nextPathInTileVisual);
-									setTimeout(() => {
-										nextTile.removeOverlay(nextPathInTileVisual);
-									}, debuggerDuration);
-								}
 
-								self.aPathfinderTrajectory.angle = VS.global.aPathfinder.getAngle(coords, nodePos);
-								self.aPathfinderTrajectory.currentNodePos = nodePos;
+				// Store the original stepsize because it will be changed via delta time calculations, and we will reset it after the path is done
+				this.aPathfinderOriginalStepSize = this.moveSettings.stepSize;
+				
+				this.aPathfinderTrajectory.interval = setInterval(() => {
+					// if (VS.global.aPathfinder.paused) return;
+					const now = Date.now();
+					if (now > this.aPathfinderTrajectory.lastTime) {
+						this.aPathfinderTrajectory.elapsedMS = now - this.aPathfinderTrajectory.lastTime;
+						if (this.aPathfinderTrajectory.elapsedMS > MAX_ELAPSED_MS) {
+							// check here, if warnings are showing up about setInterval taking too long
+							this.aPathfinderTrajectory.elapsedMS = MAX_ELAPSED_MS;
+						}
+
+						this.aPathfinderTrajectory.deltaTime = (this.aPathfinderTrajectory.elapsedMS / TICK_FPS) * TIME_SCALE;
+						this.aPathfinderTrajectory.elapsedMS *= TIME_SCALE;
+					}
+
+					// Get the stepSize multiplied by delta time to get the correct size movement
+					this.moveSettings.stepSize = this.aPathfinderOriginalStepSize * this.aPathfinderTrajectory.deltaTime;
+
+					self.easystar.calculate();
+					if ((self.aPathfinderPath && self.aPathfinderPath.length) || self.aPathfinderMoving) {
+						const coords = { x: Math.round(self.xPos + self.xOrigin), y: Math.round(self.yPos + self.yOrigin) };
+						if (!this.aPathfinderMoving) {
+							const node = self.aPathfinderPath.shift();
+							const nodePos = { x: (node.x * TILE_SIZE.width) - TILE_SIZE.width / 2, y: (node.y * TILE_SIZE.height) - TILE_SIZE.height / 2 };
+							// Show the next tile in the path to move to
+							if (VS.global.aPathfinder.debugging) {
+								const nextTile = VS.Map.getLocByPos(nodePos.x, nodePos.y, self.mapName);
+								const nextPathInTileVisual = VS.newDiob('Overlay');
+								nextPathInTileVisual.atlasName = '';
+								nextPathInTileVisual.width = TILE_SIZE.width;
+								nextPathInTileVisual.height = TILE_SIZE.height;
+								nextPathInTileVisual.color = { tint: 0xFFFFFF };
+								nextPathInTileVisual.alpha = 0.3;
+								nextPathInTileVisual.plane = 0;
+								nextPathInTileVisual.mouseOpacity = 0;
+								nextPathInTileVisual.touchOpacity = 0;
+								nextPathInTileVisual.setTransition({ alpha: 0 }, -1, debuggerDuration);
+								nextTile.addOverlay(nextPathInTileVisual);
+								setTimeout(() => {
+									nextTile.removeOverlay(nextPathInTileVisual);
+								}, debuggerDuration);
+							}
+
+							self.aPathfinderTrajectory.angle = VS.global.aPathfinder.getAngle(coords, nodePos);
+							self.aPathfinderTrajectory.nextNodePos = nodePos;
+							self.aPathfinderTrajectory.x = Math.cos(self.aPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
+							self.aPathfinderTrajectory.y = Math.sin(self.aPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
+							self.dir = VS.global.aPathfinder.getDirFromAngle(-self.aPathfinderTrajectory.angle);
+							self.movePos(self.aPathfinderTrajectory.x, self.aPathfinderTrajectory.y);
+							self.aPathfinderMoving = true;
+
+							// Show the angle to move in
+							if (VS.global.aPathfinder.debugging) {
+								const pathAngle = VS.newDiob();
+								pathAngle.atlasName = '';
+								pathAngle.color = { tint: 0xFFFFFF };
+								pathAngle.width = TILE_SIZE.width;
+								pathAngle.height = 5;
+								pathAngle.anchor = 0;
+								pathAngle.mouseOpacity = 0;
+								pathAngle.touchOpacity = 0;
+								pathAngle.density = 0;
+								pathAngle.angle = -self.aPathfinderTrajectory.angle;
+								pathAngle.setPos(coords.x, coords.y, self.mapName);
+								pathAngle.setTransition({ alpha: 0 }, -1, debuggerDuration);
+								setTimeout(() => {
+									VS.delDiob(pathAngle);
+								}, debuggerDuration);
+							}
+						} else {
+							const distance = Math.round(VS.global.aPathfinder.getDistance(coords, self.aPathfinderTrajectory.nextNodePos));
+							// Padding is in the event that the distance doesn't exactly match. This gives it room to not fail.
+							const padding = 0;
+							if (distance <= (self.aPathfinderOriginalStepSize + padding)) {
+								self.aPathfinderMoving = false;
+								if (!self.aPathfinderPath.length) {
+									if (self.onPathComplete && typeof(self.onPathComplete) === 'function') {
+										// Passes the ID so that the developer can use it for tracking
+										self.onPathComplete(self.aPathfinderID);
+									}
+									self.cancelMove();
+								}
+							} else {
+								self.aPathfinderTrajectory.angle = VS.global.aPathfinder.getAngle(coords, self.aPathfinderTrajectory.nextNodePos);
 								self.aPathfinderTrajectory.x = Math.cos(self.aPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
 								self.aPathfinderTrajectory.y = Math.sin(self.aPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
 								self.dir = VS.global.aPathfinder.getDirFromAngle(-self.aPathfinderTrajectory.angle);
 								self.movePos(self.aPathfinderTrajectory.x, self.aPathfinderTrajectory.y);
 								self.aPathfinderMoving = true;
-
-								// Show the angle to move in
-								if (VS.global.aPathfinder.debugging) {
-									const pathAngle = VS.newDiob();
-									pathAngle.atlasName = '';
-									pathAngle.color = { 'tint': 0xFFFFFF };
-									pathAngle.width = TILE_SIZE.width;
-									pathAngle.height = 5;
-									pathAngle.anchor = 0;
-									pathAngle.mouseOpacity = 0;
-									pathAngle.touchOpacity = 0;
-									pathAngle.density = 0;
-									pathAngle.angle = -self.aPathfinderTrajectory.angle;
-									pathAngle.setPos(coords.x, coords.y, self.mapName);
-									pathAngle.setTransition({ 'alpha': 0 }, -1, debuggerDuration);
-									setTimeout(() => {
-										VS.delDiob(pathAngle);
-									}, debuggerDuration);
-								}
-							} else {
-								const distance = Math.round(VS.global.aPathfinder.getDistance(coords, self.aPathfinderTrajectory.currentNodePos));
-								if (distance <= TILE_SIZE.width / 2) {
-									self.aPathfinderMoving = false;
-									if (!self.aPathfinderPath.length) {
-										if (self.onPathComplete && typeof(self.onPathComplete) === 'function') {
-											// Passes the ID so that the developer can use it for tracking
-											self.onPathComplete(self.aPathfinderID);
-										}
-										self.cancelMove();
-									}
-								} else {
-									self.aPathfinderTrajectory.angle = VS.global.aPathfinder.getAngle(coords, self.aPathfinderTrajectory.currentNodePos);
-									self.aPathfinderTrajectory.x = Math.cos(self.aPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
-									self.aPathfinderTrajectory.y = Math.sin(self.aPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
-									self.dir = VS.global.aPathfinder.getDirFromAngle(-self.aPathfinderTrajectory.angle);
-									self.movePos(self.aPathfinderTrajectory.x, self.aPathfinderTrajectory.y);
-									self.aPathfinderMoving = true;
-								}
 							}
 						}
-					};
-				}
-
-				VS.Event.addTicker(this.aPathfinderTicker);
+					}
+					this.aPathfinderTrajectory.lastTime = Date.now();
+				}, 16);
 
 				// Reset the walkable tiles
 				this.easystar.setAcceptableTiles([0]);
@@ -223,8 +251,8 @@
 				// Assign what tiles can be used
 				this.easystar.setAcceptableTiles(acceptedTiles);
 
-				const startNodeX = Math.round(Math.max(this.xPos, 0) + this.xOrigin);
-				const startNodeY = Math.round(Math.max(this.yPos, 0) + this.yOrigin);
+				const startNodeX = Math.round(this.xPos + this.xOrigin);
+				const startNodeY = Math.round(this.yPos + this.yOrigin);
 				const endNodeX = VS.global.aPathfinder.clamp(Math.round(VS.global.aPathfinder.clamp(pX - 1, 0, mapSize.x)) * TILE_SIZE.width, 0, mapSize.xPos - TILE_SIZE.width);
 				const endNodeY = VS.global.aPathfinder.clamp(Math.round(VS.global.aPathfinder.clamp(pY - 1, 0, mapSize.y)) * TILE_SIZE.height, 0, mapSize.yPos - TILE_SIZE.height);
 				const startTile = VS.Map.getLocByPos(startNodeX, startNodeY, this.mapName);
@@ -237,10 +265,12 @@
 					endTileInPathVisual.atlasName = '';
 					endTileInPathVisual.width = TILE_SIZE.width;
 					endTileInPathVisual.height = TILE_SIZE.height;
-					endTileInPathVisual.color = { 'tint': 0x111111 };
+					endTileInPathVisual.color = { tint: 0x111111 };
 					endTileInPathVisual.alpha = 0.7;
 					endTileInPathVisual.plane = 0;
-					endTileInPathVisual.setTransition({ 'alpha': 0 }, -1, debuggerDuration);
+					endTileInPathVisual.touchOpacity = 0;
+					endTileInPathVisual.touchOpacity = 0;
+					endTileInPathVisual.setTransition({ alpha: 0 }, -1, debuggerDuration);
 					endTile.addOverlay(endTileInPathVisual);
 					setTimeout(() => {
 						endTile.removeOverlay(endTileInPathVisual);
