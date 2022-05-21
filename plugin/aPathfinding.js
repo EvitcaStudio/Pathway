@@ -168,7 +168,7 @@
 								}
 							} else {
 								const distance = Math.round(VS.global.aPathfinder.getDistance(coords, self.aPathfinderTrajectory.currentNodePos));
-								if (distance <= 10) {
+								if (distance <= TILE_SIZE.width / 2) {
 									self.aPathfinderMoving = false;
 									if (!self.aPathfinderPath.length) {
 										if (self.onPathComplete && typeof(self.onPathComplete) === 'function') {
