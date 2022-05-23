@@ -43,14 +43,6 @@
 			if (VS.Client.timeScale === undefined) {
 				VS.Client.timeScale = 1;
 			}
-
-			VS.global.aListener.addEventListener(VS.Client, 'onWindowBlur', function() {
-				this.aPathfinder.paused = true;
-			});
-
-			VS.global.aListener.addEventListener(VS.Client, 'onWindowFocus', function() {
-				this.aPathfinder.paused = false;
-			});
 		}
 
 		VS.global.aPathfinder = aPathfinder;
@@ -92,25 +84,31 @@
 			clearInterval(this.aPathfinderTrajectory.interval);
 		}
 
-		prototypeDiob.constructor.prototype.goTo = function(pX, pY, pDiagonal = false, pExclude = []) {
+		prototypeDiob.constructor.prototype.goTo = function(pX, pY, pDiagonal = false, pNearest = false, pExclude = []) {
+			// pNearest will only search the closest MAX_NEAREST_TILE_SEARCH tiles or so to find a near tile. If no near tile is found, no path is returned.
 			if (this && this.mapName && this.xPos !== 10000 && this.yPos !== 10000) {
 				const TILE_SIZE = VS.World.getTileSize();
 				const TICK_FPS = VS.Client.maxFPS ? (1000 / VS.Client.maxFPS) : 16.67;
 				const MAX_ELAPSED_MS = TICK_FPS * 4;
 				const TIME_SCALE = (VS.Client.timeScale ? VS.Client.timeScale : 1);
+				const MAX_NEAREST_TILE_SEARCH = 6;
+				const STUCK_MAX_COUNTER = 100;
 				const mapSize = VS.Map.getMapSize(this.mapName);
 				const debuggerDuration = 3000;
 				const self = this;
+				let stuckCounter = 0;
+				let storedCoords = { x: 0, y: 0 };
 
 				if (!this.easystar) {
 					this.easystar = new EasyStar.js();
 					this.easystar.setIterationsPerCalculation(1000);
 				}
 				
-				const currentTile = VS.Map.getLocByPos(Math.round(this.xPos + this.xOrigin), Math.round(this.yPos + this.yOrigin), this.mapName);
+				const currentTile = VS.Map.getLocByPos(Math.round(this.xPos + this.xOrigin + this.width / 2), Math.round(this.yPos + this.yOrigin + this.height / 2), this.mapName);
 
-				if (!pExclude.includes(currentTile)) {
+				if (!pExclude.includes(currentTile)) {	
 					pExclude.push(currentTile);
+					pExclude.push(this);
 				}
 
 				this.cancelMove();
@@ -127,7 +125,6 @@
 				this.aPathfinderOriginalStepSize = this.moveSettings.stepSize;
 				
 				this.aPathfinderTrajectory.interval = setInterval(() => {
-					// if (VS.global.aPathfinder.paused) return;
 					const now = Date.now();
 					if (now > this.aPathfinderTrajectory.lastTime) {
 						this.aPathfinderTrajectory.elapsedMS = now - this.aPathfinderTrajectory.lastTime;
@@ -145,7 +142,7 @@
 
 					self.easystar.calculate();
 					if ((self.aPathfinderPath && self.aPathfinderPath.length) || self.aPathfinderMoving) {
-						const coords = { x: Math.round(self.xPos + self.xOrigin), y: Math.round(self.yPos + self.yOrigin) };
+						const coords = { x: Math.round(self.xPos + self.xOrigin + self.width / 2), y: Math.round(self.yPos + self.yOrigin + self.height / 2) };
 						if (!this.aPathfinderMoving) {
 							const node = self.aPathfinderPath.shift();
 							const nodePos = { x: (node.x * TILE_SIZE.width) - TILE_SIZE.width / 2, y: (node.y * TILE_SIZE.height) - TILE_SIZE.height / 2 };
@@ -156,8 +153,8 @@
 								nextPathInTileVisual.atlasName = '';
 								nextPathInTileVisual.width = TILE_SIZE.width;
 								nextPathInTileVisual.height = TILE_SIZE.height;
-								nextPathInTileVisual.color = { tint: 0xFFFFFF };
-								nextPathInTileVisual.alpha = 0.3;
+								nextPathInTileVisual.color = { tint: 0x005aff };
+								nextPathInTileVisual.alpha = 0.8;
 								nextPathInTileVisual.plane = 0;
 								nextPathInTileVisual.mouseOpacity = 0;
 								nextPathInTileVisual.touchOpacity = 0;
@@ -184,6 +181,7 @@
 								pathAngle.width = TILE_SIZE.width;
 								pathAngle.height = 5;
 								pathAngle.anchor = 0;
+								pathAngle.plane = 0;
 								pathAngle.mouseOpacity = 0;
 								pathAngle.touchOpacity = 0;
 								pathAngle.density = 0;
@@ -196,10 +194,9 @@
 							}
 						} else {
 							const distance = Math.round(VS.global.aPathfinder.getDistance(coords, self.aPathfinderTrajectory.nextNodePos));
-							// Padding is in the event that the distance doesn't exactly match. This gives it room to not fail.
-							const padding = 0;
-							if (distance <= (self.aPathfinderOriginalStepSize + padding)) {
+							if (distance <= self.aPathfinderOriginalStepSize) {
 								self.aPathfinderMoving = false;
+								stuckCounter = 0;
 								if (!self.aPathfinderPath.length) {
 									if (self.onPathComplete && typeof(self.onPathComplete) === 'function') {
 										// Passes the ID so that the developer can use it for tracking
@@ -216,6 +213,17 @@
 								self.aPathfinderMoving = true;
 							}
 						}
+						if (coords.x === storedCoords.x && coords.y === storedCoords.y) {
+							stuckCounter++;
+							if (stuckCounter >= STUCK_MAX_COUNTER) {
+								if (self.onPathStuck && typeof(self.onPathStuck) === 'function') {
+									self.cancelMove();
+									self.onPathStuck();
+									return;
+								}
+							}
+						}
+						storedCoords = coords;
 					}
 					this.aPathfinderTrajectory.lastTime = Date.now();
 				}, 16);
@@ -251,40 +259,263 @@
 				// Assign what tiles can be used
 				this.easystar.setAcceptableTiles(acceptedTiles);
 
-				const startNodeX = Math.round(this.xPos + this.xOrigin);
-				const startNodeY = Math.round(this.yPos + this.yOrigin);
-				const endNodeX = VS.global.aPathfinder.clamp(Math.round(VS.global.aPathfinder.clamp(pX - 1, 0, mapSize.x)) * TILE_SIZE.width, 0, mapSize.xPos - TILE_SIZE.width);
-				const endNodeY = VS.global.aPathfinder.clamp(Math.round(VS.global.aPathfinder.clamp(pY - 1, 0, mapSize.y)) * TILE_SIZE.height, 0, mapSize.yPos - TILE_SIZE.height);
+				const startNodeX = Math.round(this.xPos + this.xOrigin + this.width / 2);
+				const startNodeY = Math.round(this.yPos + this.yOrigin + this.height / 2);
+				const endNodeX = VS.global.aPathfinder.clamp(Math.round(VS.global.aPathfinder.clamp(pX - 1, 0, mapSize.x)) * TILE_SIZE.width + TILE_SIZE.width / 2, 0, mapSize.xPos - TILE_SIZE.width);
+				const endNodeY = VS.global.aPathfinder.clamp(Math.round(VS.global.aPathfinder.clamp(pY - 1, 0, mapSize.y)) * TILE_SIZE.height + TILE_SIZE.height / 2, 0, mapSize.yPos - TILE_SIZE.height);
 				const startTile = VS.Map.getLocByPos(startNodeX, startNodeY, this.mapName);
+				// This end tile is based on the position you bounds are on (this can be a different tile)
 				const endTile = VS.Map.getLocByPos(endNodeX, endNodeY, this.mapName);
-				const startNode = VS.global.aPathfinder.tileToNode(startTile);
-				const endNode = VS.global.aPathfinder.tileToNode(endTile);
+				let startNode = VS.global.aPathfinder.tileToNode(startTile);
+				let endNode = VS.global.aPathfinder.tileToNode(endTile);
 				
 				if (VS.global.aPathfinder.debugging) {
-					const endTileInPathVisual = VS.newDiob('Overlay');
-					endTileInPathVisual.atlasName = '';
-					endTileInPathVisual.width = TILE_SIZE.width;
-					endTileInPathVisual.height = TILE_SIZE.height;
-					endTileInPathVisual.color = { tint: 0x111111 };
-					endTileInPathVisual.alpha = 0.7;
-					endTileInPathVisual.plane = 0;
-					endTileInPathVisual.touchOpacity = 0;
-					endTileInPathVisual.touchOpacity = 0;
-					endTileInPathVisual.setTransition({ alpha: 0 }, -1, debuggerDuration);
-					endTile.addOverlay(endTileInPathVisual);
+					const endTileOverlay = VS.newDiob('Overlay');
+					endTileOverlay.atlasName = '';
+					endTileOverlay.width = TILE_SIZE.width;
+					endTileOverlay.height = TILE_SIZE.height;
+					endTileOverlay.color = { tint: 0xFFFFFF };
+					endTileOverlay.alpha = 0.7;
+					endTileOverlay.plane = 0;
+					endTileOverlay.touchOpacity = 0;
+					endTileOverlay.touchOpacity = 0;
+					endTileOverlay.setTransition({ alpha: 0 }, -1, debuggerDuration);
+					endTile.addOverlay(endTileOverlay);
 					setTimeout(() => {
-						endTile.removeOverlay(endTileInPathVisual);
+						endTile.removeOverlay(endTileOverlay);
 					}, debuggerDuration);
+				}
+
+				const getNearestNode = function(pNode, pNodeX, pNodeY, pBlockingDirections = { left: false, right: false, up: false, down: false }, pStart) {
+					if (pNode) {
+						let nearestTiles = {};
+						let rejectedTiles = {};
+						let nodeToUse;
+						for (let i = 1; i < MAX_NEAREST_TILE_SEARCH + 1; i++) {
+							const tileLeft = VS.Map.getLocByPos(pNodeX - (i * TILE_SIZE.width / 2), pNodeY, self.mapName);
+							const tileRight = VS.Map.getLocByPos(pNodeX + (i * TILE_SIZE.width / 2), pNodeY, self.mapName);
+							const tileUp = VS.Map.getLocByPos(pNodeX, pNodeY - (i * TILE_SIZE.height / 2), self.mapName);
+							const tileDown = VS.Map.getLocByPos(pNodeX, pNodeY + (i * TILE_SIZE.height / 2), self.mapName);
+
+							if (tileLeft && !pBlockingDirections['left'] && !(((tileLeft.density && !pExclude.includes(tileLeft)) || tileLeft.getContents().filter((pElement) => {
+								// Only use this if pStart is true
+								const withinYAxis = !pStart ? true : VS.global.aPathfinder.within(self.yPos + self.yOrigin + self.height, pElement.yPos + pElement.yOrigin, pElement.yOrigin + pElement.height);
+								if (pElement.density && !pExclude.includes(pElement) && withinYAxis) {
+									return pElement.density;
+								}
+								}).length)))
+							{
+								nearestTiles[tileLeft.id] = tileLeft;
+							} else {
+								rejectedTiles[tileLeft.id] = tileLeft;
+								// Only block this direction if it's a direct route from the current tile
+								if (i <= 1) pBlockingDirections['left'] = true;
+							}
+
+							if (tileRight && !pBlockingDirections['right'] && !(((tileRight.density && !pExclude.includes(tileRight)) || tileRight.getContents().filter((pElement) => {
+								// Only use this if pStart is true
+								const withinYAxis = !pStart ? true : VS.global.aPathfinder.within(self.yPos + self.yOrigin + self.height, pElement.yPos + pElement.yOrigin, pElement.yOrigin + pElement.height);
+								if (pElement.density && !pExclude.includes(pElement) && withinYAxis) {
+									return pElement.density;
+								}
+								}).length)))
+							{
+								nearestTiles[tileRight.id] = tileRight;
+							} else {
+								rejectedTiles[tileRight.id] = tileRight;
+								// Only block this direction if it's a direct route from the current tile
+								if (i <= 1) pBlockingDirections['right'] = true;
+							}
+
+							if (tileUp && !pBlockingDirections['up'] && !(((tileUp.density && !pExclude.includes(tileUp)) || tileUp.getContents().filter((pElement) => {
+								// Only use this if pStart is true
+								const withinXAxis = !pStart ? true : VS.global.aPathfinder.within(self.xPos + self.xOrigin + self.width, pElement.xPos + pElement.xOrigin, pElement.xOrigin + pElement.width);
+								if (pElement.density && !pExclude.includes(pElement) && withinXAxis) {
+									return pElement.density;
+								}
+								}).length))) 
+							{
+								nearestTiles[tileUp.id] = tileUp;
+							} else {
+								rejectedTiles[tileUp.id] = tileUp;
+								// Only block this direction if it's a direct route from the current tile
+								if (i <= 1) pBlockingDirections['up'] = true;
+							}
+
+							if (tileDown && !pBlockingDirections['down'] && !(((tileDown.density && !pExclude.includes(tileDown)) || tileDown.getContents().filter((pElement) => {
+								// Only use this if pStart is true
+								const withinXAxis = !pStart ? true : VS.global.aPathfinder.within(self.xPos + self.xOrigin + self.width, pElement.xPos + pElement.xOrigin, pElement.xOrigin + pElement.width);
+								if (pElement.density && !pExclude.includes(pElement) && withinXAxis) {
+									return pElement.density;
+								}
+								}).length))) 
+							{
+								nearestTiles[tileDown.id] = tileDown;
+							} else {
+								rejectedTiles[tileDown.id] = tileDown;
+								// Only block this direction if it's a direct route from the current tile
+								if (i <= 1) pBlockingDirections['down'] = true;
+							}
+						}
+
+						let nearestNode;
+						
+						if (VS.global.aPathfinder.debugging) {
+							for (const rT in rejectedTiles) {
+								const overlay = VS.newDiob('Overlay');
+								overlay.color = { tint: 0xFF0000 };
+								overlay.atlasName = '';
+								overlay.width = TILE_SIZE.width;
+								overlay.height = TILE_SIZE.height;
+								// red and orange signify a tile that is unreachable
+								overlay.color = { tint: (pStart ? 0xffa500 : 0xFF0000) };
+								overlay.alpha = 0.3;
+								overlay.plane = 0;
+								overlay.mouseOpacity = 0;
+								overlay.touchOpacity = 0;
+								overlay.setTransition({ alpha: 0 }, -1, debuggerDuration);
+								rejectedTiles[rT].addOverlay(overlay);
+								setTimeout(() => {
+									rejectedTiles[rT].removeOverlay(overlay);
+								}, debuggerDuration);
+							}
+						}
+
+						for (const nT in nearestTiles) {
+							if (VS.global.aPathfinder.debugging) {
+								const overlay = VS.newDiob('Overlay');
+								overlay.color = { tint: 0xFF0000 };
+								overlay.atlasName = '';
+								overlay.width = TILE_SIZE.width;
+								overlay.height = TILE_SIZE.height;
+								// blue and green signify a tile that is reachable
+								overlay.color = { tint: (pStart ? 0x87ceeb : 0x00ff00) };
+								overlay.alpha = 0.3;
+								overlay.plane = 0;
+								overlay.mouseOpacity = 0;
+								overlay.touchOpacity = 0;
+								overlay.setTransition({ alpha: 0 }, -1, debuggerDuration);
+								nearestTiles[nT].addOverlay(overlay);
+								setTimeout(() => {
+									nearestTiles[nT].removeOverlay(overlay);
+								}, debuggerDuration);
+							}
+
+							const node = VS.global.aPathfinder.tileToNode(nearestTiles[nT]);
+							if (nearestNode) {
+								const nearestNodeDistance = VS.global.aPathfinder.getDistance(pNode, nearestNode);
+								const distance = VS.global.aPathfinder.getDistance(pNode, node);
+								// This means the nearest node has been changed now, since we found one with a closer distance
+								if (distance < nearestNodeDistance) {
+									nearestNode = node;
+								}
+							} else {
+								nearestNode = node;
+							}
+						}
+						nodeToUse = nearestNode ? nearestNode : pNode;
+						return nodeToUse;
+					}
+				}
+
+				const getBlockingSides = function(pDiob, pStartNodeX, pStartNodeY, pEndNodeX, pEndNodeY) {
+					const diobTruePos = { x: pDiob.xPos + pDiob.xOrigin + pDiob.width / 2, y: pDiob.yPos + pDiob.yOrigin + pDiob.height / 2};
+					const obstacleBlockingLeft = (pEndNodeX <= diobTruePos.x && pStartNodeX >= diobTruePos.x);
+					const obstacleBlockingRight = (pEndNodeX >= diobTruePos.x && pStartNodeX <= diobTruePos.x);
+					const obstacleBlockingUp = (pEndNodeY <= diobTruePos.y && pStartNodeY >= diobTruePos.y);
+					const obstacleBlockingDown = (pEndNodeY >= diobTruePos.y && pStartNodeY <= diobTruePos.y);
+					return { left: obstacleBlockingLeft, right: obstacleBlockingRight, up: obstacleBlockingUp, down: obstacleBlockingDown };
+				}
+
+				if (startTile && ((startTile.density && !pExclude.includes(startTile)) || startTile.getContents().filter((pElement) => { if (pElement.density && !pExclude.includes(pElement)) return pElement.density }).length)) {
+					let blockedSides;
+					let blockingDirections = { left: false, right: false, up: false, down: false };					
+					if (pNearest) {
+						for (const diob of startTile.getContents()) {
+							if (diob.density) {
+								// This returns whether you can safely move to a new start position, and also changes the start position if you can.
+								blockedSides = getBlockingSides(diob, startNodeX, startNodeY, endNodeX, endNodeY);
+								if (blockedSides.left) blockingDirections.left = true;
+								if (blockedSides.right) blockingDirections.right = true;
+								if (blockedSides.up) blockingDirections.up = true;
+								if (blockedSides.down) blockingDirections.down = true;
+							}
+						}
+
+						let nearestNode = getNearestNode(startNode, startNodeX, startNodeY, blockingDirections, true);
+
+						if (blockingDirections.left) {
+							const tileRight = VS.Map.getLocByPos(startNodeX + TILE_SIZE.width / 2, startNodeY, self.mapName);
+							if ((tileRight && ((tileRight.density && !pExclude.includes(tileRight)) || tileRight.getContents().filter((pElement) => { if (pElement.density && !pExclude.includes(pElement)) return pElement.density }).length))) {
+								nearestNode.x++;
+							}
+						}
+						if (blockingDirections.right) {
+							const tileLeft = VS.Map.getLocByPos(startNodeX - TILE_SIZE.width / 2, startNodeY, self.mapName);
+							if ((tileLeft && ((tileLeft.density && !pExclude.includes(tileLeft)) || tileLeft.getContents().filter((pElement) => { if (pElement.density && !pExclude.includes(pElement)) return pElement.density }).length))) {
+								nearestNode.x--;
+							}
+						}
+						if (blockingDirections.up) {
+							const tileDown = VS.Map.getLocByPos(startNodeX, startNodeY + TILE_SIZE.height / 2, self.mapName);
+							if ((tileDown && ((tileDown.density && !pExclude.includes(tileDown)) || tileDown.getContents().filter((pElement) => { if (pElement.density && !pExclude.includes(pElement)) return pElement.density }).length))) {
+								nearestNode.y++;
+							}
+						}
+						if (blockingDirections.down) {
+							const tileUp = VS.Map.getLocByPos(startNodeX, startNodeY - TILE_SIZE.height / 2, self.mapName);
+							if ((tileUp && ((tileUp.density && !pExclude.includes(tileUp)) || tileUp.getContents().filter((pElement) => { if (pElement.density && !pExclude.includes(pElement)) return pElement.density }).length))) {
+								nearestNode.y--;
+							}
+						}
+
+						startNode = nearestNode;
+					}
+					
+					if (!pNearest || blockingDirections.left && blockingDirections.right && blockingDirections.up && blockingDirections.down) {
+						if (VS.global.aPathfinder.debugging) {
+							const startTileOverlay = VS.newDiob('Overlay');
+							startTileOverlay.atlasName = '';
+							startTileOverlay.width = TILE_SIZE.width;
+							startTileOverlay.height = TILE_SIZE.height;
+							startTileOverlay.color = { tint: 0xFF0000 };
+							startTileOverlay.alpha = 0.7;
+							startTileOverlay.plane = 0;
+							startTileOverlay.touchOpacity = 0;
+							startTileOverlay.touchOpacity = 0;
+							startTileOverlay.setTransition({ alpha: 0 }, -1, debuggerDuration);
+							startTile.addOverlay(startTileOverlay);
+							setTimeout(() => {
+								endTile.removeOverlay(startTileOverlay);
+							}, debuggerDuration);
+						}							
+						if (self.onPathNotFound && typeof(self.onPathNotFound) === 'function') {
+							self.onPathNotFound(startTile);
+						}
+						self.cancelMove();
+						return;
+					}
 				}
 
 				// If the end tile is dense and it is not on the exclusion list then it cannot be traveled to. And no path is generated.
 				// Possibly create a closest to path instead. Future update*
-				if (endTile && ((endTile.density && !pExclude.includes(endTile)) || endTile.getContents().filter((pElement) => { if (pElement.density) return pElement.density }).length)) {
-					if (self.onPathNotFound && typeof(self.onPathNotFound) === 'function') {
-						self.onPathNotFound(endTile);
+				if (endTile && ((endTile.density && !pExclude.includes(endTile)) || endTile.getContents().filter((pElement) => { if (pElement.density && !pExclude.includes(pElement)) return pElement.density }).length)) {
+					let nearestNode;
+					if (pNearest) {
+						nearestNode = getNearestNode(endNode, endNodeX, endNodeY);
+						endNode = nearestNode;
 					}
-					self.cancelMove();
-					return;
+
+					if (!pNearest) {
+						if (self.onPathNotFound && typeof(self.onPathNotFound) === 'function') {
+							self.onPathNotFound(endTile);
+						}
+						if (VS.global.aPathfinder.debugging) {
+							endTile.getOverlays().filter((pElement) => { pElement.color = { tint: 0xFF0000 }; });
+						}
+						self.cancelMove();
+						return;
+					}
 				}
 
 				// Find the path
@@ -328,6 +559,10 @@
 
 		aPathfinder.clamp = (pVal, pMin, pMax) => {
 			return Math.max(pMin, Math.min(pVal, pMax));
+		}
+
+		aPathfinder.within = function (pVal, pMin, pMax) {
+  			return pVal >= pMin && pVal <= pMax;
 		}
 
 		aPathfinder.getAngle = function (pStartPoint, pEndPoint) {
@@ -375,7 +610,6 @@
 
 					tilesArray.forEach((pElement, pIndex) => {
 						const tile = pElement;
-						const contents = tile.getContents();
 						// a weight of 0 indicates it is impassable.
 						let weight = (((tile.aPathfindingWeight || tile.aPathfindingWeight === 0) && typeof(tile.aPathfindingWeight) === 'number') ? tile.aPathfindingWeight : 0);
 
@@ -389,15 +623,15 @@
 							weight = 1;
 						}
 						
-						for (let el of contents) {
-							// This can be used to turn a tile that has a dense diob in it into a passable tile, if you deem that diob safe to pass. THIS CAN BREAK PATHFINDING. USE AT YOUR OWN DISCRETION
-							if (el.aPathfindingWeight && typeof(el.aPathfindingWeight) === 'number') {
-								weight += el.aPathfindingWeight;
-							}
-							// If something in this tile is dense, then it is treated as a wall
-							if (el.density) {
+						for (const diob of tile.getContents()) {
+							// If something in this tile is dense, then it is treated as a wall if it is not in the exclusion list
+							if (diob.density && !pExclude.includes(diob)) {
 								weight = 1;
 								break;
+							}
+							// This can be used to turn a tile that has a dense diob in it into a passable tile, if you deem that diob safe to pass. THIS CAN BREAK PATHFINDING. USE AT YOUR OWN DISCRETION
+							if (diob.aPathfindingWeight && typeof(diob.aPathfindingWeight) === 'number') {
+								weight += diob.aPathfindingWeight;
 							}
 						}
 						
@@ -439,6 +673,10 @@
 					console.error('aPathfinder: There is no stored grid for the map this tile belongs to.');
 				}
 			}
+		}
+
+		aPathfinder.nodeToTile = function(pMapName, pNode) {
+			return VS.Map.getLoc(pNode.x + 1, pNode.y + 1, pMapName);
 		}
 
 		aPathfinder.toggleDebug = function() {
