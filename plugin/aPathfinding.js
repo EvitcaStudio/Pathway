@@ -216,8 +216,8 @@
 						if (coords.x === storedCoords.x && coords.y === storedCoords.y) {
 							stuckCounter++;
 							if (stuckCounter >= STUCK_MAX_COUNTER) {
+								self.cancelMove();
 								if (self.onPathStuck && typeof(self.onPathStuck) === 'function') {
-									self.cancelMove();
 									self.onPathStuck();
 									return;
 								}
@@ -307,7 +307,7 @@
 							{
 								nearestTiles[tileLeft.id] = tileLeft;
 							} else {
-								rejectedTiles[tileLeft.id] = tileLeft;
+								if (tileLeft) rejectedTiles[tileLeft.id] = tileLeft;
 								// Only block this direction if it's a direct route from the current tile
 								if (i <= 1) pBlockingDirections['left'] = true;
 							}
@@ -322,7 +322,7 @@
 							{
 								nearestTiles[tileRight.id] = tileRight;
 							} else {
-								rejectedTiles[tileRight.id] = tileRight;
+								if (tileRight) rejectedTiles[tileRight.id] = tileRight;
 								// Only block this direction if it's a direct route from the current tile
 								if (i <= 1) pBlockingDirections['right'] = true;
 							}
@@ -337,7 +337,7 @@
 							{
 								nearestTiles[tileUp.id] = tileUp;
 							} else {
-								rejectedTiles[tileUp.id] = tileUp;
+								if (tileUp) rejectedTiles[tileUp.id] = tileUp;
 								// Only block this direction if it's a direct route from the current tile
 								if (i <= 1) pBlockingDirections['up'] = true;
 							}
@@ -352,7 +352,7 @@
 							{
 								nearestTiles[tileDown.id] = tileDown;
 							} else {
-								rejectedTiles[tileDown.id] = tileDown;
+								if (tileDown) rejectedTiles[tileDown.id] = tileDown;
 								// Only block this direction if it's a direct route from the current tile
 								if (i <= 1) pBlockingDirections['down'] = true;
 							}
