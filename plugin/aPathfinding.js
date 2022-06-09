@@ -88,9 +88,9 @@
 			// pNearest will only search the closest MAX_NEAREST_TILE_SEARCH tiles or so to find a near tile. If no near tile is found, no path is returned.
 			if (this && this.mapName && this.xPos !== 10000 && this.yPos !== 10000) {
 				const TILE_SIZE = VS.World.getTileSize();
-				const TICK_FPS = VS.Client.maxFPS ? (1000 / VS.Client.maxFPS) : 16.67;
+				const TICK_FPS = 16.67;
 				const MAX_ELAPSED_MS = TICK_FPS * 4;
-				const TIME_SCALE = (VS.Client.timeScale ? VS.Client.timeScale : 1);
+				const TIME_SCALE = 1;
 				const MAX_NEAREST_TILE_SEARCH = 6;
 				const STUCK_MAX_COUNTER = 100;
 				const mapSize = VS.Map.getMapSize(this.mapName);
