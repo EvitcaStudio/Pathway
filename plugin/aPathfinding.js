@@ -51,7 +51,7 @@
 
 		const prototypeDiob = VS.newDiob();
 
-		prototypeDiob.constructor.prototype.cancelMove = function() {
+		prototypeDiob.constructor.prototype.cancelPath = function() {
 			if (this.aPathfinderID && this.easystar) {
 				this.easystar.cancelPath(this.aPathfinderID);
 				this.easystar.collisionGrid = undefined;
@@ -113,7 +113,7 @@
 					pExclude.push(this);
 				}
 
-				this.cancelMove();
+				this.cancelPath();
 
 				if (this.moveSettings) {
 					this.moveSettings.stepSlide = true;
@@ -204,7 +204,7 @@
 										// Passes the ID so that the developer can use it for tracking
 										self.onPathComplete(self.aPathfinderID);
 									}
-									self.cancelMove();
+									self.cancelPath();
 								}
 							} else {
 								self.aPathfinderTrajectory.angle = VS.global.aPathfinder.getAngle(coords, self.aPathfinderTrajectory.nextNodePos);
@@ -218,7 +218,7 @@
 						if (coords.x === storedCoords.x && coords.y === storedCoords.y) {
 							stuckCounter++;
 							if (stuckCounter >= STUCK_MAX_COUNTER) {
-								self.cancelMove();
+								self.cancelPath();
 								if (self.onPathStuck && typeof(self.onPathStuck) === 'function') {
 									self.onPathStuck(self.aPathfinderID);
 									return;
@@ -494,7 +494,7 @@
 						if (self.onPathNotFound && typeof(self.onPathNotFound) === 'function') {
 							self.onPathNotFound(startTile);
 						}
-						self.cancelMove();
+						self.cancelPath();
 						return;
 					}
 				}
@@ -515,7 +515,7 @@
 						if (VS.global.aPathfinder.debugging) {
 							endTile.getOverlays().filter((pElement) => { pElement.color = { tint: 0xFF0000 }; });
 						}
-						self.cancelMove();
+						self.cancelPath();
 						return;
 					}
 				}
@@ -541,7 +541,7 @@
 						if (self.onPathNotFound && typeof(self.onPathNotFound) === 'function') {
 							self.onPathNotFound();
 						}
-						self.cancelMove();
+						self.cancelPath();
 					}
 					// get the 2d array out of memory. Since there will be a easystar instance per diob that uses pathfinding
 					self.easystar.collisionGrid = undefined;
