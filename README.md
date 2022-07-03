@@ -29,10 +29,10 @@ A plugin that will enable pathfinding functionality.
    - `pDiagonal`: Whether or not the pathfinder allows diagonal moves `boolean`  
    - `pNearest`: Whether or not the path will find the nearest path if the provided coordinates are blocked `boolean`  
    - `pExclude`: An array of diobs that will be ignored when calculating the path `array`  
-   - `desc`: Moves this `diobInstance` to the provided coordinates. Returns a `pathID` if a path is generated  
+   - `desc`: Moves this `diobInstance` to the provided coordinates by walking along a generated path free of obstacles. Returns a `pathID` if a path is generated  
 
 ###  diobInstance.cancelPath()  
-   - `desc`: Cancels the current path if there is one  
+   - `desc`: Cancels the current path if there is one and stops this instance from moving    
 
 ###  diobInstance.onPathFound(pPath, pPathReversed) `event`  
    - `pPath`: The path that was calculated `array` 
