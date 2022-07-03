@@ -220,7 +220,7 @@
 							if (stuckCounter >= STUCK_MAX_COUNTER) {
 								self.cancelMove();
 								if (self.onPathStuck && typeof(self.onPathStuck) === 'function') {
-									self.onPathStuck();
+									self.onPathStuck(self.aPathfinderID);
 									return;
 								}
 							}
