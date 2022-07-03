@@ -25,7 +25,7 @@ A plugin that will enable pathfinding functionality.
    - `pExclude`: An array of diobs that will be ignored when calculating the path `array`  
    - `desc`: Moves this `diobInstance` to the provided coordinates. Returns a `pathID` if a path is generated  
 
-###  diobInstance.cancelMove()  
+###  diobInstance.cancelPath()  
    - `desc`: Cancels the current path if there is one  
 
 ###  diobInstance.onPathComplete(pPathID) `event`  
