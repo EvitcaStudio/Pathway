@@ -47,5 +47,5 @@ A plugin that will enable pathfinding functionality.
    - `desc`: This event function is called when this instance has arrived at its destination  
 
 ###  diobInstance.onPathStuck(pPathID) `event`  
-   - `pPathID`: The ID of the path that was completed `string`
+   - `pPathID`: The ID of the path that got stuck `string`
    - `desc`: This event function is called when this instance has become stuck somewhere along its path  
