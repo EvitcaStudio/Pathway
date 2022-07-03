@@ -200,7 +200,7 @@
 								self.aPathfinderMoving = false;
 								stuckCounter = 0;
 								if (!self.aPathfinderPath.length) {
-									if (self.onPathComplete && typeof(self.onPathComplete) === 'function') {
+									if (typeof(self.onPathComplete) === 'function') {
 										// Passes the ID so that the developer can use it for tracking
 										self.onPathComplete(self.aPathfinderID);
 									}
@@ -219,7 +219,7 @@
 							stuckCounter++;
 							if (stuckCounter >= STUCK_MAX_COUNTER) {
 								self.cancelPath();
-								if (self.onPathStuck && typeof(self.onPathStuck) === 'function') {
+								if (typeof(self.onPathStuck) === 'function') {
 									self.onPathStuck(self.aPathfinderID);
 									return;
 								}
@@ -491,8 +491,8 @@
 								endTile.removeOverlay(startTileOverlay);
 							}, debuggerDuration);
 						}							
-						if (self.onPathNotFound && typeof(self.onPathNotFound) === 'function') {
-							self.onPathNotFound(startTile);
+						if (typeof(self.onPathNotFound) === 'function') {
+							self.onPathNotFound();
 						}
 						self.cancelPath();
 						return;
@@ -509,8 +509,8 @@
 					}
 
 					if (!pNearest) {
-						if (self.onPathNotFound && typeof(self.onPathNotFound) === 'function') {
-							self.onPathNotFound(endTile);
+						if (typeof(self.onPathNotFound) === 'function') {
+							self.onPathNotFound();
 						}
 						if (VS.global.aPathfinder.debugging) {
 							endTile.getOverlays().filter((pElement) => { pElement.color = { tint: 0xFF0000 }; });
@@ -534,11 +534,11 @@
 						pPath.shift();
 						self.aPathfinderPath = pPath;
 						self.aPathfinderPathReversed = reversedPath;
-						if (self.onPathFound && typeof(self.onPathFound) === 'function') {
+						if (typeof(self.onPathFound) === 'function') {
 							self.onPathFound([...pPath], [...reversedPath]);
 						}
 					} else if (!pPath || !pPath.length) {
-						if (self.onPathNotFound && typeof(self.onPathNotFound) === 'function') {
+						if (typeof(self.onPathNotFound) === 'function') {
 							self.onPathNotFound();
 						}
 						self.cancelPath();
@@ -632,7 +632,7 @@
 								break;
 							}
 							// This can be used to turn a tile that has a dense diob in it into a passable tile, if you deem that diob safe to pass. THIS CAN BREAK PATHFINDING. USE AT YOUR OWN DISCRETION
-							if (diob.aPathfindingWeight && typeof(diob.aPathfindingWeight) === 'number') {
+							if (typeof(diob.aPathfindingWeight) === 'number') {
 								weight += diob.aPathfindingWeight;
 							}
 						}
