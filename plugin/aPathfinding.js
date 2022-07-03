@@ -46,8 +46,8 @@
 		}
 
 		VS.global.aPathfinder = aPathfinder;
-		if (global) global.aPathfinder = aPathfinder;
-		if (window) window.aPathfinder = aPathfinder;
+		if (VS.World.getCodeType() === 'server') global.aPathfinder = aPathfinder;
+		if (VS.World.getCodeType() !== 'server') window.aPathfinder = aPathfinder;
 
 		const prototypeDiob = VS.newDiob();
 
