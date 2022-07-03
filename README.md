@@ -17,6 +17,12 @@ A plugin that will enable pathfinding functionality.
 
 ## API   
 
+###  aPathfinder.toggleDebug()
+   - `desc`: Turn on/off the debugging mode of this plugin, which throws additional logs/warnings. Will also show the paths as the instance moves along it. Should be turned off in production code.  
+
+###  diobInstance.aPathfinderWeight   
+   - `desc`: The weight of this diob in the pathfinder system, higher values will try to make the pathfinder generate paths that do not include this instance  
+
 ###  diobInstance.goTo(pX, pY, pDiagonal, pNearest, pExclude)  
    - `pX`: The xCoordinate to move to `integer`  
    - `pY`: The yCoordinate to move to `integer`  
@@ -27,6 +33,14 @@ A plugin that will enable pathfinding functionality.
 
 ###  diobInstance.cancelPath()  
    - `desc`: Cancels the current path if there is one  
+
+###  diobInstance.onPathFound(pPath, pPathReversed) `event`  
+   - `pPath`: The path that was calculated `array` 
+   - `pPathReversed`: The reversed path that was calculated `array`  
+   - `desc`: This event function is called when a path has been found after calling `this.goTo`    
+
+###  diobInstance.onPathNotFound() `event`  
+   - `desc`: This event function is called when no path was found after calling `this.goTo`    
 
 ###  diobInstance.onPathComplete(pPathID) `event`  
    - `pPathID`: The ID of the path that was completed `string`  
