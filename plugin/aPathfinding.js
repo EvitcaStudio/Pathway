@@ -46,6 +46,8 @@
 		}
 
 		VS.global.aPathfinder = aPathfinder;
+		if (global) global.aPathfinder = aPathfinder;
+		if (window) window.aPathfinder = aPathfinder;
 
 		const prototypeDiob = VS.newDiob();
 
