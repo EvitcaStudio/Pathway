@@ -26,7 +26,7 @@ A plugin that will enable pathfinding functionality.
 ###  diobInstance.goTo(pX, pY, pDiagonal, pNearest, pExclude)  
    - `pX`: The xCoordinate to move to `integer`  
    - `pY`: The yCoordinate to move to `integer`  
-   - `pDiagonal`: Whether or not the pathfinder allow diagonal moves `boolean`  
+   - `pDiagonal`: Whether or not the pathfinder allows diagonal moves `boolean`  
    - `pNearest`: Whether or not the path will find the nearest path if the provided coordinates are blocked `boolean`  
    - `pExclude`: An array of diobs that will be ignored when calculating the path `array`  
    - `desc`: Moves this `diobInstance` to the provided coordinates. Returns a `pathID` if a path is generated  
