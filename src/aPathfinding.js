@@ -1,359 +1,46 @@
 (() => {
-	/*!
-	* @license
-	* The MIT License (MIT)
-	* 
-	* Copyright (c) 2012-2020 Bryce Neal
-	* 
-	* Permission is hereby granted, free of charge, to any person obtaining a copy
-	* of this software and associated documentation files (the "Software"), to deal
-	* in the Software without restriction, including without limitation the rights
-	* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	* copies of the Software, and to permit persons to whom the Software is
-	* furnished to do so, subject to the following conditions:
-	* 
-	* The above copyright notice and this permission notice shall be included in
-	* all copies or substantial portions of the Software.
-	* 
-	* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	* THE SOFTWARE.
-	*/
-	var EasyStar=
-	/******/function(modules){// webpackBootstrap
-	/******/ // The module cache
-	/******/var installedModules={};
-	/******/
-	/******/ // The require function
-	/******/function __webpack_require__(moduleId){
-	/******/
-	/******/ // Check if module is in cache
-	/******/if(installedModules[moduleId])
-	/******/return installedModules[moduleId].exports;
-	/******/
-	/******/ // Create a new module (and put it into the cache)
-	/******/var module=installedModules[moduleId]={
-	/******/i:moduleId,
-	/******/l:!1,
-	/******/exports:{}
-	/******/};
-	/******/
-	/******/ // Execute the module function
-	/******/
-	/******/
-	/******/ // Return the exports of the module
-	/******/return modules[moduleId].call(module.exports,module,module.exports,__webpack_require__),
-	/******/
-	/******/ // Flag the module as loaded
-	/******/module.l=!0,module.exports;
-	/******/}
-	/******/
-	/******/
-	/******/ // expose the modules object (__webpack_modules__)
-	/******/
-	/******/
-	/******/
-	/******/ // Load entry module and return exports
-	/******/return __webpack_require__.m=modules,
-	/******/
-	/******/ // expose the module cache
-	/******/__webpack_require__.c=installedModules,
-	/******/
-	/******/ // define getter function for harmony exports
-	/******/__webpack_require__.d=function(exports,name,getter){
-	/******/__webpack_require__.o(exports,name)||
-	/******/Object.defineProperty(exports,name,{enumerable:!0,get:getter})
-	/******/},
-	/******/
-	/******/ // define __esModule on exports
-	/******/__webpack_require__.r=function(exports){
-	/******/"undefined"!=typeof Symbol&&Symbol.toStringTag&&
-	/******/Object.defineProperty(exports,Symbol.toStringTag,{value:"Module"})
-	/******/,Object.defineProperty(exports,"__esModule",{value:!0})},
-	/******/
-	/******/ // create a fake namespace object
-	/******/ // mode & 1: value is a module id, require it
-	/******/ // mode & 2: merge all properties of value into the ns
-	/******/ // mode & 4: return value when already ns object
-	/******/ // mode & 8|1: behave like require
-	/******/__webpack_require__.t=function(value,mode){
-	/******/if(
-	/******/1&mode&&(value=__webpack_require__(value)),8&mode)return value;
-	/******/if(4&mode&&"object"==typeof value&&value&&value.__esModule)return value;
-	/******/var ns=Object.create(null);
-	/******/
-	/******/if(__webpack_require__.r(ns),
-	/******/Object.defineProperty(ns,"default",{enumerable:!0,value:value}),2&mode&&"string"!=typeof value)for(var key in value)__webpack_require__.d(ns,key,function(key){return value[key]}.bind(null,key));
-	/******/return ns;
-	/******/},
-	/******/
-	/******/ // getDefaultExport function for compatibility with non-harmony modules
-	/******/__webpack_require__.n=function(module){
-	/******/var getter=module&&module.__esModule?
-	/******/function(){return module.default}:
-	/******/function(){return module};
-	/******/
-	/******/return __webpack_require__.d(getter,"a",getter),getter;
-	/******/},
-	/******/
-	/******/ // Object.prototype.hasOwnProperty.call
-	/******/__webpack_require__.o=function(object,property){return Object.prototype.hasOwnProperty.call(object,property)},
-	/******/
-	/******/ // __webpack_public_path__
-	/******/__webpack_require__.p="/bin/",__webpack_require__(__webpack_require__.s=0);
-	/******/}
-	/************************************************************************/
-	/******/([
-	/* 0 */
-	/***/function(module,exports,__webpack_require__){
-	/**
-	*   EasyStar.js
-	*   github.com/prettymuchbryce/EasyStarJS
-	*   Licensed under the MIT license.
-	*
-	*   Implementation By Bryce Neal (@prettymuchbryce)
-	**/
-	var EasyStar={},Instance=__webpack_require__(1),Node=__webpack_require__(2),Heap=__webpack_require__(3);module.exports=EasyStar;var nextInstanceId=1;EasyStar.js=function(){var collisionGrid,iterationsSoFar,acceptableTiles,syncEnabled=!1,pointsToAvoid={},costMap={},pointsToCost={},directionalConditions={},allowCornerCutting=!0,instances={},instanceQueue=[],iterationsPerCalculation=Number.MAX_VALUE,diagonalsEnabled=!1;
-	this.setAcceptableTiles=function(tiles){tiles instanceof Array?
-	// Array
-	acceptableTiles=tiles:!isNaN(parseFloat(tiles))&&isFinite(tiles)&&(
-	// Number
-	acceptableTiles=[tiles])},
-	/**
-	 * Enables sync mode for this EasyStar instance..
-	 * if you're into that sort of thing.
-	 **/
-	this.enableSync=function(){syncEnabled=!0},
-	/**
-	 * Disables sync mode for this EasyStar instance.
-	 **/
-	this.disableSync=function(){syncEnabled=!1},
-	/**
-	 * Enable diagonal pathfinding.
-	 */
-	this.enableDiagonals=function(){diagonalsEnabled=!0},
-	/**
-	 * Disable diagonal pathfinding.
-	 */
-	this.disableDiagonals=function(){diagonalsEnabled=!1},
-	/**
-	 * Sets the collision grid that EasyStar uses.
-	 *
-	 * @param {Array} grid The collision grid that this EasyStar instance will read from.
-	 * This should be a 2D Array of Numbers.
-	 **/
-	this.setGrid=function(grid){collisionGrid=grid;//Setup cost map
-	for(var y=0;y<collisionGrid.length;y++)for(var x=0;x<collisionGrid[0].length;x++)costMap[collisionGrid[y][x]]||(costMap[collisionGrid[y][x]]=1)},
-	/**
-	 * Sets the tile cost for a particular tile type.
-	 *
-	 * @param {Number} The tile type to set the cost for.
-	 * @param {Number} The multiplicative cost associated with the given tile.
-	 **/
-	this.setTileCost=function(tileType,cost){costMap[tileType]=cost},
-	/**
-	 * Sets the an additional cost for a particular point.
-	 * Overrides the cost from setTileCost.
-	 *
-	 * @param {Number} x The x value of the point to cost.
-	 * @param {Number} y The y value of the point to cost.
-	 * @param {Number} The multiplicative cost associated with the given point.
-	 **/
-	this.setAdditionalPointCost=function(x,y,cost){void 0===pointsToCost[y]&&(pointsToCost[y]={}),pointsToCost[y][x]=cost},
-	/**
-	 * Remove the additional cost for a particular point.
-	 *
-	 * @param {Number} x The x value of the point to stop costing.
-	 * @param {Number} y The y value of the point to stop costing.
-	 **/
-	this.removeAdditionalPointCost=function(x,y){void 0!==pointsToCost[y]&&delete pointsToCost[y][x]},
-	/**
-	 * Remove all additional point costs.
-	 **/
-	this.removeAllAdditionalPointCosts=function(){pointsToCost={}},
-	/**
-	 * Sets a directional condition on a tile
-	 *
-	 * @param {Number} x The x value of the point.
-	 * @param {Number} y The y value of the point.
-	 * @param {Array.<String>} allowedDirections A list of all the allowed directions that can access
-	 * the tile.
-	 **/
-	this.setDirectionalCondition=function(x,y,allowedDirections){void 0===directionalConditions[y]&&(directionalConditions[y]={}),directionalConditions[y][x]=allowedDirections},
-	/**
-	 * Remove all directional conditions
-	 **/
-	this.removeAllDirectionalConditions=function(){directionalConditions={}},
-	/**
-	 * Sets the number of search iterations per calculation.
-	 * A lower number provides a slower result, but more practical if you
-	 * have a large tile-map and don't want to block your thread while
-	 * finding a path.
-	 *
-	 * @param {Number} iterations The number of searches to prefrom per calculate() call.
-	 **/
-	this.setIterationsPerCalculation=function(iterations){iterationsPerCalculation=iterations},
-	/**
-	 * Avoid a particular point on the grid,
-	 * regardless of whether or not it is an acceptable tile.
-	 *
-	 * @param {Number} x The x value of the point to avoid.
-	 * @param {Number} y The y value of the point to avoid.
-	 **/
-	this.avoidAdditionalPoint=function(x,y){void 0===pointsToAvoid[y]&&(pointsToAvoid[y]={}),pointsToAvoid[y][x]=1},
-	/**
-	 * Stop avoiding a particular point on the grid.
-	 *
-	 * @param {Number} x The x value of the point to stop avoiding.
-	 * @param {Number} y The y value of the point to stop avoiding.
-	 **/
-	this.stopAvoidingAdditionalPoint=function(x,y){void 0!==pointsToAvoid[y]&&delete pointsToAvoid[y][x]},
-	/**
-	 * Enables corner cutting in diagonal movement.
-	 **/
-	this.enableCornerCutting=function(){allowCornerCutting=!0},
-	/**
-	 * Disables corner cutting in diagonal movement.
-	 **/
-	this.disableCornerCutting=function(){allowCornerCutting=!1},
-	/**
-	 * Stop avoiding all additional points on the grid.
-	 **/
-	this.stopAvoidingAllAdditionalPoints=function(){pointsToAvoid={}},
-	/**
-	 * Find a path.
-	 *
-	 * @param {Number} startX The X position of the starting point.
-	 * @param {Number} startY The Y position of the starting point.
-	 * @param {Number} endX The X position of the ending point.
-	 * @param {Number} endY The Y position of the ending point.
-	 * @param {Function} callback A function that is called when your path
-	 * is found, or no path is found.
-	 * @return {Number} A numeric, non-zero value which identifies the created instance. This value can be passed to cancelPath to cancel the path calculation.
-	 *
-	 **/
-	this.findPath=function(startX,startY,endX,endY,callback){
-	// Wraps the callback for sync vs async logic
-	var callbackWrapper=function(result){syncEnabled?callback(result):setTimeout((function(){callback(result)}))};// No acceptable tiles were set
-	if(void 0===acceptableTiles)throw new Error("You can't set a path without first calling setAcceptableTiles() on EasyStar.");// No grid was set
-	if(void 0===collisionGrid)throw new Error("You can't set a path without first calling setGrid() on EasyStar.");// Start or endpoint outside of scope.
-	if(startX<0||startY<0||endX<0||endY<0||startX>collisionGrid[0].length-1||startY>collisionGrid.length-1||endX>collisionGrid[0].length-1||endY>collisionGrid.length-1)throw new Error("Your start or end point is outside the scope of your grid.");// Start and end are the same tile.
-	if(startX!==endX||startY!==endY){for(// End point is not an acceptable tile.
-	var endTile=collisionGrid[endY][endX],isAcceptable=!1,i=0;i<acceptableTiles.length;i++)if(endTile===acceptableTiles[i]){isAcceptable=!0;break}if(!1!==isAcceptable){// Create the instance
-	var instance=new Instance;instance.openList=new Heap((function(nodeA,nodeB){return nodeA.bestGuessDistance()-nodeB.bestGuessDistance()})),instance.isDoneCalculating=!1,instance.nodeHash={},instance.startX=startX,instance.startY=startY,instance.endX=endX,instance.endY=endY,instance.callback=callbackWrapper,instance.openList.push(coordinateToNode(instance,instance.startX,instance.startY,null,1));var instanceId=nextInstanceId++;return instances[instanceId]=instance,instanceQueue.push(instanceId),instanceId}callbackWrapper(null)}else callbackWrapper([])},
-	/**
-	 * Cancel a path calculation.
-	 *
-	 * @param {Number} instanceId The instance ID of the path being calculated
-	 * @return {Boolean} True if an instance was found and cancelled.
-	 *
-	 **/
-	this.cancelPath=function(instanceId){return instanceId in instances&&(delete instances[instanceId],!0)},
-	/**
-	 * This method steps through the A* Algorithm in an attempt to
-	 * find your path(s). It will search 4-8 tiles (depending on diagonals) for every calculation.
-	 * You can change the number of calculations done in a call by using
-	 * easystar.setIteratonsPerCalculation().
-	 **/
-	this.calculate=function(){if(0!==instanceQueue.length&&void 0!==collisionGrid&&void 0!==acceptableTiles)for(iterationsSoFar=0;iterationsSoFar<iterationsPerCalculation;iterationsSoFar++){if(0===instanceQueue.length)return;syncEnabled&&(
-	// If this is a sync instance, we want to make sure that it calculates synchronously.
-	iterationsSoFar=0);var instanceId=instanceQueue[0],instance=instances[instanceId];if(void 0!==instance)// Couldn't find a path.
-	if(0!==instance.openList.size()){var searchNode=instance.openList.pop();// Handles the case where we have found the destination
-	if(instance.endX!==searchNode.x||instance.endY!==searchNode.y)searchNode.list=0,searchNode.y>0&&checkAdjacentNode(instance,searchNode,0,-1,1*getTileCost(searchNode.x,searchNode.y-1)),searchNode.x<collisionGrid[0].length-1&&checkAdjacentNode(instance,searchNode,1,0,1*getTileCost(searchNode.x+1,searchNode.y)),searchNode.y<collisionGrid.length-1&&checkAdjacentNode(instance,searchNode,0,1,1*getTileCost(searchNode.x,searchNode.y+1)),searchNode.x>0&&checkAdjacentNode(instance,searchNode,-1,0,1*getTileCost(searchNode.x-1,searchNode.y)),diagonalsEnabled&&(searchNode.x>0&&searchNode.y>0&&(allowCornerCutting||isTileWalkable(collisionGrid,acceptableTiles,searchNode.x,searchNode.y-1,searchNode)&&isTileWalkable(collisionGrid,acceptableTiles,searchNode.x-1,searchNode.y,searchNode))&&checkAdjacentNode(instance,searchNode,-1,-1,1.4*getTileCost(searchNode.x-1,searchNode.y-1)),searchNode.x<collisionGrid[0].length-1&&searchNode.y<collisionGrid.length-1&&(allowCornerCutting||isTileWalkable(collisionGrid,acceptableTiles,searchNode.x,searchNode.y+1,searchNode)&&isTileWalkable(collisionGrid,acceptableTiles,searchNode.x+1,searchNode.y,searchNode))&&checkAdjacentNode(instance,searchNode,1,1,1.4*getTileCost(searchNode.x+1,searchNode.y+1)),searchNode.x<collisionGrid[0].length-1&&searchNode.y>0&&(allowCornerCutting||isTileWalkable(collisionGrid,acceptableTiles,searchNode.x,searchNode.y-1,searchNode)&&isTileWalkable(collisionGrid,acceptableTiles,searchNode.x+1,searchNode.y,searchNode))&&checkAdjacentNode(instance,searchNode,1,-1,1.4*getTileCost(searchNode.x+1,searchNode.y-1)),searchNode.x>0&&searchNode.y<collisionGrid.length-1&&(allowCornerCutting||isTileWalkable(collisionGrid,acceptableTiles,searchNode.x,searchNode.y+1,searchNode)&&isTileWalkable(collisionGrid,acceptableTiles,searchNode.x-1,searchNode.y,searchNode))&&checkAdjacentNode(instance,searchNode,-1,1,1.4*getTileCost(searchNode.x-1,searchNode.y+1)));else{var path=[];path.push({x:searchNode.x,y:searchNode.y});for(var parent=searchNode.parent;null!=parent;)path.push({x:parent.x,y:parent.y}),parent=parent.parent;path.reverse();var ip=path;instance.callback(ip),delete instances[instanceId],instanceQueue.shift()}}else instance.callback(null),delete instances[instanceId],instanceQueue.shift();else
-	// This instance was cancelled
-	instanceQueue.shift()}};// Private methods follow
-	var checkAdjacentNode=function(instance,searchNode,x,y,cost){var adjacentCoordinateX=searchNode.x+x,adjacentCoordinateY=searchNode.y+y;if((void 0===pointsToAvoid[adjacentCoordinateY]||void 0===pointsToAvoid[adjacentCoordinateY][adjacentCoordinateX])&&isTileWalkable(collisionGrid,acceptableTiles,adjacentCoordinateX,adjacentCoordinateY,searchNode)){var node=coordinateToNode(instance,adjacentCoordinateX,adjacentCoordinateY,searchNode,cost);void 0===node.list?(node.list=1,instance.openList.push(node)):searchNode.costSoFar+cost<node.costSoFar&&(node.costSoFar=searchNode.costSoFar+cost,node.parent=searchNode,instance.openList.updateItem(node))}},isTileWalkable=function(collisionGrid,acceptableTiles,x,y,sourceNode){var directionalCondition=directionalConditions[y]&&directionalConditions[y][x];if(directionalCondition){var direction=calculateDirection(sourceNode.x-x,sourceNode.y-y);if(!function(){for(var i=0;i<directionalCondition.length;i++)if(directionalCondition[i]===direction)return!0;return!1}())return!1}for(var i=0;i<acceptableTiles.length;i++)if(collisionGrid[y][x]===acceptableTiles[i])return!0;return!1},calculateDirection=function(diffX,diffY){if(0===diffX&&-1===diffY)return EasyStar.TOP;if(1===diffX&&-1===diffY)return EasyStar.TOP_RIGHT;if(1===diffX&&0===diffY)return EasyStar.RIGHT;if(1===diffX&&1===diffY)return EasyStar.BOTTOM_RIGHT;if(0===diffX&&1===diffY)return EasyStar.BOTTOM;if(-1===diffX&&1===diffY)return EasyStar.BOTTOM_LEFT;if(-1===diffX&&0===diffY)return EasyStar.LEFT;if(-1===diffX&&-1===diffY)return EasyStar.TOP_LEFT;throw new Error("These differences are not valid: "+diffX+", "+diffY)},getTileCost=function(x,y){return pointsToCost[y]&&pointsToCost[y][x]||costMap[collisionGrid[y][x]]},coordinateToNode=function(instance,x,y,parent,cost){if(void 0!==instance.nodeHash[y]){if(void 0!==instance.nodeHash[y][x])return instance.nodeHash[y][x]}else instance.nodeHash[y]={};var simpleDistanceToTarget=getDistance(x,y,instance.endX,instance.endY);if(null!==parent)var costSoFar=parent.costSoFar+cost;else costSoFar=0;var node=new Node(parent,x,y,costSoFar,simpleDistanceToTarget);return instance.nodeHash[y][x]=node,node},getDistance=function(x1,y1,x2,y2){
-	// Octile distance
-	var dx,dy;return diagonalsEnabled?(dx=Math.abs(x1-x2))<(dy=Math.abs(y1-y2))?1.4*dx+dy:1.4*dy+dx:(dx=Math.abs(x1-x2))+(dy=Math.abs(y1-y2))};// Helpers
-	},EasyStar.TOP="TOP",EasyStar.TOP_RIGHT="TOP_RIGHT",EasyStar.RIGHT="RIGHT",EasyStar.BOTTOM_RIGHT="BOTTOM_RIGHT",EasyStar.BOTTOM="BOTTOM",EasyStar.BOTTOM_LEFT="BOTTOM_LEFT",EasyStar.LEFT="LEFT",EasyStar.TOP_LEFT="TOP_LEFT"},
-	/* 1 */
-	/***/function(module,exports){
-	/**
-	 * Represents a single instance of EasyStar.
-	 * A path that is in the queue to eventually be found.
-	 */
-	module.exports=function(){this.pointsToAvoid={},this.startX = undefined,this.callback = undefined,this.startY = undefined,this.endX = undefined,this.endY = undefined,this.nodeHash={},this.openList = undefined};
-	/***/},
-	/* 2 */
-	/***/function(module,exports){
-	/**
-	* A simple Node that represents a single tile on the grid.
-	* @param {Object} parent The parent node.
-	* @param {Number} x The x position on the grid.
-	* @param {Number} y The y position on the grid.
-	* @param {Number} costSoFar How far this node is in moves*cost from the start.
-	* @param {Number} simpleDistanceToTarget Manhatten distance to the end point.
-	**/
-	module.exports=function(parent,x,y,costSoFar,simpleDistanceToTarget){this.parent=parent,this.x=x,this.y=y,this.costSoFar=costSoFar,this.simpleDistanceToTarget=simpleDistanceToTarget,
-	/**
-	 * @return {Number} Best guess distance of a cost using this node.
-	 **/
-	this.bestGuessDistance=function(){return this.costSoFar+this.simpleDistanceToTarget}};
-	/***/},
-	/* 3 */
-	/***/function(module,exports,__webpack_require__){module.exports=__webpack_require__(4);
-	/***/},
-	/* 4 */
-	/***/function(module,exports,__webpack_require__){var __WEBPACK_AMD_DEFINE_FACTORY__,__WEBPACK_AMD_DEFINE_ARRAY__,__WEBPACK_AMD_DEFINE_RESULT__;// Generated by CoffeeScript 1.8.0
-	(function(){var Heap,defaultCmp,floor,heapify,heappop,heappush,heappushpop,heapreplace,insort,min,nlargest,nsmallest,updateItem,_siftdown,_siftup;floor=Math.floor,min=Math.min,
 	/*
-	Default comparison function to be used
+	@license
+	The MIT License (MIT)
+
+	Copyright (c) 2012-2020 Bryce Neal
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in
+	all copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+	THE SOFTWARE.
 	*/
-	defaultCmp=function(x,y){return x<y?-1:x>y?1:0},
-	/*
-	Insert item x in list a, and keep it sorted assuming a is sorted.
-	
-	If x is already in a, insert it to the right of the rightmost x.
-	
-	Optional args lo (default 0) and hi (default a.length) bound the slice
-	of a to be searched.
-	*/
-	insort=function(a,x,lo,hi,cmp){var mid;if(null==lo&&(lo=0),null==cmp&&(cmp=defaultCmp),lo<0)throw new Error("lo must be non-negative");for(null==hi&&(hi=a.length);lo<hi;)cmp(x,a[mid=floor((lo+hi)/2)])<0?hi=mid:lo=mid+1;return[].splice.apply(a,[lo,lo-lo].concat(x)),x},
-	/*
-	Push item onto heap, maintaining the heap invariant.
-	*/
-	heappush=function(array,item,cmp){return null==cmp&&(cmp=defaultCmp),array.push(item),_siftdown(array,0,array.length-1,cmp)},
-	/*
-	Pop the smallest item off the heap, maintaining the heap invariant.
-	*/
-	heappop=function(array,cmp){var lastelt,returnitem;return null==cmp&&(cmp=defaultCmp),lastelt=array.pop(),array.length?(returnitem=array[0],array[0]=lastelt,_siftup(array,0,cmp)):returnitem=lastelt,returnitem},
-	/*
-	Pop and return the current smallest value, and add the new item.
-	
-	This is more efficient than heappop() followed by heappush(), and can be
-	more appropriate when using a fixed size heap. Note that the value
-	returned may be larger than item! That constrains reasonable use of
-	this routine unless written as part of a conditional replacement:
-		if item > array[0]
-			item = heapreplace(array, item)
-	*/
-	heapreplace=function(array,item,cmp){var returnitem;return null==cmp&&(cmp=defaultCmp),returnitem=array[0],array[0]=item,_siftup(array,0,cmp),returnitem},
-	/*
-	Fast version of a heappush followed by a heappop.
-	*/
-	heappushpop=function(array,item,cmp){var _ref;return null==cmp&&(cmp=defaultCmp),array.length&&cmp(array[0],item)<0&&(item=(_ref=[array[0],item])[0],array[0]=_ref[1],_siftup(array,0,cmp)),item},
-	/*
-	Transform list into a heap, in-place, in O(array.length) time.
-	*/
-	heapify=function(array,cmp){var i,_i,_len,_ref1,_results,_results1;for(null==cmp&&(cmp=defaultCmp),_results=[],_i=0,_len=(_ref1=function(){_results1=[];for(var _j=0,_ref=floor(array.length/2);0<=_ref?_j<_ref:_j>_ref;0<=_ref?_j++:_j--)_results1.push(_j);return _results1}.apply(this).reverse()).length;_i<_len;_i++)i=_ref1[_i],_results.push(_siftup(array,i,cmp));return _results},
-	/*
-	Update the position of the given item in the heap.
-	This function should be called every time the item is being modified.
-	*/
-	updateItem=function(array,item,cmp){var pos;if(null==cmp&&(cmp=defaultCmp),-1!==(pos=array.indexOf(item)))return _siftdown(array,0,pos,cmp),_siftup(array,pos,cmp)},
-	/*
-	Find the n largest elements in a dataset.
-	*/
-	nlargest=function(array,n,cmp){var elem,result,_i,_len,_ref;if(null==cmp&&(cmp=defaultCmp),!(result=array.slice(0,n)).length)return result;for(heapify(result,cmp),_i=0,_len=(_ref=array.slice(n)).length;_i<_len;_i++)elem=_ref[_i],heappushpop(result,elem,cmp);return result.sort(cmp).reverse()},
-	/*
-	Find the n smallest elements in a dataset.
-	*/
-	nsmallest=function(array,n,cmp){var elem,los,result,_i,_j,_len,_ref,_ref1,_results;if(null==cmp&&(cmp=defaultCmp),10*n<=array.length){if(!(result=array.slice(0,n).sort(cmp)).length)return result;for(los=result[result.length-1],_i=0,_len=(_ref=array.slice(n)).length;_i<_len;_i++)cmp(elem=_ref[_i],los)<0&&(insort(result,elem,0,null,cmp),result.pop(),los=result[result.length-1]);return result}for(heapify(array,cmp),_results=[],_j=0,_ref1=min(n,array.length);0<=_ref1?_j<_ref1:_j>_ref1;0<=_ref1?++_j:--_j)_results.push(heappop(array,cmp));return _results},_siftdown=function(array,startpos,pos,cmp){var newitem,parent,parentpos;for(null==cmp&&(cmp=defaultCmp),newitem=array[pos];pos>startpos&&cmp(newitem,parent=array[parentpos=pos-1>>1])<0;)array[pos]=parent,pos=parentpos;return array[pos]=newitem},_siftup=function(array,pos,cmp){var childpos,endpos,newitem,rightpos,startpos;for(null==cmp&&(cmp=defaultCmp),endpos=array.length,startpos=pos,newitem=array[pos],childpos=2*pos+1;childpos<endpos;)(rightpos=childpos+1)<endpos&&!(cmp(array[childpos],array[rightpos])<0)&&(childpos=rightpos),array[pos]=array[childpos],childpos=2*(pos=childpos)+1;return array[pos]=newitem,_siftdown(array,startpos,pos,cmp)},Heap=function(){function Heap(cmp){this.cmp=null!=cmp?cmp:defaultCmp,this.nodes=[]}return Heap.push=heappush,Heap.pop=heappop,Heap.replace=heapreplace,Heap.pushpop=heappushpop,Heap.heapify=heapify,Heap.updateItem=updateItem,Heap.nlargest=nlargest,Heap.nsmallest=nsmallest,Heap.prototype.push=function(x){return heappush(this.nodes,x,this.cmp)},Heap.prototype.pop=function(){return heappop(this.nodes,this.cmp)},Heap.prototype.peek=function(){return this.nodes[0]},Heap.prototype.contains=function(x){return-1!==this.nodes.indexOf(x)},Heap.prototype.replace=function(x){return heapreplace(this.nodes,x,this.cmp)},Heap.prototype.pushpop=function(x){return heappushpop(this.nodes,x,this.cmp)},Heap.prototype.heapify=function(){return heapify(this.nodes,this.cmp)},Heap.prototype.updateItem=function(x){return updateItem(this.nodes,x,this.cmp)},Heap.prototype.clear=function(){return this.nodes=[]},Heap.prototype.empty=function(){return 0===this.nodes.length},Heap.prototype.size=function(){return this.nodes.length},Heap.prototype.clone=function(){var heap;return(heap=new Heap).nodes=this.nodes.slice(0),heap},Heap.prototype.toArray=function(){return this.nodes.slice(0)},Heap.prototype.insert=Heap.prototype.push,Heap.prototype.top=Heap.prototype.peek,Heap.prototype.front=Heap.prototype.peek,Heap.prototype.has=Heap.prototype.contains,Heap.prototype.copy=Heap.prototype.clone,Heap}(),__WEBPACK_AMD_DEFINE_ARRAY__=[],void 0===(__WEBPACK_AMD_DEFINE_RESULT__="function"==typeof(__WEBPACK_AMD_DEFINE_FACTORY__=function(){return Heap})?__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports,__WEBPACK_AMD_DEFINE_ARRAY__):__WEBPACK_AMD_DEFINE_FACTORY__)||(module.exports=__WEBPACK_AMD_DEFINE_RESULT__)}).call(this)}
-	/******/]);
+	'use strict';var EasyStar=function(y){function p(g){if(v[g])return v[g].exports;var n=v[g]={i:g,l:!1,exports:{}};return y[g].call(n.exports,n,n.exports,p),n.l=!0,n.exports}var v={};return p.m=y,p.c=v,p.d=function(g,n,w){p.o(g,n)||Object.defineProperty(g,n,{enumerable:!0,get:w})},p.r=function(g){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(g,Symbol.toStringTag,{value:"Module"});Object.defineProperty(g,"__esModule",{value:!0})},p.t=function(g,n){if((1&n&&(g=p(g)),8&n)||4&n&&
+	"object"==typeof g&&g&&g.__esModule)return g;var w=Object.create(null);if(p.r(w),Object.defineProperty(w,"default",{enumerable:!0,value:g}),2&n&&"string"!=typeof g)for(var B in g)p.d(w,B,function(M){return g[M]}.bind(null,B));return w},p.n=function(g){var n=g&&g.__esModule?function(){return g.default}:function(){return g};return p.d(n,"a",n),n},p.o=function(g,n){return Object.prototype.hasOwnProperty.call(g,n)},p.p="/bin/",p(p.s=0)}([function(y,p,v){var g={},n=v(1),w=v(2),B=v(3);y.exports=g;var M=
+	1;g.js=function(){var l,J,t,D=!1,z={},E={},x={},C={},F=!0,G={},A=[],H=Number.MAX_VALUE,K=!1;this.setAcceptableTiles=function(c){c instanceof Array?t=c:!isNaN(parseFloat(c))&&isFinite(c)&&(t=[c])};this.enableSync=function(){D=!0};this.disableSync=function(){D=!1};this.enableDiagonals=function(){K=!0};this.disableDiagonals=function(){K=!1};this.setGrid=function(c){l=c;for(c=0;c<l.length;c++)for(var d=0;d<l[0].length;d++)E[l[c][d]]||(E[l[c][d]]=1)};this.setTileCost=function(c,d){E[c]=d};this.setAdditionalPointCost=
+	function(c,d,a){void 0===x[d]&&(x[d]={});x[d][c]=a};this.removeAdditionalPointCost=function(c,d){void 0!==x[d]&&delete x[d][c]};this.removeAllAdditionalPointCosts=function(){x={}};this.setDirectionalCondition=function(c,d,a){void 0===C[d]&&(C[d]={});C[d][c]=a};this.removeAllDirectionalConditions=function(){C={}};this.setIterationsPerCalculation=function(c){H=c};this.avoidAdditionalPoint=function(c,d){void 0===z[d]&&(z[d]={});z[d][c]=1};this.stopAvoidingAdditionalPoint=function(c,d){void 0!==z[d]&&
+	delete z[d][c]};this.enableCornerCutting=function(){F=!0};this.disableCornerCutting=function(){F=!1};this.stopAvoidingAllAdditionalPoints=function(){z={}};this.findPath=function(c,d,a,k,u){var r=function(N){D?u(N):setTimeout(function(){u(N)})};if(void 0===t)throw Error("You can't set a path without first calling setAcceptableTiles() on EasyStar.");if(void 0===l)throw Error("You can't set a path without first calling setGrid() on EasyStar.");if(0>c||0>d||0>a||0>k||c>l[0].length-1||d>l.length-1||a>
+	l[0].length-1||k>l.length-1)throw Error("Your start or end point is outside the scope of your grid.");if(c!==a||d!==k){for(var q=l[k][a],L=!1,I=0;I<t.length;I++)if(q===t[I]){L=!0;break}if(!1!==L)return q=new n,q.openList=new B(function(N,O){return N.bestGuessDistance()-O.bestGuessDistance()}),q.isDoneCalculating=!1,q.nodeHash={},q.startX=c,q.startY=d,q.endX=a,q.endY=k,q.callback=r,q.openList.push(m(q,q.startX,q.startY,null,1)),c=M++,G[c]=q,A.push(c),c;r(null)}else r([])};this.cancelPath=function(c){return c in
+	G&&(delete G[c],!0)};this.calculate=function(){if(0!==A.length&&void 0!==l&&void 0!==t)for(J=0;J<H&&0!==A.length;J++){D&&(J=0);var c=A[0],d=G[c];if(void 0!==d)if(0!==d.openList.size()){var a=d.openList.pop();if(d.endX!==a.x||d.endY!==a.y)a.list=0,0<a.y&&b(d,a,0,-1,1*h(a.x,a.y-1)),a.x<l[0].length-1&&b(d,a,1,0,1*h(a.x+1,a.y)),a.y<l.length-1&&b(d,a,0,1,1*h(a.x,a.y+1)),0<a.x&&b(d,a,-1,0,1*h(a.x-1,a.y)),K&&(0<a.x&&0<a.y&&(F||e(l,t,a.x,a.y-1,a)&&e(l,t,a.x-1,a.y,a))&&b(d,a,-1,-1,1.4*h(a.x-1,a.y-1)),a.x<
+	l[0].length-1&&a.y<l.length-1&&(F||e(l,t,a.x,a.y+1,a)&&e(l,t,a.x+1,a.y,a))&&b(d,a,1,1,1.4*h(a.x+1,a.y+1)),a.x<l[0].length-1&&0<a.y&&(F||e(l,t,a.x,a.y-1,a)&&e(l,t,a.x+1,a.y,a))&&b(d,a,1,-1,1.4*h(a.x+1,a.y-1)),0<a.x&&a.y<l.length-1&&(F||e(l,t,a.x,a.y+1,a)&&e(l,t,a.x-1,a.y,a))&&b(d,a,-1,1,1.4*h(a.x-1,a.y+1)));else{var k=[];k.push({x:a.x,y:a.y});for(a=a.parent;null!=a;)k.push({x:a.x,y:a.y}),a=a.parent;k.reverse();d.callback(k);delete G[c];A.shift()}}else d.callback(null),delete G[c],A.shift();else A.shift()}};
+	var b=function(c,d,a,k,u){a=d.x+a;k=d.y+k;void 0!==z[k]&&void 0!==z[k][a]||!e(l,t,a,k,d)||(k=m(c,a,k,d,u),void 0===k.list?(k.list=1,c.openList.push(k)):d.costSoFar+u<k.costSoFar&&(k.costSoFar=d.costSoFar+u,k.parent=d,c.openList.updateItem(k)))},e=function(c,d,a,k,u){var r=C[k]&&C[k][a];if(r){u=f(u.x-a,u.y-k);a:{for(var q=0;q<r.length;q++)if(r[q]===u){r=!0;break a}r=!1}if(!r)return!1}for(r=0;r<d.length;r++)if(c[k][a]===d[r])return!0;return!1},f=function(c,d){if(0===c&&-1===d)return g.TOP;if(1===c&&
+	-1===d)return g.TOP_RIGHT;if(1===c&&0===d)return g.RIGHT;if(1===c&&1===d)return g.BOTTOM_RIGHT;if(0===c&&1===d)return g.BOTTOM;if(-1===c&&1===d)return g.BOTTOM_LEFT;if(-1===c&&0===d)return g.LEFT;if(-1===c&&-1===d)return g.TOP_LEFT;throw Error("These differences are not valid: "+c+", "+d);},h=function(c,d){return x[d]&&x[d][c]||E[l[d][c]]},m=function(c,d,a,k,u){if(void 0!==c.nodeHash[a]){if(void 0!==c.nodeHash[a][d])return c.nodeHash[a][d]}else c.nodeHash[a]={};var r=c.endX;var q=c.endY,L,I;r=K?(L=
+	Math.abs(d-r))<(I=Math.abs(a-q))?1.4*L+I:1.4*I+L:Math.abs(d-r)+Math.abs(a-q);k=new w(k,d,a,null!==k?k.costSoFar+u:0,r);return c.nodeHash[a][d]=k,k}};g.TOP="TOP";g.TOP_RIGHT="TOP_RIGHT";g.RIGHT="RIGHT";g.BOTTOM_RIGHT="BOTTOM_RIGHT";g.BOTTOM="BOTTOM";g.BOTTOM_LEFT="BOTTOM_LEFT";g.LEFT="LEFT";g.TOP_LEFT="TOP_LEFT"},function(y,p){y.exports=function(){this.pointsToAvoid={};this.endY=this.endX=this.startY=this.callback=this.startX=void 0;this.nodeHash={};this.openList=void 0}},function(y,p){y.exports=function(v,
+	g,n,w,B){this.parent=v;this.x=g;this.y=n;this.costSoFar=w;this.simpleDistanceToTarget=B;this.bestGuessDistance=function(){return this.costSoFar+this.simpleDistanceToTarget}}},function(y,p,v){y.exports=v(4)},function(y,p,v){var g,n,w;(function(){var B=Math.floor;var M=Math.min;var l=function(b,e){return b<e?-1:b>e?1:0};var J=function(b,e,f,h,m){var c;if(null==f&&(f=0),null==m&&(m=l),0>f)throw Error("lo must be non-negative");for(null==h&&(h=b.length);f<h;)0>m(e,b[c=B((f+h)/2)])?h=c:f=c+1;return[].splice.apply(b,
+	[f,f-f].concat(e)),e};var t=function(b,e,f){return null==f&&(f=l),b.push(e),A(b,0,b.length-1,f)};var D=function(b,e){var f,h;return null==e&&(e=l),f=b.pop(),b.length?(h=b[0],b[0]=f,H(b,0,e)):h=f,h};var z=function(b,e,f){var h;return null==f&&(f=l),h=b[0],b[0]=e,H(b,0,f),h};var E=function(b,e,f){var h;return null==f&&(f=l),b.length&&0>f(b[0],e)&&(e=(h=[b[0],e])[0],b[0]=h[1],H(b,0,f)),e};var x=function(b,e){var f,h,m;null==e&&(e=l);var c=[];var d=0;for(f=(h=function(){m=[];for(var k=0,u=B(b.length/
+	2);0<=u?k<u:k>u;0<=u?k++:k--)m.push(k);return m}.apply(this).reverse()).length;d<f;d++){var a=h[d];c.push(H(b,a,e))}return c};var C=function(b,e,f){if(null==f&&(f=l),-1!==(e=b.indexOf(e)))return A(b,0,e,f),H(b,e,f)};var F=function(b,e,f){var h,m;if(null==f&&(f=l),!(h=b.slice(0,e)).length)return h;x(h,f);var c=0;for(e=(m=b.slice(e)).length;c<e;c++)b=m[c],E(h,b,f);return h.sort(f).reverse()};var G=function(b,e,f){var h,m;if(null==f&&(f=l),10*e<=b.length){if(!(m=b.slice(0,e).sort(f)).length)return m;
+	var c=m[m.length-1];var d=0;for(b=(e=b.slice(e)).length;d<b;d++)0>f(h=e[d],c)&&(J(m,h,0,null,f),m.pop(),c=m[m.length-1]);return m}x(b,f);c=[];h=0;for(e=M(e,b.length);0<=e?h<e:h>e;0<=e?++h:--h)c.push(D(b,f));return c};var A=function(b,e,f,h){var m,c,d;null==h&&(h=l);for(m=b[f];f>e&&0>h(m,c=b[d=f-1>>1]);)b[f]=c,f=d;return b[f]=m};var H=function(b,e,f){var h,m;null==f&&(f=l);var c=b.length;var d=e;var a=b[e];for(h=2*e+1;h<c;)(m=h+1)<c&&!(0>f(b[h],b[m]))&&(h=m),b[e]=b[h],h=2*(e=h)+1;return b[e]=a,A(b,
+	d,e,f)};var K=function(){function b(e){this.cmp=null!=e?e:l;this.nodes=[]}return b.push=t,b.pop=D,b.replace=z,b.pushpop=E,b.heapify=x,b.updateItem=C,b.nlargest=F,b.nsmallest=G,b.prototype.push=function(e){return t(this.nodes,e,this.cmp)},b.prototype.pop=function(){return D(this.nodes,this.cmp)},b.prototype.peek=function(){return this.nodes[0]},b.prototype.contains=function(e){return-1!==this.nodes.indexOf(e)},b.prototype.replace=function(e){return z(this.nodes,e,this.cmp)},b.prototype.pushpop=function(e){return E(this.nodes,
+	e,this.cmp)},b.prototype.heapify=function(){return x(this.nodes,this.cmp)},b.prototype.updateItem=function(e){return C(this.nodes,e,this.cmp)},b.prototype.clear=function(){return this.nodes=[]},b.prototype.empty=function(){return 0===this.nodes.length},b.prototype.size=function(){return this.nodes.length},b.prototype.clone=function(){var e;return(e=new b).nodes=this.nodes.slice(0),e},b.prototype.toArray=function(){return this.nodes.slice(0)},b.prototype.insert=b.prototype.push,b.prototype.top=b.prototype.peek,
+	b.prototype.front=b.prototype.peek,b.prototype.has=b.prototype.contains,b.prototype.copy=b.prototype.clone,b}();n=[];void 0===(w="function"==typeof(g=function(){return K})?g.apply(p,n):g)||(y.exports=w)}).call(this)}]);
 
 	/* 
 	@license
@@ -426,7 +113,7 @@
 		// pNearest will only search the closest MAX_NEAREST_TILE_SEARCH tiles or so to find a near tile. If no near tile is found, no path is returned.
 		if (this && this.mapName && this.x !== 10000 && this.y !== 10000) {
 			const TILE_SIZE = VYLO.World.getTileSize();
-			const TICK_FPS = VYLO.Client.maxFPS ? (1000 / VYLO.Client.maxFPS) : 16.67;
+			const TICK_FPS = 16.67;
 			const MAX_ELAPSED_MS = TICK_FPS * 4;
 			const MAX_NEAREST_TILE_SEARCH = 6;
 			const STUCK_MAX_COUNTER = 100;
