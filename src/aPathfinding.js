@@ -424,7 +424,7 @@
 
 	Diob.prototype.goTo = function(pX, pY, pDiagonal = false, pNearest = false, pExclude = []) {
 		// pNearest will only search the closest MAX_NEAREST_TILE_SEARCH tiles or so to find a near tile. If no near tile is found, no path is returned.
-		if (this && this.mapName && this.xPos !== 10000 && this.yPos !== 10000) {
+		if (this && this.mapName && this.x !== 10000 && this.y !== 10000) {
 			const TILE_SIZE = VYLO.World.getTileSize();
 			const TICK_FPS = VYLO.Client.maxFPS ? (1000 / VYLO.Client.maxFPS) : 16.67;
 			const MAX_ELAPSED_MS = TICK_FPS * 4;
@@ -441,7 +441,7 @@
 				this.easystar.setIterationsPerCalculation(1000);
 			}
 			
-			const currentTile = VYLO.Map.getLocByPos(Math.round(this.xPos + this.xOrigin + this.width / 2), Math.round(this.yPos + this.yOrigin + this.height / 2), this.mapName);
+			const currentTile = VYLO.Map.getLocByPos(Math.round(this.x + this.xOrigin + this.width / 2), Math.round(this.y + this.yOrigin + this.height / 2), this.mapName);
 
 			if (!pExclude.includes(currentTile)) {	
 				pExclude.push(currentTile);
@@ -478,7 +478,7 @@
 
 				self.easystar.calculate();
 				if ((self.aPathfinderPath && self.aPathfinderPath.length) || self.aPathfinderMoving) {
-					const coords = { x: Math.round(self.xPos + self.xOrigin + self.width / 2), y: Math.round(self.yPos + self.yOrigin + self.height / 2) };
+					const coords = { x: Math.round(self.x + self.xOrigin + self.width / 2), y: Math.round(self.y + self.yOrigin + self.height / 2) };
 					if (!this.aPathfinderMoving) {
 						const node = self.aPathfinderPath.shift();
 						const nodePos = { x: (node.x * TILE_SIZE.width) - TILE_SIZE.width / 2, y: (node.y * TILE_SIZE.height) - TILE_SIZE.height / 2 };
@@ -595,8 +595,8 @@
 			// Assign what tiles can be used
 			this.easystar.setAcceptableTiles(acceptedTiles);
 
-			const startNodeX = Math.round(this.xPos + this.xOrigin + this.width / 2);
-			const startNodeY = Math.round(this.yPos + this.yOrigin + this.height / 2);
+			const startNodeX = Math.round(this.x + this.xOrigin + this.width / 2);
+			const startNodeY = Math.round(this.y + this.yOrigin + this.height / 2);
 			const endNodeX = VYLO.global.aPathfinder.clamp(Math.round(VYLO.global.aPathfinder.clamp(pX - 1, 0, mapSize.x)) * TILE_SIZE.width + TILE_SIZE.width / 2, 0, mapSize.xPos - TILE_SIZE.width);
 			const endNodeY = VYLO.global.aPathfinder.clamp(Math.round(VYLO.global.aPathfinder.clamp(pY - 1, 0, mapSize.y)) * TILE_SIZE.height + TILE_SIZE.height / 2, 0, mapSize.yPos - TILE_SIZE.height);
 			const startTile = VYLO.Map.getLocByPos(startNodeX, startNodeY, this.mapName);
@@ -635,7 +635,7 @@
 
 						if (tileLeft && !pBlockingDirections['left'] && !(((tileLeft.density && !pExclude.includes(tileLeft)) || tileLeft.getContents().filter((pElement) => {
 							// Only use this if pStart is true
-							const withinYAxis = !pStart ? true : VYLO.global.aPathfinder.within(self.yPos + self.yOrigin + self.height, pElement.yPos + pElement.yOrigin, pElement.yOrigin + pElement.height);
+							const withinYAxis = !pStart ? true : VYLO.global.aPathfinder.within(self.y + self.yOrigin + self.height, pElement.y + pElement.yOrigin, pElement.yOrigin + pElement.height);
 							if (pElement.density && !pExclude.includes(pElement) && withinYAxis) {
 								return pElement.density;
 							}
@@ -650,7 +650,7 @@
 
 						if (tileRight && !pBlockingDirections['right'] && !(((tileRight.density && !pExclude.includes(tileRight)) || tileRight.getContents().filter((pElement) => {
 							// Only use this if pStart is true
-							const withinYAxis = !pStart ? true : VYLO.global.aPathfinder.within(self.yPos + self.yOrigin + self.height, pElement.yPos + pElement.yOrigin, pElement.yOrigin + pElement.height);
+							const withinYAxis = !pStart ? true : VYLO.global.aPathfinder.within(self.y + self.yOrigin + self.height, pElement.y + pElement.yOrigin, pElement.yOrigin + pElement.height);
 							if (pElement.density && !pExclude.includes(pElement) && withinYAxis) {
 								return pElement.density;
 							}
@@ -665,7 +665,7 @@
 
 						if (tileUp && !pBlockingDirections['up'] && !(((tileUp.density && !pExclude.includes(tileUp)) || tileUp.getContents().filter((pElement) => {
 							// Only use this if pStart is true
-							const withinXAxis = !pStart ? true : VYLO.global.aPathfinder.within(self.xPos + self.xOrigin + self.width, pElement.xPos + pElement.xOrigin, pElement.xOrigin + pElement.width);
+							const withinXAxis = !pStart ? true : VYLO.global.aPathfinder.within(self.x + self.xOrigin + self.width, pElement.x + pElement.xOrigin, pElement.xOrigin + pElement.width);
 							if (pElement.density && !pExclude.includes(pElement) && withinXAxis) {
 								return pElement.density;
 							}
@@ -680,7 +680,7 @@
 
 						if (tileDown && !pBlockingDirections['down'] && !(((tileDown.density && !pExclude.includes(tileDown)) || tileDown.getContents().filter((pElement) => {
 							// Only use this if pStart is true
-							const withinXAxis = !pStart ? true : VYLO.global.aPathfinder.within(self.xPos + self.xOrigin + self.width, pElement.xPos + pElement.xOrigin, pElement.xOrigin + pElement.width);
+							const withinXAxis = !pStart ? true : VYLO.global.aPathfinder.within(self.x + self.xOrigin + self.width, pElement.x + pElement.xOrigin, pElement.xOrigin + pElement.width);
 							if (pElement.density && !pExclude.includes(pElement) && withinXAxis) {
 								return pElement.density;
 							}
@@ -755,7 +755,7 @@
 			}
 
 			const getBlockingSides = function(pDiob, pStartNodeX, pStartNodeY, pEndNodeX, pEndNodeY) {
-				const diobTruePos = { x: pDiob.xPos + pDiob.xOrigin + pDiob.width / 2, y: pDiob.yPos + pDiob.yOrigin + pDiob.height / 2};
+				const diobTruePos = { x: pDiob.x + pDiob.xOrigin + pDiob.width / 2, y: pDiob.y + pDiob.yOrigin + pDiob.height / 2};
 				const obstacleBlockingLeft = (pEndNodeX <= diobTruePos.x && pStartNodeX >= diobTruePos.x);
 				const obstacleBlockingRight = (pEndNodeX >= diobTruePos.x && pStartNodeX <= diobTruePos.x);
 				const obstacleBlockingUp = (pEndNodeY <= diobTruePos.y && pStartNodeY >= diobTruePos.y);
