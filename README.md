@@ -1,5 +1,6 @@
 # EPathfinder
 A plugin that will enable pathfinding functionality.  
+Uses https://github.com/prettymuchbryce/easystarjs to generate paths    
 
 ## Implementation 
 
