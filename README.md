@@ -1,26 +1,26 @@
-# aPathfinding
+# EPathfinder
 A plugin that will enable pathfinding functionality.  
 
 ## Implementation 
 
 ### `CLIENT-SIDE`  
-#### #INCLUDE SCRIPT aPathfinding.min.js  
+#### #INCLUDE SCRIPT EPathfinder.min.js  
 ### `SERVER-SIDE` 
-#### #INCLUDE SERSCRIPT aPathfinding.min.js  
+#### #INCLUDE SERSCRIPT EPathfinder.min.js  
 
 ## How to reference  
 ### `Javascript`
-#### aPathfinder  
+#### EPathfinder  
   
 ### `VyScript`  
-#### aPathfinder
+#### EPathfinder
 
 ## API   
 
-###  aPathfinder.toggleDebug()
+###  EPathfinder.toggleDebug()
    - `desc`: Turn on/off the debugging mode of this plugin, which throws additional logs/warnings. Will also show the paths as the instance moves along it. Should be turned off in production code.  
 
-###  diobInstance.aPathfinderWeight   
+###  diobInstance.EPathfinderWeight   
    - `desc`: The weight of this diob in the pathfinder system, higher values will try to make the pathfinder generate paths that do not include this instance  
 
 ###  diobInstance.goTo(pX, pY, pDiagonal, pNearest, pExclude)  

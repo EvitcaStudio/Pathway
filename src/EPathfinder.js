@@ -44,7 +44,7 @@
 
 	/* 
 	@license
-	aPathfinding is free software, available under the terms of a MIT style License.
+	EPathfinding is free software, available under the terms of a MIT style License.
 
 	Copyright (c) 2022 Evitca Studio
 	
@@ -60,7 +60,7 @@
 	
 	This software cannot be sold by itself. It must be used in a project and the project itself can be sold. In the case it is not, you the "user" of this software are breaking the license and agreeing to forfeit its usage.
 	
-	Neither the name “EvitcaStudio” or "aPathfinding" nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+	Neither the name “EvitcaStudio” or "EPathfinding" nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
 	
 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -71,31 +71,31 @@
 	SOFTWARE. 
 	*/
 		
-	const aPathfinder = {};
-	VYLO.global.aPathfinder = aPathfinder;
+	const EPathfinder = {};
+	VYLO.global.EPathfinder = EPathfinder;
 
 	Diob.prototype.cancelMove = function() {
-		if (this.aPathfinderID && this.easystar) {
-			this.easystar.cancelPath(this.aPathfinderID);
+		if (this.EPathfinderID && this.easystar) {
+			this.easystar.cancelPath(this.EPathfinderID);
 			this.easystar.collisionGrid = undefined;
-			this.aPathfinderID = null;
+			this.EPathfinderID = null;
 		}
 
-		if (!this.aPathfinderTrajectory) {
-			this.aPathfinderTrajectory = { angle: 0, x: 0, y: 0, nextNodePos: null, lastTime: 0, deltaTime: 0, elapsedMS: 0 };
+		if (!this.EPathfinderTrajectory) {
+			this.EPathfinderTrajectory = { angle: 0, x: 0, y: 0, nextNodePos: null, lastTime: 0, deltaTime: 0, elapsedMS: 0 };
 		} else {
-			this.aPathfinderTrajectory.x = 0;
-			this.aPathfinderTrajectory.y = 0;
-			this.aPathfinderTrajectory.angle = 0;
-			this.aPathfinderTrajectory.lastTime = 0;
-			this.aPathfinderTrajectory.deltaTime = 0;
-			this.aPathfinderTrajectory.elapsedMS = 0;
-			this.aPathfinderTrajectory.nextNodePos = null;
+			this.EPathfinderTrajectory.x = 0;
+			this.EPathfinderTrajectory.y = 0;
+			this.EPathfinderTrajectory.angle = 0;
+			this.EPathfinderTrajectory.lastTime = 0;
+			this.EPathfinderTrajectory.deltaTime = 0;
+			this.EPathfinderTrajectory.elapsedMS = 0;
+			this.EPathfinderTrajectory.nextNodePos = null;
 		}
 
-		this.aPathfinderPath = [];
-		this.aPathfinderPathReversed = [];
-		this.aPathfinderMoving = false;
+		this.EPathfinderPath = [];
+		this.EPathfinderPathReversed = [];
+		this.EPathfinderMoving = false;
 
 		if (this.moveSettings) {
 			this.moveSettings.stepSlide = false;
@@ -103,10 +103,10 @@
 		}
 
 		// Restore the original stepSize
-		if (this.aPathfinderOriginalStepSize) this.moveSettings.stepSize = this.aPathfinderOriginalStepSize;
+		if (this.EPathfinderOriginalStepSize) this.moveSettings.stepSize = this.EPathfinderOriginalStepSize;
 
 		this.move();
-		clearInterval(this.aPathfinderTrajectory.interval);
+		clearInterval(this.EPathfinderTrajectory.interval);
 	}
 
 	Diob.prototype.goTo = function(pX, pY, pDiagonal = false, pNearest = false, pExclude = []) {
@@ -146,31 +146,31 @@
 			}
 
 			// Store the original stepsize because it will be changed via delta time calculations, and we will reset it after the path is done
-			this.aPathfinderOriginalStepSize = this.moveSettings.stepSize;
+			this.EPathfinderOriginalStepSize = this.moveSettings.stepSize;
 			
-			this.aPathfinderTrajectory.interval = setInterval(() => {
+			this.EPathfinderTrajectory.interval = setInterval(() => {
 				const now = Date.now();
-				if (now > this.aPathfinderTrajectory.lastTime) {
-					this.aPathfinderTrajectory.elapsedMS = now - this.aPathfinderTrajectory.lastTime;
-					if (this.aPathfinderTrajectory.elapsedMS > MAX_ELAPSED_MS) {
+				if (now > this.EPathfinderTrajectory.lastTime) {
+					this.EPathfinderTrajectory.elapsedMS = now - this.EPathfinderTrajectory.lastTime;
+					if (this.EPathfinderTrajectory.elapsedMS > MAX_ELAPSED_MS) {
 						// check here, if warnings are showing up about setInterval taking too long
-						this.aPathfinderTrajectory.elapsedMS = MAX_ELAPSED_MS;
+						this.EPathfinderTrajectory.elapsedMS = MAX_ELAPSED_MS;
 					}
 
-					this.aPathfinderTrajectory.deltaTime = (this.aPathfinderTrajectory.elapsedMS / TICK_FPS);
+					this.EPathfinderTrajectory.deltaTime = (this.EPathfinderTrajectory.elapsedMS / TICK_FPS);
 				}
 
 				// Get the stepSize multiplied by delta time to get the correct size movement
-				this.moveSettings.stepSize = this.aPathfinderOriginalStepSize * this.aPathfinderTrajectory.deltaTime;
+				this.moveSettings.stepSize = this.EPathfinderOriginalStepSize * this.EPathfinderTrajectory.deltaTime;
 
 				self.easystar.calculate();
-				if ((self.aPathfinderPath && self.aPathfinderPath.length) || self.aPathfinderMoving) {
+				if ((self.EPathfinderPath && self.EPathfinderPath.length) || self.EPathfinderMoving) {
 					const coords = { x: Math.round(self.x + self.xOrigin + self.width / 2), y: Math.round(self.y + self.yOrigin + self.height / 2) };
-					if (!this.aPathfinderMoving) {
-						const node = self.aPathfinderPath.shift();
+					if (!this.EPathfinderMoving) {
+						const node = self.EPathfinderPath.shift();
 						const nodePos = { x: (node.x * TILE_SIZE.width) - TILE_SIZE.width / 2, y: (node.y * TILE_SIZE.height) - TILE_SIZE.height / 2 };
 						// Show the next tile in the path to move to
-						if (VYLO.global.aPathfinder.debugging) {
+						if (VYLO.global.EPathfinder.debugging) {
 							const nextTile = VYLO.Map.getLocByPos(nodePos.x, nodePos.y, self.mapName);
 							const nextPathInTileVisual = VYLO.newDiob('Overlay');
 							nextPathInTileVisual.atlasName = '';
@@ -188,16 +188,16 @@
 							}, debuggerDuration);
 						}
 
-						self.aPathfinderTrajectory.angle = VYLO.global.aPathfinder.getAngle(coords, nodePos);
-						self.aPathfinderTrajectory.nextNodePos = nodePos;
-						self.aPathfinderTrajectory.x = Math.cos(self.aPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
-						self.aPathfinderTrajectory.y = Math.sin(self.aPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
-						self.dir = VYLO.global.aPathfinder.getDirFromAngle(-self.aPathfinderTrajectory.angle);
-						self.movePos(self.aPathfinderTrajectory.x, self.aPathfinderTrajectory.y);
-						self.aPathfinderMoving = true;
+						self.EPathfinderTrajectory.angle = VYLO.global.EPathfinder.getAngle(coords, nodePos);
+						self.EPathfinderTrajectory.nextNodePos = nodePos;
+						self.EPathfinderTrajectory.x = Math.cos(self.EPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
+						self.EPathfinderTrajectory.y = Math.sin(self.EPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
+						self.dir = VYLO.global.EPathfinder.getDirFromAngle(-self.EPathfinderTrajectory.angle);
+						self.movePos(self.EPathfinderTrajectory.x, self.EPathfinderTrajectory.y);
+						self.EPathfinderMoving = true;
 
 						// Show the angle to move in
-						if (VYLO.global.aPathfinder.debugging) {
+						if (VYLO.global.EPathfinder.debugging) {
 							const pathAngle = VYLO.newDiob();
 							pathAngle.atlasName = '';
 							pathAngle.color = { tint: 0xFFFFFF };
@@ -208,7 +208,7 @@
 							pathAngle.mouseOpacity = 0;
 							pathAngle.touchOpacity = 0;
 							pathAngle.density = 0;
-							pathAngle.angle = -self.aPathfinderTrajectory.angle;
+							pathAngle.angle = -self.EPathfinderTrajectory.angle;
 							pathAngle.setPos(coords.x, coords.y, self.mapName);
 							pathAngle.setTransition({ alpha: 0 }, -1, debuggerDuration);
 							setTimeout(() => {
@@ -216,24 +216,24 @@
 							}, debuggerDuration);
 						}
 					} else {
-						const distance = Math.round(VYLO.global.aPathfinder.getDistance(coords, self.aPathfinderTrajectory.nextNodePos));
-						if (distance <= self.aPathfinderOriginalStepSize) {
-							self.aPathfinderMoving = false;
+						const distance = Math.round(VYLO.global.EPathfinder.getDistance(coords, self.EPathfinderTrajectory.nextNodePos));
+						if (distance <= self.EPathfinderOriginalStepSize) {
+							self.EPathfinderMoving = false;
 							stuckCounter = 0;
-							if (!self.aPathfinderPath.length) {
+							if (!self.EPathfinderPath.length) {
 								if (self.onPathComplete && typeof(self.onPathComplete) === 'function') {
 									// Passes the ID so that the developer can use it for tracking
-									self.onPathComplete(self.aPathfinderID);
+									self.onPathComplete(self.EPathfinderID);
 								}
 								self.cancelMove();
 							}
 						} else {
-							self.aPathfinderTrajectory.angle = VYLO.global.aPathfinder.getAngle(coords, self.aPathfinderTrajectory.nextNodePos);
-							self.aPathfinderTrajectory.x = Math.cos(self.aPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
-							self.aPathfinderTrajectory.y = Math.sin(self.aPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
-							self.dir = VYLO.global.aPathfinder.getDirFromAngle(-self.aPathfinderTrajectory.angle);
-							self.movePos(self.aPathfinderTrajectory.x, self.aPathfinderTrajectory.y);
-							self.aPathfinderMoving = true;
+							self.EPathfinderTrajectory.angle = VYLO.global.EPathfinder.getAngle(coords, self.EPathfinderTrajectory.nextNodePos);
+							self.EPathfinderTrajectory.x = Math.cos(self.EPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
+							self.EPathfinderTrajectory.y = Math.sin(self.EPathfinderTrajectory.angle); // This is already multiplied by stepSize when using movePos
+							self.dir = VYLO.global.EPathfinder.getDirFromAngle(-self.EPathfinderTrajectory.angle);
+							self.movePos(self.EPathfinderTrajectory.x, self.EPathfinderTrajectory.y);
+							self.EPathfinderMoving = true;
 						}
 					}
 					if (coords.x === storedCoords.x && coords.y === storedCoords.y) {
@@ -248,7 +248,7 @@
 					}
 					storedCoords = coords;
 				}
-				this.aPathfinderTrajectory.lastTime = Date.now();
+				this.EPathfinderTrajectory.lastTime = Date.now();
 			}, 16);
 
 			// Reset the walkable tiles
@@ -268,7 +268,7 @@
 			}
 
 			// Build the 2d array grid that represents the map, the pathfinder is passed along so it can determine the weight of the tiles on the map
-			const gridInfo = VYLO.global.aPathfinder.mapTilesToGrid(this.mapName, pExclude);
+			const gridInfo = VYLO.global.EPathfinder.mapTilesToGrid(this.mapName, pExclude);
 			const grid = gridInfo.grid;
 			const acceptedTiles = gridInfo.acceptedTiles;
 			const weights = gridInfo.weights;
@@ -284,15 +284,15 @@
 
 			const startNodeX = Math.round(this.x + this.xOrigin + this.width / 2);
 			const startNodeY = Math.round(this.y + this.yOrigin + this.height / 2);
-			const endNodeX = VYLO.global.aPathfinder.clamp(Math.round(VYLO.global.aPathfinder.clamp(pX - 1, 0, mapSize.x)) * TILE_SIZE.width + TILE_SIZE.width / 2, 0, mapSize.xPos - TILE_SIZE.width);
-			const endNodeY = VYLO.global.aPathfinder.clamp(Math.round(VYLO.global.aPathfinder.clamp(pY - 1, 0, mapSize.y)) * TILE_SIZE.height + TILE_SIZE.height / 2, 0, mapSize.yPos - TILE_SIZE.height);
+			const endNodeX = VYLO.global.EPathfinder.clamp(Math.round(VYLO.global.EPathfinder.clamp(pX - 1, 0, mapSize.x)) * TILE_SIZE.width + TILE_SIZE.width / 2, 0, mapSize.xPos - TILE_SIZE.width);
+			const endNodeY = VYLO.global.EPathfinder.clamp(Math.round(VYLO.global.EPathfinder.clamp(pY - 1, 0, mapSize.y)) * TILE_SIZE.height + TILE_SIZE.height / 2, 0, mapSize.yPos - TILE_SIZE.height);
 			const startTile = VYLO.Map.getLocByPos(startNodeX, startNodeY, this.mapName);
 			// This end tile is based on the position you bounds are on (this can be a different tile)
 			const endTile = VYLO.Map.getLocByPos(endNodeX, endNodeY, this.mapName);
-			let startNode = VYLO.global.aPathfinder.tileToNode(startTile);
-			let endNode = VYLO.global.aPathfinder.tileToNode(endTile);
+			let startNode = VYLO.global.EPathfinder.tileToNode(startTile);
+			let endNode = VYLO.global.EPathfinder.tileToNode(endTile);
 			
-			if (VYLO.global.aPathfinder.debugging) {
+			if (VYLO.global.EPathfinder.debugging) {
 				const endTileOverlay = VYLO.newDiob('Overlay');
 				endTileOverlay.atlasName = '';
 				endTileOverlay.width = TILE_SIZE.width;
@@ -322,7 +322,7 @@
 
 						if (tileLeft && !pBlockingDirections['left'] && !(((tileLeft.density && !pExclude.includes(tileLeft)) || tileLeft.getContents().filter((pElement) => {
 							// Only use this if pStart is true
-							const withinYAxis = !pStart ? true : VYLO.global.aPathfinder.within(self.y + self.yOrigin + self.height, pElement.y + pElement.yOrigin, pElement.yOrigin + pElement.height);
+							const withinYAxis = !pStart ? true : VYLO.global.EPathfinder.within(self.y + self.yOrigin + self.height, pElement.y + pElement.yOrigin, pElement.yOrigin + pElement.height);
 							if (pElement.density && !pExclude.includes(pElement) && withinYAxis) {
 								return pElement.density;
 							}
@@ -337,7 +337,7 @@
 
 						if (tileRight && !pBlockingDirections['right'] && !(((tileRight.density && !pExclude.includes(tileRight)) || tileRight.getContents().filter((pElement) => {
 							// Only use this if pStart is true
-							const withinYAxis = !pStart ? true : VYLO.global.aPathfinder.within(self.y + self.yOrigin + self.height, pElement.y + pElement.yOrigin, pElement.yOrigin + pElement.height);
+							const withinYAxis = !pStart ? true : VYLO.global.EPathfinder.within(self.y + self.yOrigin + self.height, pElement.y + pElement.yOrigin, pElement.yOrigin + pElement.height);
 							if (pElement.density && !pExclude.includes(pElement) && withinYAxis) {
 								return pElement.density;
 							}
@@ -352,7 +352,7 @@
 
 						if (tileUp && !pBlockingDirections['up'] && !(((tileUp.density && !pExclude.includes(tileUp)) || tileUp.getContents().filter((pElement) => {
 							// Only use this if pStart is true
-							const withinXAxis = !pStart ? true : VYLO.global.aPathfinder.within(self.x + self.xOrigin + self.width, pElement.x + pElement.xOrigin, pElement.xOrigin + pElement.width);
+							const withinXAxis = !pStart ? true : VYLO.global.EPathfinder.within(self.x + self.xOrigin + self.width, pElement.x + pElement.xOrigin, pElement.xOrigin + pElement.width);
 							if (pElement.density && !pExclude.includes(pElement) && withinXAxis) {
 								return pElement.density;
 							}
@@ -367,7 +367,7 @@
 
 						if (tileDown && !pBlockingDirections['down'] && !(((tileDown.density && !pExclude.includes(tileDown)) || tileDown.getContents().filter((pElement) => {
 							// Only use this if pStart is true
-							const withinXAxis = !pStart ? true : VYLO.global.aPathfinder.within(self.x + self.xOrigin + self.width, pElement.x + pElement.xOrigin, pElement.xOrigin + pElement.width);
+							const withinXAxis = !pStart ? true : VYLO.global.EPathfinder.within(self.x + self.xOrigin + self.width, pElement.x + pElement.xOrigin, pElement.xOrigin + pElement.width);
 							if (pElement.density && !pExclude.includes(pElement) && withinXAxis) {
 								return pElement.density;
 							}
@@ -383,7 +383,7 @@
 
 					let nearestNode;
 					
-					if (VYLO.global.aPathfinder.debugging) {
+					if (VYLO.global.EPathfinder.debugging) {
 						for (const rT in rejectedTiles) {
 							const overlay = VYLO.newDiob('Overlay');
 							overlay.color = { tint: 0xFF0000 };
@@ -405,7 +405,7 @@
 					}
 
 					for (const nT in nearestTiles) {
-						if (VYLO.global.aPathfinder.debugging) {
+						if (VYLO.global.EPathfinder.debugging) {
 							const overlay = VYLO.newDiob('Overlay');
 							overlay.color = { tint: 0xFF0000 };
 							overlay.atlasName = '';
@@ -424,10 +424,10 @@
 							}, debuggerDuration);
 						}
 
-						const node = VYLO.global.aPathfinder.tileToNode(nearestTiles[nT]);
+						const node = VYLO.global.EPathfinder.tileToNode(nearestTiles[nT]);
 						if (nearestNode) {
-							const nearestNodeDistance = VYLO.global.aPathfinder.getDistance(pNode, nearestNode);
-							const distance = VYLO.global.aPathfinder.getDistance(pNode, node);
+							const nearestNodeDistance = VYLO.global.EPathfinder.getDistance(pNode, nearestNode);
+							const distance = VYLO.global.EPathfinder.getDistance(pNode, node);
 							// This means the nearest node has been changed now, since we found one with a closer distance
 							if (distance < nearestNodeDistance) {
 								nearestNode = node;
@@ -496,7 +496,7 @@
 				}
 				
 				if (!pNearest || blockingDirections.left && blockingDirections.right && blockingDirections.up && blockingDirections.down) {
-					if (VYLO.global.aPathfinder.debugging) {
+					if (VYLO.global.EPathfinder.debugging) {
 						const startTileOverlay = VYLO.newDiob('Overlay');
 						startTileOverlay.atlasName = '';
 						startTileOverlay.width = TILE_SIZE.width;
@@ -533,7 +533,7 @@
 					if (self.onPathNotFound && typeof(self.onPathNotFound) === 'function') {
 						self.onPathNotFound(endTile);
 					}
-					if (VYLO.global.aPathfinder.debugging) {
+					if (VYLO.global.EPathfinder.debugging) {
 						endTile.getOverlays().filter((pElement) => { pElement.color = { tint: 0xFF0000 }; });
 					}
 					self.cancelMove();
@@ -542,7 +542,7 @@
 			}
 
 			// Find the path
-			this.aPathfinderID = this.easystar.findPath(startNode.x, startNode.y, endNode.x, endNode.y, (pPath) => {
+			this.EPathfinderID = this.easystar.findPath(startNode.x, startNode.y, endNode.x, endNode.y, (pPath) => {
 				if (pPath && pPath.length) {
 					pPath = pPath.map((pElement) => {
 						++pElement.x;
@@ -553,8 +553,8 @@
 					const reversedPath = [...pPath].reverse();
 					// This gets rid of the node you are already on. Makes no sense to travel to the node you already are on.
 					pPath.shift();
-					self.aPathfinderPath = pPath;
-					self.aPathfinderPathReversed = reversedPath;
+					self.EPathfinderPath = pPath;
+					self.EPathfinderPathReversed = reversedPath;
 					if (self.onPathFound && typeof(self.onPathFound) === 'function') {
 						self.onPathFound([...pPath], [...reversedPath]);
 					}
@@ -569,44 +569,44 @@
 			});
 
 		} else {
-			console.error('aPathfinder: No mapName was found on this diob.');
+			console.error('EPathfinder: No mapName was found on this diob.');
 			return;
 		}
-		return this.aPathfinderID;
+		return this.EPathfinderID;
 	};
 
 	// a object that stores the map tiles in normal format and in 2d format
-	aPathfinder.storedMapTiles = {};
+	EPathfinder.storedMapTiles = {};
 	// a object that stores the icon sizes of icons used in this library
-	aPathfinder.cachedResourcesInfo = {};
+	EPathfinder.cachedResourcesInfo = {};
 
-	aPathfinder.clamp = (pVal, pMin, pMax) => {
+	EPathfinder.clamp = (pVal, pMin, pMax) => {
 		return Math.max(pMin, Math.min(pVal, pMax));
 	}
 
-	aPathfinder.within = function (pVal, pMin, pMax) {
+	EPathfinder.within = function (pVal, pMin, pMax) {
 		return pVal >= pMin && pVal <= pMax;
 	}
 
-	aPathfinder.getAngle = function (pStartPoint, pEndPoint) {
+	EPathfinder.getAngle = function (pStartPoint, pEndPoint) {
 		const y = (pStartPoint.y - pEndPoint.y);
 		const x = (pStartPoint.x - pEndPoint.x);
 		return Math.atan2(y, x) - Math.PI;
 	}
 
-	aPathfinder.getDistance = (pStartPoint, pEndPoint) => {
+	EPathfinder.getDistance = (pStartPoint, pEndPoint) => {
 		const y = (pStartPoint.y - pEndPoint.y);
 		const x = (pStartPoint.x - pEndPoint.x);
 		return Math.sqrt(x * x + y * y);
 	}
 
-	aPathfinder.getDirFromAngle = function (pAngle) {
+	EPathfinder.getDirFromAngle = function (pAngle) {
 		const degree = Math.floor(((pAngle * (180 / Math.PI)) / 45) + 0.5);
 		const compassDirections = ['east', 'northeast', 'north', 'northwest', 'west', 'southwest', 'south', 'southeast'];
 		return compassDirections[(degree % 8)];
 	}
 
-	aPathfinder.toTwoDimensionalArray = function(pArray, pLengthOfSubArray) {
+	EPathfinder.toTwoDimensionalArray = function(pArray, pLengthOfSubArray) {
 		let i = 0;
 		const result = [];
 		while (i < pArray.length) {
@@ -615,7 +615,7 @@
 		return result;
 	}
 
-	aPathfinder.mapTilesToGrid = function(pMapName, pExclude) {
+	EPathfinder.mapTilesToGrid = function(pMapName, pExclude) {
 		if (pMapName) {
 			if (VYLO.Map.getMaps().includes(pMapName)) {
 				let tilesArray;
@@ -634,7 +634,7 @@
 				tilesArray.forEach((pElement, pIndex) => {
 					const tile = pElement;
 					// a weight of 0 indicates it is impassable.
-					let weight = (((tile.aPathfindingWeight || tile.aPathfindingWeight === 0) && typeof(tile.aPathfindingWeight) === 'number') ? tile.aPathfindingWeight : 0);
+					let weight = (((tile.EPathfinderWeight || tile.EPathfinderWeight === 0) && typeof(tile.EPathfinderWeight) === 'number') ? tile.EPathfinderWeight : 0);
 
 					if (pExclude.includes(tile)) {
 						// assign the previous assigned weight or just let it be passable
@@ -653,8 +653,8 @@
 							break;
 						}
 						// This can be used to turn a tile that has a dense diob in it into a passable tile, if you deem that diob safe to pass. THIS CAN BREAK PATHFINDING. USE AT YOUR OWN DISCRETION
-						if (diob.aPathfindingWeight && typeof(diob.aPathfindingWeight) === 'number') {
-							weight += diob.aPathfindingWeight;
+						if (diob.EPathfinderWeight && typeof(diob.EPathfinderWeight) === 'number') {
+							weight += diob.EPathfinderWeight;
 						}
 					}
 					
@@ -669,15 +669,15 @@
 				});
 				return { 'acceptedTiles': acceptedTiles, 'grid': this.toTwoDimensionalArray(tilesArray, mapSize.x), 'weights': weights };
 			} else {
-				console.error('aPathfinder: That mapname was not found.');
+				console.error('EPathfinder: That mapname was not found.');
 				return;
 			}
 		} else {
-			console.error('aPathfinder: No mapname was passed.');
+			console.error('EPathfinder: No mapname was passed.');
 		}
 	}
 
-	aPathfinder.getIndexOf2DArray = function(pArray, pValue) {
+	EPathfinder.getIndexOf2DArray = function(pArray, pValue) {
 		for (let i = 0; i < pArray.length; i++) {
 			let index = pArray[i].indexOf(pValue);
 			if (index > -1) {
@@ -686,23 +686,23 @@
 		}
 	}
 
-	aPathfinder.tileToNode = function(pTile) {
+	EPathfinder.tileToNode = function(pTile) {
 		if (pTile && pTile.mapName) {
 			if (this.storedMapTiles[pTile.mapName]) {
 				const index = this.getIndexOf2DArray(this.storedMapTiles[pTile.mapName].tiles2d, pTile);
 				const node = { 'x': index[1], 'y': index[0] };
 				return node;
 			} else {
-				console.error('aPathfinder: There is no stored grid for the map this tile belongs to.');
+				console.error('EPathfinder: There is no stored grid for the map this tile belongs to.');
 			}
 		}
 	}
 
-	aPathfinder.nodeToTile = function(pMapName, pNode) {
+	EPathfinder.nodeToTile = function(pMapName, pNode) {
 		return VYLO.Map.getLoc(pNode.x + 1, pNode.y + 1, pMapName);
 	}
 
-	aPathfinder.toggleDebug = function() {
+	EPathfinder.toggleDebug = function() {
 		this.debugging = !this.debugging;
 	}
 
