@@ -4,9 +4,9 @@ A plugin that will enable pathfinding functionality.
 ## Implementation 
 
 ### `CLIENT-SIDE`  
-#### #INCLUDE SCRIPT aPathfinding.js  
+#### #INCLUDE SCRIPT aPathfinding.min.js  
 ### `SERVER-SIDE` 
-#### #INCLUDE SERSCRIPT aPathfinding.js  
+#### #INCLUDE SERSCRIPT aPathfinding.min.js  
 
 ## How to reference  
 ### `Javascript`
