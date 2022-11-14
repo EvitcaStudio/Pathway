@@ -5,9 +5,9 @@ Uses https://github.com/prettymuchbryce/easystarjs to generate paths
 ## Implementation 
 
 ### `CLIENT-SIDE`  
-#### #INCLUDE SCRIPT EPathfinder.min.js  
+#### #INCLUDE SCRIPT epathfinder.min.js  
 ### `SERVER-SIDE` 
-#### #INCLUDE SERSCRIPT EPathfinder.min.js  
+#### #INCLUDE SERSCRIPT epathfinder.min.js  
 
 ## How to reference  
 ### `Javascript`
@@ -18,10 +18,8 @@ Uses https://github.com/prettymuchbryce/easystarjs to generate paths
 
 ## API   
 
-###  EPathfinder.toggleDebug()  
+###  EPathfinder.toggleDebug()
    - `desc`: Turn on/off the debugging mode of this plugin, which throws additional logs/warnings. Will also show the paths as the instance moves along it. Should be turned off in production code.  
-> **Note**  
-Client-Side only.  
 
 ###  diobInstance.EPathfinderWeight   
    - `desc`: The weight of this diob in the pathfinder system, higher values will try to make the pathfinder generate paths that do not include this instance  
