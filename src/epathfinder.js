@@ -1,27 +1,25 @@
-/*
-@license
-The MIT License (MIT)
+// The MIT License (MIT)
 
-Copyright (c) 2012-2020 Bryce Neal
+// Copyright (c) 2012-2020 Bryce Neal
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-*/
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
 'use strict';var EasyStar=function(y){function p(g){if(v[g])return v[g].exports;var n=v[g]={i:g,l:!1,exports:{}};return y[g].call(n.exports,n,n.exports,p),n.l=!0,n.exports}var v={};return p.m=y,p.c=v,p.d=function(g,n,w){p.o(g,n)||Object.defineProperty(g,n,{enumerable:!0,get:w})},p.r=function(g){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(g,Symbol.toStringTag,{value:"Module"});Object.defineProperty(g,"__esModule",{value:!0})},p.t=function(g,n){if((1&n&&(g=p(g)),8&n)||4&n&&
 "object"==typeof g&&g&&g.__esModule)return g;var w=Object.create(null);if(p.r(w),Object.defineProperty(w,"default",{enumerable:!0,value:g}),2&n&&"string"!=typeof g)for(var B in g)p.d(w,B,function(M){return g[M]}.bind(null,B));return w},p.n=function(g){var n=g&&g.__esModule?function(){return g.default}:function(){return g};return p.d(n,"a",n),n},p.o=function(g,n){return Object.prototype.hasOwnProperty.call(g,n)},p.p="/bin/",p(p.s=0)}([function(y,p,v){var g={},n=v(1),w=v(2),B=v(3);y.exports=g;var M=
 1;g.js=function(){var l,J,t,D=!1,z={},E={},x={},C={},F=!0,G={},A=[],H=Number.MAX_VALUE,K=!1;this.setAcceptableTiles=function(c){c instanceof Array?t=c:!isNaN(parseFloat(c))&&isFinite(c)&&(t=[c])};this.enableSync=function(){D=!0};this.disableSync=function(){D=!1};this.enableDiagonals=function(){K=!0};this.disableDiagonals=function(){K=!1};this.setGrid=function(c){l=c;for(c=0;c<l.length;c++)for(var d=0;d<l[0].length;d++)E[l[c][d]]||(E[l[c][d]]=1)};this.setTileCost=function(c,d){E[c]=d};this.setAdditionalPointCost=
@@ -41,36 +39,35 @@ d,e,f)};var K=function(){function b(e){this.cmp=null!=e?e:l;this.nodes=[]}return
 e,this.cmp)},b.prototype.heapify=function(){return x(this.nodes,this.cmp)},b.prototype.updateItem=function(e){return C(this.nodes,e,this.cmp)},b.prototype.clear=function(){return this.nodes=[]},b.prototype.empty=function(){return 0===this.nodes.length},b.prototype.size=function(){return this.nodes.length},b.prototype.clone=function(){var e;return(e=new b).nodes=this.nodes.slice(0),e},b.prototype.toArray=function(){return this.nodes.slice(0)},b.prototype.insert=b.prototype.push,b.prototype.top=b.prototype.peek,
 b.prototype.front=b.prototype.peek,b.prototype.has=b.prototype.contains,b.prototype.copy=b.prototype.clone,b}();n=[];void 0===(w="function"==typeof(g=function(){return K})?g.apply(p,n):g)||(y.exports=w)}).call(this)}]);
 
-/* 
-@license
-EPathfinding is free software, available under the terms of a MIT style License.
 
-Copyright (c) 2022 Evitca Studio
+// EPathfinding is free software, available under the terms of a MIT style License.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+// Copyright (c) 2022 Evitca Studio
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
 
-This software cannot be sold by itself. It must be used in a project and the project itself can be sold. In the case it is not, you the "user" of this software are breaking the license and agreeing to forfeit its usage.
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
 
-Neither the name “EvitcaStudio” or "EPathfinding" nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// This software cannot be sold by itself. It must be used in a project and the project itself can be sold. In the case it is not, you the "user" of this software are breaking the license and agreeing to forfeit its usage.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE. 
-*/
+// Neither the name “EvitcaStudio” or "EPathfinding" nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
 
-Diob.prototype.cancelMove = function() {
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE. 
+
+const protoDiob = VYLO.newDiob();
+protoDiob.__proto__.constructor.prototype.cancelMove = function() {
 	if (this.EPathfinderID && this.easystar) {
 		this.easystar.cancelPath(this.EPathfinderID);
 		this.easystar.collisionGrid = undefined;
@@ -105,7 +102,7 @@ Diob.prototype.cancelMove = function() {
 	clearInterval(this.EPathfinderTrajectory.interval);
 }
 
-Diob.prototype.goTo = function(pX, pY, pDiagonal = false, pNearest = false, pExclude = []) {
+protoDiob.__proto__.constructor.prototype.goTo = function(pX, pY, pDiagonal = false, pNearest = false, pExclude = []) {
 	// pNearest will only search the closest MAX_NEAREST_TILE_SEARCH tiles or so to find a near tile. If no near tile is found, no path is returned.
 	if (this && this.mapName && this.x !== 10000 && this.y !== 10000) {
 		const TILE_SIZE = VYLO.World.getTileSize();
@@ -570,6 +567,7 @@ Diob.prototype.goTo = function(pX, pY, pDiagonal = false, pNearest = false, pExc
 	}
 	return this.EPathfinderID;
 };
+VYLO.delDiob(protoDiob);
 
 class EPathfinderManager {
 	constructor() {
