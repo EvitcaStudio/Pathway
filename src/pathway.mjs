@@ -25,6 +25,7 @@ import { EasyStar } from './vendor/easystar-0.4.4.min.js';
  * @todo Use icon width to get center when applicable.
  * @todo JSDOC annotations
  * @todo Look into better method for getting index of 2D array lol.
+ * @todo Allow devs to specify if they want collisions to be taken into account during the move, so they can choose to use setPos or `movePos`.
  */
 
 
@@ -530,7 +531,19 @@ VYLO.delDiob(protoDiob);
 
 
 class Pathway {
-
+	/**
+	 * The version of the module.
+	 */
+	version = "VERSION_REPLACE_ME";
+	constructor() {
+        // Create a logger
+        /** The logger module this module uses to log errors / logs
+         * @private
+         * @type {Object}
+         */
+        this.logger = new Logger();
+        this.logger.registerType('Pathway-Module', '#ff6600');
+	}
 }
 
 class EPathfinderManager {
@@ -662,10 +675,6 @@ class EPathfinderManager {
 	nodeToTile(pMapName, pNode) {
 		return VYLO.Map.getLoc(pNode.x + 1, pNode.y + 1, pMapName);
 	}
-
-	toggleDebug() {
-		this.debugging = !this.debugging;
-	}
 }
 
-(typeof(window) !== 'undefined' ? window : global).EPathfinder = new EPathfinderManager();
+export const Pathway = new Pathway();
