@@ -1,76 +1,37 @@
-// The MIT License (MIT)
+import { Utils } from './vendor/utils.min.mjs';
+import { Logger } from './vendor/logger.min.mjs';
+import { EasyStar } from './vendor/easystar-0.4.4.min.js';
 
-// Copyright (c) 2012-2020 Bryce Neal
+/**
+ * @todo Remove adding overlays
+ * @todo Remove prototyping
+ * @todo condense into Pathway class
+ * @todo remove EPathfinder prefix
+ * @todo Add weakmaps to reference data and not mutate
+ * @todo Test on server
+ * @todo Remove tick / delta time ?? Move the instance in PPS (pixels per second) stop storing original step size and only allow player to input speed, or read from move settings.
+ * @todo remove stepSlide ?? Figure out why its used.
+ * @todo reuse references and stop recreating objects per tick. This gets intensive for no reason.
+ * @todo allow path to be returned without traveling it.
+ * @todo add utils module for API, get rid of additional angle and etc API
+ * @todo make debugging class
+ * @todo Add in README that this is expecting VYLO variable to be global.
+ * @todo storedMapTiles variable should be cached on a "global" level. As a static func on the pathway class. To get cached info.
+ * @todo cachedResourcesInfo variable should be cached on a "global" level. As a static func on the pathway class.
+ * @todo Add tweakable stuck data. Allowing devs to change the stuck counter and etc.
+ * @todo Allow devs to "pass" data to the pathway class. Such as assigning the tile size. Pathway.setTileSize(32) The default will be 32. This will be used in calculations.
+ * @todo Create a "rectangle" between start and end nodes. That way you won't need to process the entire map grid when moving small distances.
+ * @todo Easy way to use reversed path.
+ * @todo Use icon width to get center when applicable.
+ * @todo JSDOC annotations
+ * @todo Look into better method for getting index of 2D array lol.
+ */
 
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-
-'use strict';var EasyStar=function(y){function p(g){if(v[g])return v[g].exports;var n=v[g]={i:g,l:!1,exports:{}};return y[g].call(n.exports,n,n.exports,p),n.l=!0,n.exports}var v={};return p.m=y,p.c=v,p.d=function(g,n,w){p.o(g,n)||Object.defineProperty(g,n,{enumerable:!0,get:w})},p.r=function(g){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(g,Symbol.toStringTag,{value:"Module"});Object.defineProperty(g,"__esModule",{value:!0})},p.t=function(g,n){if((1&n&&(g=p(g)),8&n)||4&n&&
-"object"==typeof g&&g&&g.__esModule)return g;var w=Object.create(null);if(p.r(w),Object.defineProperty(w,"default",{enumerable:!0,value:g}),2&n&&"string"!=typeof g)for(var B in g)p.d(w,B,function(M){return g[M]}.bind(null,B));return w},p.n=function(g){var n=g&&g.__esModule?function(){return g.default}:function(){return g};return p.d(n,"a",n),n},p.o=function(g,n){return Object.prototype.hasOwnProperty.call(g,n)},p.p="/bin/",p(p.s=0)}([function(y,p,v){var g={},n=v(1),w=v(2),B=v(3);y.exports=g;var M=
-1;g.js=function(){var l,J,t,D=!1,z={},E={},x={},C={},F=!0,G={},A=[],H=Number.MAX_VALUE,K=!1;this.setAcceptableTiles=function(c){c instanceof Array?t=c:!isNaN(parseFloat(c))&&isFinite(c)&&(t=[c])};this.enableSync=function(){D=!0};this.disableSync=function(){D=!1};this.enableDiagonals=function(){K=!0};this.disableDiagonals=function(){K=!1};this.setGrid=function(c){l=c;for(c=0;c<l.length;c++)for(var d=0;d<l[0].length;d++)E[l[c][d]]||(E[l[c][d]]=1)};this.setTileCost=function(c,d){E[c]=d};this.setAdditionalPointCost=
-function(c,d,a){void 0===x[d]&&(x[d]={});x[d][c]=a};this.removeAdditionalPointCost=function(c,d){void 0!==x[d]&&delete x[d][c]};this.removeAllAdditionalPointCosts=function(){x={}};this.setDirectionalCondition=function(c,d,a){void 0===C[d]&&(C[d]={});C[d][c]=a};this.removeAllDirectionalConditions=function(){C={}};this.setIterationsPerCalculation=function(c){H=c};this.avoidAdditionalPoint=function(c,d){void 0===z[d]&&(z[d]={});z[d][c]=1};this.stopAvoidingAdditionalPoint=function(c,d){void 0!==z[d]&&
-delete z[d][c]};this.enableCornerCutting=function(){F=!0};this.disableCornerCutting=function(){F=!1};this.stopAvoidingAllAdditionalPoints=function(){z={}};this.findPath=function(c,d,a,k,u){var r=function(N){D?u(N):setTimeout(function(){u(N)})};if(void 0===t)throw Error("You can't set a path without first calling setAcceptableTiles() on EasyStar.");if(void 0===l)throw Error("You can't set a path without first calling setGrid() on EasyStar.");if(0>c||0>d||0>a||0>k||c>l[0].length-1||d>l.length-1||a>
-l[0].length-1||k>l.length-1)throw Error("Your start or end point is outside the scope of your grid.");if(c!==a||d!==k){for(var q=l[k][a],L=!1,I=0;I<t.length;I++)if(q===t[I]){L=!0;break}if(!1!==L)return q=new n,q.openList=new B(function(N,O){return N.bestGuessDistance()-O.bestGuessDistance()}),q.isDoneCalculating=!1,q.nodeHash={},q.startX=c,q.startY=d,q.endX=a,q.endY=k,q.callback=r,q.openList.push(m(q,q.startX,q.startY,null,1)),c=M++,G[c]=q,A.push(c),c;r(null)}else r([])};this.cancelPath=function(c){return c in
-G&&(delete G[c],!0)};this.calculate=function(){if(0!==A.length&&void 0!==l&&void 0!==t)for(J=0;J<H&&0!==A.length;J++){D&&(J=0);var c=A[0],d=G[c];if(void 0!==d)if(0!==d.openList.size()){var a=d.openList.pop();if(d.endX!==a.x||d.endY!==a.y)a.list=0,0<a.y&&b(d,a,0,-1,1*h(a.x,a.y-1)),a.x<l[0].length-1&&b(d,a,1,0,1*h(a.x+1,a.y)),a.y<l.length-1&&b(d,a,0,1,1*h(a.x,a.y+1)),0<a.x&&b(d,a,-1,0,1*h(a.x-1,a.y)),K&&(0<a.x&&0<a.y&&(F||e(l,t,a.x,a.y-1,a)&&e(l,t,a.x-1,a.y,a))&&b(d,a,-1,-1,1.4*h(a.x-1,a.y-1)),a.x<
-l[0].length-1&&a.y<l.length-1&&(F||e(l,t,a.x,a.y+1,a)&&e(l,t,a.x+1,a.y,a))&&b(d,a,1,1,1.4*h(a.x+1,a.y+1)),a.x<l[0].length-1&&0<a.y&&(F||e(l,t,a.x,a.y-1,a)&&e(l,t,a.x+1,a.y,a))&&b(d,a,1,-1,1.4*h(a.x+1,a.y-1)),0<a.x&&a.y<l.length-1&&(F||e(l,t,a.x,a.y+1,a)&&e(l,t,a.x-1,a.y,a))&&b(d,a,-1,1,1.4*h(a.x-1,a.y+1)));else{var k=[];k.push({x:a.x,y:a.y});for(a=a.parent;null!=a;)k.push({x:a.x,y:a.y}),a=a.parent;k.reverse();d.callback(k);delete G[c];A.shift()}}else d.callback(null),delete G[c],A.shift();else A.shift()}};
-var b=function(c,d,a,k,u){a=d.x+a;k=d.y+k;void 0!==z[k]&&void 0!==z[k][a]||!e(l,t,a,k,d)||(k=m(c,a,k,d,u),void 0===k.list?(k.list=1,c.openList.push(k)):d.costSoFar+u<k.costSoFar&&(k.costSoFar=d.costSoFar+u,k.parent=d,c.openList.updateItem(k)))},e=function(c,d,a,k,u){var r=C[k]&&C[k][a];if(r){u=f(u.x-a,u.y-k);a:{for(var q=0;q<r.length;q++)if(r[q]===u){r=!0;break a}r=!1}if(!r)return!1}for(r=0;r<d.length;r++)if(c[k][a]===d[r])return!0;return!1},f=function(c,d){if(0===c&&-1===d)return g.TOP;if(1===c&&
--1===d)return g.TOP_RIGHT;if(1===c&&0===d)return g.RIGHT;if(1===c&&1===d)return g.BOTTOM_RIGHT;if(0===c&&1===d)return g.BOTTOM;if(-1===c&&1===d)return g.BOTTOM_LEFT;if(-1===c&&0===d)return g.LEFT;if(-1===c&&-1===d)return g.TOP_LEFT;throw Error("These differences are not valid: "+c+", "+d);},h=function(c,d){return x[d]&&x[d][c]||E[l[d][c]]},m=function(c,d,a,k,u){if(void 0!==c.nodeHash[a]){if(void 0!==c.nodeHash[a][d])return c.nodeHash[a][d]}else c.nodeHash[a]={};var r=c.endX;var q=c.endY,L,I;r=K?(L=
-Math.abs(d-r))<(I=Math.abs(a-q))?1.4*L+I:1.4*I+L:Math.abs(d-r)+Math.abs(a-q);k=new w(k,d,a,null!==k?k.costSoFar+u:0,r);return c.nodeHash[a][d]=k,k}};g.TOP="TOP";g.TOP_RIGHT="TOP_RIGHT";g.RIGHT="RIGHT";g.BOTTOM_RIGHT="BOTTOM_RIGHT";g.BOTTOM="BOTTOM";g.BOTTOM_LEFT="BOTTOM_LEFT";g.LEFT="LEFT";g.TOP_LEFT="TOP_LEFT"},function(y,p){y.exports=function(){this.pointsToAvoid={};this.endY=this.endX=this.startY=this.callback=this.startX=void 0;this.nodeHash={};this.openList=void 0}},function(y,p){y.exports=function(v,
-g,n,w,B){this.parent=v;this.x=g;this.y=n;this.costSoFar=w;this.simpleDistanceToTarget=B;this.bestGuessDistance=function(){return this.costSoFar+this.simpleDistanceToTarget}}},function(y,p,v){y.exports=v(4)},function(y,p,v){var g,n,w;(function(){var B=Math.floor;var M=Math.min;var l=function(b,e){return b<e?-1:b>e?1:0};var J=function(b,e,f,h,m){var c;if(null==f&&(f=0),null==m&&(m=l),0>f)throw Error("lo must be non-negative");for(null==h&&(h=b.length);f<h;)0>m(e,b[c=B((f+h)/2)])?h=c:f=c+1;return[].splice.apply(b,
-[f,f-f].concat(e)),e};var t=function(b,e,f){return null==f&&(f=l),b.push(e),A(b,0,b.length-1,f)};var D=function(b,e){var f,h;return null==e&&(e=l),f=b.pop(),b.length?(h=b[0],b[0]=f,H(b,0,e)):h=f,h};var z=function(b,e,f){var h;return null==f&&(f=l),h=b[0],b[0]=e,H(b,0,f),h};var E=function(b,e,f){var h;return null==f&&(f=l),b.length&&0>f(b[0],e)&&(e=(h=[b[0],e])[0],b[0]=h[1],H(b,0,f)),e};var x=function(b,e){var f,h,m;null==e&&(e=l);var c=[];var d=0;for(f=(h=function(){m=[];for(var k=0,u=B(b.length/
-2);0<=u?k<u:k>u;0<=u?k++:k--)m.push(k);return m}.apply(this).reverse()).length;d<f;d++){var a=h[d];c.push(H(b,a,e))}return c};var C=function(b,e,f){if(null==f&&(f=l),-1!==(e=b.indexOf(e)))return A(b,0,e,f),H(b,e,f)};var F=function(b,e,f){var h,m;if(null==f&&(f=l),!(h=b.slice(0,e)).length)return h;x(h,f);var c=0;for(e=(m=b.slice(e)).length;c<e;c++)b=m[c],E(h,b,f);return h.sort(f).reverse()};var G=function(b,e,f){var h,m;if(null==f&&(f=l),10*e<=b.length){if(!(m=b.slice(0,e).sort(f)).length)return m;
-var c=m[m.length-1];var d=0;for(b=(e=b.slice(e)).length;d<b;d++)0>f(h=e[d],c)&&(J(m,h,0,null,f),m.pop(),c=m[m.length-1]);return m}x(b,f);c=[];h=0;for(e=M(e,b.length);0<=e?h<e:h>e;0<=e?++h:--h)c.push(D(b,f));return c};var A=function(b,e,f,h){var m,c,d;null==h&&(h=l);for(m=b[f];f>e&&0>h(m,c=b[d=f-1>>1]);)b[f]=c,f=d;return b[f]=m};var H=function(b,e,f){var h,m;null==f&&(f=l);var c=b.length;var d=e;var a=b[e];for(h=2*e+1;h<c;)(m=h+1)<c&&!(0>f(b[h],b[m]))&&(h=m),b[e]=b[h],h=2*(e=h)+1;return b[e]=a,A(b,
-d,e,f)};var K=function(){function b(e){this.cmp=null!=e?e:l;this.nodes=[]}return b.push=t,b.pop=D,b.replace=z,b.pushpop=E,b.heapify=x,b.updateItem=C,b.nlargest=F,b.nsmallest=G,b.prototype.push=function(e){return t(this.nodes,e,this.cmp)},b.prototype.pop=function(){return D(this.nodes,this.cmp)},b.prototype.peek=function(){return this.nodes[0]},b.prototype.contains=function(e){return-1!==this.nodes.indexOf(e)},b.prototype.replace=function(e){return z(this.nodes,e,this.cmp)},b.prototype.pushpop=function(e){return E(this.nodes,
-e,this.cmp)},b.prototype.heapify=function(){return x(this.nodes,this.cmp)},b.prototype.updateItem=function(e){return C(this.nodes,e,this.cmp)},b.prototype.clear=function(){return this.nodes=[]},b.prototype.empty=function(){return 0===this.nodes.length},b.prototype.size=function(){return this.nodes.length},b.prototype.clone=function(){var e;return(e=new b).nodes=this.nodes.slice(0),e},b.prototype.toArray=function(){return this.nodes.slice(0)},b.prototype.insert=b.prototype.push,b.prototype.top=b.prototype.peek,
-b.prototype.front=b.prototype.peek,b.prototype.has=b.prototype.contains,b.prototype.copy=b.prototype.clone,b}();n=[];void 0===(w="function"==typeof(g=function(){return K})?g.apply(p,n):g)||(y.exports=w)}).call(this)}]);
-
-
-// EPathfinding is free software, available under the terms of a MIT style License.
-
-// Copyright (c) 2022 Evitca Studio
-
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-
-// This software cannot be sold by itself. It must be used in a project and the project itself can be sold. In the case it is not, you the "user" of this software are breaking the license and agreeing to forfeit its usage.
-
-// Neither the name “EvitcaStudio” or "EPathfinding" nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE. 
 
 const protoDiob = VYLO.newDiob();
 protoDiob.__proto__.constructor.prototype.cancelMove = function() {
 	if (this.EPathfinderID && this.easystar) {
 		this.easystar.cancelPath(this.EPathfinderID);
-		this.easystar.collisionGrid = undefined;
 		this.EPathfinderID = null;
 	}
 
@@ -101,6 +62,7 @@ protoDiob.__proto__.constructor.prototype.cancelMove = function() {
 	this.move();
 	clearInterval(this.EPathfinderTrajectory.interval);
 }
+
 
 protoDiob.__proto__.constructor.prototype.goTo = function(pX, pY, pDiagonal = false, pNearest = false, pExclude = []) {
 	// pNearest will only search the closest MAX_NEAREST_TILE_SEARCH tiles or so to find a near tile. If no near tile is found, no path is returned.
@@ -157,6 +119,7 @@ protoDiob.__proto__.constructor.prototype.goTo = function(pX, pY, pDiagonal = fa
 			this.moveSettings.stepSize = this.EPathfinderOriginalStepSize * this.EPathfinderTrajectory.deltaTime;
 
 			self.easystar.calculate();
+
 			if ((self.EPathfinderPath && self.EPathfinderPath.length) || self.EPathfinderMoving) {
 				const coords = { x: Math.round(self.x + self.xOrigin + self.width / 2), y: Math.round(self.y + self.yOrigin + self.height / 2) };
 				if (!this.EPathfinderMoving) {
@@ -169,7 +132,7 @@ protoDiob.__proto__.constructor.prototype.goTo = function(pX, pY, pDiagonal = fa
 						nextPathInTileVisual.atlasName = '';
 						nextPathInTileVisual.width = TILE_SIZE.width;
 						nextPathInTileVisual.height = TILE_SIZE.height;
-						nextPathInTileVisual.color = { tint: 0x005aff };
+						nextPathInTileVisual.tint = 0x005aff;
 						nextPathInTileVisual.alpha = 0.8;
 						nextPathInTileVisual.plane = 0;
 						nextPathInTileVisual.mouseOpacity = 0;
@@ -193,7 +156,7 @@ protoDiob.__proto__.constructor.prototype.goTo = function(pX, pY, pDiagonal = fa
 					if (EPathfinder.debugging) {
 						const pathAngle = VYLO.newDiob();
 						pathAngle.atlasName = '';
-						pathAngle.color = { tint: 0xFFFFFF };
+						pathAngle.tint = 0xFFFFFF;
 						pathAngle.width = TILE_SIZE.width;
 						pathAngle.height = 5;
 						pathAngle.anchor = 0;
@@ -214,7 +177,7 @@ protoDiob.__proto__.constructor.prototype.goTo = function(pX, pY, pDiagonal = fa
 						self.EPathfinderMoving = false;
 						stuckCounter = 0;
 						if (!self.EPathfinderPath.length) {
-							if (self.onPathComplete && typeof(self.onPathComplete) === 'function') {
+							if (typeof(self.onPathComplete) === 'function') {
 								// Passes the ID so that the developer can use it for tracking
 								self.onPathComplete(self.EPathfinderID);
 							}
@@ -233,7 +196,7 @@ protoDiob.__proto__.constructor.prototype.goTo = function(pX, pY, pDiagonal = fa
 					stuckCounter++;
 					if (stuckCounter >= STUCK_MAX_COUNTER) {
 						self.cancelMove();
-						if (self.onPathStuck && typeof(self.onPathStuck) === 'function') {
+						if (typeof(self.onPathStuck) === 'function') {
 							self.onPathStuck();
 							return;
 						}
@@ -244,14 +207,10 @@ protoDiob.__proto__.constructor.prototype.goTo = function(pX, pY, pDiagonal = fa
 			this.EPathfinderTrajectory.lastTime = Date.now();
 		}, 16);
 
-		// Reset the walkable tiles
-		this.easystar.setAcceptableTiles([0]);
 		// Disable diagonals in the event they were enabled in a previous call
 		this.easystar.disableDiagonals();
 		// Disable corner cutting in the event it was enabled in a previous call
 		this.easystar.disableCornerCutting();
-		// Reset the grid
-		this.easystar.setGrid([[]]);
 
 		// Enable diagonals if the developer wants diagonal
 		if (pDiagonal) {
@@ -290,7 +249,7 @@ protoDiob.__proto__.constructor.prototype.goTo = function(pX, pY, pDiagonal = fa
 			endTileOverlay.atlasName = '';
 			endTileOverlay.width = TILE_SIZE.width;
 			endTileOverlay.height = TILE_SIZE.height;
-			endTileOverlay.color = { tint: 0xFFFFFF };
+			endTileOverlay.tint = 0xFFFFFF;
 			endTileOverlay.alpha = 0.7;
 			endTileOverlay.plane = 0;
 			endTileOverlay.touchOpacity = 0;
@@ -379,12 +338,12 @@ protoDiob.__proto__.constructor.prototype.goTo = function(pX, pY, pDiagonal = fa
 				if (EPathfinder.debugging) {
 					for (const rT in rejectedTiles) {
 						const overlay = VYLO.newDiob('Overlay');
-						overlay.color = { tint: 0xFF0000 };
+						overlay.tint = 0xFF0000;
 						overlay.atlasName = '';
 						overlay.width = TILE_SIZE.width;
 						overlay.height = TILE_SIZE.height;
 						// red and orange signify a tile that is unreachable
-						overlay.color = { tint: (pStart ? 0xffa500 : 0xFF0000) };
+						overlay.tint = (pStart ? 0xffa500 : 0xFF0000);
 						overlay.alpha = 0.3;
 						overlay.plane = 0;
 						overlay.mouseOpacity = 0;
@@ -400,12 +359,12 @@ protoDiob.__proto__.constructor.prototype.goTo = function(pX, pY, pDiagonal = fa
 				for (const nT in nearestTiles) {
 					if (EPathfinder.debugging) {
 						const overlay = VYLO.newDiob('Overlay');
-						overlay.color = { tint: 0xFF0000 };
+						overlay.tint = 0xFF0000;
 						overlay.atlasName = '';
 						overlay.width = TILE_SIZE.width;
 						overlay.height = TILE_SIZE.height;
 						// blue and green signify a tile that is reachable
-						overlay.color = { tint: (pStart ? 0x87ceeb : 0x00ff00) };
+						overlay.tint = (pStart ? 0x87ceeb : 0x00ff00);
 						overlay.alpha = 0.3;
 						overlay.plane = 0;
 						overlay.mouseOpacity = 0;
@@ -494,7 +453,7 @@ protoDiob.__proto__.constructor.prototype.goTo = function(pX, pY, pDiagonal = fa
 					startTileOverlay.atlasName = '';
 					startTileOverlay.width = TILE_SIZE.width;
 					startTileOverlay.height = TILE_SIZE.height;
-					startTileOverlay.color = { tint: 0xFF0000 };
+					startTileOverlay.tint = 0xFF0000;
 					startTileOverlay.alpha = 0.7;
 					startTileOverlay.plane = 0;
 					startTileOverlay.touchOpacity = 0;
@@ -505,7 +464,7 @@ protoDiob.__proto__.constructor.prototype.goTo = function(pX, pY, pDiagonal = fa
 						endTile.removeOverlay(startTileOverlay);
 					}, debuggerDuration);
 				}							
-				if (self.onPathNotFound && typeof(self.onPathNotFound) === 'function') {
+				if (typeof(self.onPathNotFound) === 'function') {
 					self.onPathNotFound(startTile);
 				}
 				self.cancelMove();
@@ -523,11 +482,13 @@ protoDiob.__proto__.constructor.prototype.goTo = function(pX, pY, pDiagonal = fa
 			}
 
 			if (!pNearest) {
-				if (self.onPathNotFound && typeof(self.onPathNotFound) === 'function') {
+				if (typeof(self.onPathNotFound) === 'function') {
 					self.onPathNotFound(endTile);
 				}
 				if (EPathfinder.debugging) {
-					endTile.getOverlays().filter((pElement) => { pElement.color = { tint: 0xFF0000 }; });
+					endTile.getOverlays().filter((pElement) => { 
+						pElement.tint = 0xFF0000; 
+					});
 				}
 				self.cancelMove();
 				return;
@@ -548,17 +509,15 @@ protoDiob.__proto__.constructor.prototype.goTo = function(pX, pY, pDiagonal = fa
 				pPath.shift();
 				self.EPathfinderPath = pPath;
 				self.EPathfinderPathReversed = reversedPath;
-				if (self.onPathFound && typeof(self.onPathFound) === 'function') {
+				if (typeof(self.onPathFound) === 'function') {
 					self.onPathFound([...pPath], [...reversedPath]);
 				}
 			} else if (!pPath || !pPath.length) {
-				if (self.onPathNotFound && typeof(self.onPathNotFound) === 'function') {
+				if (typeof(self.onPathNotFound) === 'function') {
 					self.onPathNotFound();
 				}
 				self.cancelMove();
 			}
-			// get the 2d array out of memory. Since there will be a easystar instance per diob that uses pathfinding
-			self.easystar.collisionGrid = undefined;
 		});
 
 	} else {
@@ -568,6 +527,11 @@ protoDiob.__proto__.constructor.prototype.goTo = function(pX, pY, pDiagonal = fa
 	return this.EPathfinderID;
 };
 VYLO.delDiob(protoDiob);
+
+
+class Pathway {
+
+}
 
 class EPathfinderManager {
 	constructor() {
@@ -650,7 +614,7 @@ class EPathfinderManager {
 							break;
 						}
 						// This can be used to turn a tile that has a dense diob in it into a passable tile, if you deem that diob safe to pass. THIS CAN BREAK PATHFINDING. USE AT YOUR OWN DISCRETION
-						if (diob.EPathfinderWeight && typeof(diob.EPathfinderWeight) === 'number') {
+						if (typeof(diob.EPathfinderWeight) === 'number') {
 							weight += diob.EPathfinderWeight;
 						}
 					}
