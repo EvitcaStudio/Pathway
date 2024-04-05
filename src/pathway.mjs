@@ -25,45 +25,9 @@ import { EasyStar } from './vendor/easystar-0.4.4.min.js';
  * @todo Use icon width to get center when applicable.
  * @todo JSDOC annotations
  * @todo Look into better method for getting index of 2D array lol.
+ * @todo Make sure to reset stuck counter when the player moves, because a previous stuck counter may bump it to the max counter even when its not truly "stuck".
  * @todo Allow devs to specify if they want collisions to be taken into account during the move, so they can choose to use setPos or `movePos`.
  */
-
-
-const protoDiob = VYLO.newDiob();
-protoDiob.__proto__.constructor.prototype.cancelMove = function() {
-	if (this.EPathfinderID && this.easystar) {
-		this.easystar.cancelPath(this.EPathfinderID);
-		this.EPathfinderID = null;
-	}
-
-	if (!this.EPathfinderTrajectory) {
-		this.EPathfinderTrajectory = { angle: 0, x: 0, y: 0, nextNodePos: null, lastTime: 0, deltaTime: 0, elapsedMS: 0 };
-	} else {
-		this.EPathfinderTrajectory.x = 0;
-		this.EPathfinderTrajectory.y = 0;
-		this.EPathfinderTrajectory.angle = 0;
-		this.EPathfinderTrajectory.lastTime = 0;
-		this.EPathfinderTrajectory.deltaTime = 0;
-		this.EPathfinderTrajectory.elapsedMS = 0;
-		this.EPathfinderTrajectory.nextNodePos = null;
-	}
-
-	this.EPathfinderPath = [];
-	this.EPathfinderPathReversed = [];
-	this.EPathfinderMoving = false;
-
-	if (this.moveSettings) {
-		this.moveSettings.stepSlide = false;
-		this.moveSettings = this.moveSettings;
-	}
-
-	// Restore the original stepSize
-	if (this.EPathfinderOriginalStepSize) this.moveSettings.stepSize = this.EPathfinderOriginalStepSize;
-
-	this.move();
-	clearInterval(this.EPathfinderTrajectory.interval);
-}
-
 
 protoDiob.__proto__.constructor.prototype.goTo = function(pX, pY, pDiagonal = false, pNearest = false, pExclude = []) {
 	// pNearest will only search the closest MAX_NEAREST_TILE_SEARCH tiles or so to find a near tile. If no near tile is found, no path is returned.
@@ -532,9 +496,24 @@ VYLO.delDiob(protoDiob);
 
 class Pathway {
 	/**
+	 * The maximum amount of ticks an instance can be in the same position before the pathfinder deems it "stuck". The user will be able to tweak values up to this max value.
+	 * @private
+	 * @type {number}
+	 */
+	static MAX_STUCK_COUNTER = 1000;
+	/**
 	 * The version of the module.
 	 */
 	version = "VERSION_REPLACE_ME";
+	/**
+	 * A weakmap storing the data of instances used in this pathfinder.
+	 * @private
+	 * @type {WeakMap}
+	 */
+	instanceWeakMap = new WeakMap();
+	/**
+	 * @private
+	 */
 	constructor() {
         // Create a logger
         /** The logger module this module uses to log errors / logs
@@ -543,6 +522,91 @@ class Pathway {
          */
         this.logger = new Logger();
         this.logger.registerType('Pathway-Module', '#ff6600');
+	}
+	/**
+	 * Moves pInstance to the destination position with pOptions in mind.
+	 * @param {Object} pInstance - The instance to move to the destination. The origin position will be retrived from this instance as well.
+	 * @param {Object} pDestination - The end position to travel to.
+	 * @property {number} pDestination.x - The end x coordinate.
+	 * @property {number} pDestination.y - The end y coordinate.
+	 * @param {Object} pOptions - An object of settings on how to move pInstance to pDestination.
+	 * @property {boolean} pOptions.diagonal - Whether or not the pathfinder allows diagonal moves.
+	 * @property {boolean} pOptions.nearest - Whether or not the path will find the nearest path if the provided coordinates are blocked.
+	 * @property {Array} pOptions.exclude - An array of diobs that will be ignored when calculating the path.
+	 * @property {string} pOptions.mode - How this instance will move. `collision` for moving with collisions in mind (movePos). `position` for moving with no collisions in mind (setPos). 
+	 */
+	to(pInstance, pDestination, pOptions) {
+		// Get the instance data for this instance
+		const instanceData = this.instanceWeakMap.get(pInstance);
+		// If there is no instance data
+		if (!instanceData) {
+			// Set the instance data
+			const instanceData = {
+				trajectory: { 
+					angle: 0, 
+					x: 0, 
+					y: 0, 
+					nextNodePos: null,
+				},
+				// The stuck counter of this instance. When this instance is in the same position for multiple ticks, this value is added onto up until -
+				// the max stuck counter is reached and the `stuck` event is called.
+				stuckCounter: 0,
+				pathID: null, // ID of the path that was generated. Used to cancel the path.
+				path: null,
+				reversedPath: null,
+				active: null,
+				easystar: new EasyStar.js()
+			};
+			// If you have a large grid, then it is possible that these calculations could slow down the browser. 
+			// For this reason, it might be a good idea to give EasyStar a smaller iterationsPerCalculation
+			// https://github.com/prettymuchbryce/easystarjs
+			instanceData.easystar.setIterationsPerCalculation(1000);
+			// Assign the instance data
+			this.instanceWeakMap.set(pInstance, instanceData);
+		}
+	}
+	/**
+	 * Ends the current pathfinding for pInstance.
+	 * @param {Object} pInstance - The instance to terminate pathfinding on.
+	 */
+	end(pInstance) {
+		// Get the instance data for this instance
+		const instanceData = this.instanceWeakMap.get(pInstance);
+		if (instanceData) {
+			// We are ending the pathfinding. So we get the path ID so we can cancel calculations being made for this path.
+			if (instanceData.pathID) {
+				instanceData.easystar.cancelPath(instanceData.pathID);
+				instanceData.pathID = null;
+			}
+			// Reset trajectory data
+			instanceData.trajectory.x = 0;
+			instanceData.trajectory.y = 0;
+			instanceData.trajectory.angle = 0;
+			instanceData.trajectory.nextNodePos = null;
+			// Reset stuck counter
+			instanceData.stuckCounter = 0;
+			// Empty path(s) array
+			instanceData.path.length = 0;
+			instanceData.reversedPath.length = 0;
+			instanceData.active = false;
+			// Stop instance from moving via VYLO API.
+			pInstance.move();
+		} else {
+			this.logger.prefix('Pathway-Module').error('No instance data found from pInstance. This instance is not engaged in pathfinding.');
+		}
+	}
+	/**
+	 * 
+	 * @param {Object} pOrigin - An object containing the start x and y position. 
+	 * @property {number} pOrigin.x - The start x coordinate.
+	 * @property {number} pOrigin.y -The start y coordinate.
+	 * @param {Object} pDestination - An object containing the end x and y position to travel to.
+	 * @property {number} pDestination.x - The end x coordinate.
+	 * @property {number} pDestination.y - The end y coordinate.
+	 * @returns {Array} An array containing the path from the start position to the end position.
+	 */
+	getPath(pOrigin, pDestination) {
+
 	}
 }
 
