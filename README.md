@@ -21,6 +21,7 @@ import {Pathway} from 'pathway/src/pathway.mjs';
    - `pOptions.mode` How this instance will move. `collision` for moving with collisions in mind (movePos). `position` for moving with no collisions in mind (setPos). `string`
    - `pOptions.nearest`: Whether or not the path will find the nearest path if the provided coordinates are blocked `boolean`  
    - `pOptions.ignore`: An array of diobs that will be ignored when calculating the path `array`  
+   - `pOptions.maxStuckCounter` The maximum amount of ticks of pInstance being in the same position as the last tick before its considered stuck. `number`
    - `desc`: Moves this `diobInstance` to the provided coordinates by walking along a generated path free of obstacles. Returns a `pathID` if a path is generated  
 
 ###  Pathway.end(pInstance)  

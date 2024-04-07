@@ -14,7 +14,7 @@ class PathwaySingleton {
 	 * @private
 	 * @type {number}
 	 */
-	static MAX_STUCK_COUNTER = 1000;
+	static MAX_STUCK_COUNTER = 100;
 	/**
 	 * The maximum amount of tiles to search from the end tile.
 	 * @private
@@ -44,7 +44,13 @@ class PathwaySingleton {
 	 * @private
 	 * @type {number}
 	 */
-	static NO_TRAVEL_WEIGHT = 999999999;
+	static NO_TRAVEL_WEIGHT = -1;
+	/**
+	 * The duration a debugger object exists.
+	 * @private
+	 * @type {number}
+	 */
+	static DEBUGGER_DURATION = 3000;
 	/**
 	 * An object that stores the map tiles in normal format and in 2D format.
 	 * @private
@@ -92,6 +98,12 @@ class PathwaySingleton {
 	 */
 	elapsedMS = 0;
 	/**
+	 * An array of active instances that are currently pathfinding.
+	 * @private
+	 * @type {Array}
+	 */
+	activeInstances = [];
+	/**
 	 * @private
 	 */
 	constructor() {
@@ -114,6 +126,7 @@ class PathwaySingleton {
 	 * @property {boolean} pOptions.center - Whether the position of this sprite is based in the center. If set to true, the center of the sprite will be used as the position. If no icon is found then the center of the geometrical bounds will be used as the center.
 	 * @property {boolean} pOptions.nearest - Whether or not the path will find the nearest path if the provided coordinates are blocked.
 	 * @property {Array} pOptions.ignore - An array of diobs that will be ignored when calculating the path.
+	 * @property {number} pOptions.maxStuckCounter - The maximum amount of ticks of pInstance being in the same position as the last tick before its considered stuck.
 	 * @property {string} pOptions.mode - How this instance will move. `collision` for moving with collisions in mind (movePos). `position` for moving with no collisions in mind (setPos). 
 	 */
 	async to(pInstance, pDestination, pOptions) {
@@ -153,8 +166,9 @@ class PathwaySingleton {
 					// The stuck counter of this instance. When this instance is in the same position for multiple ticks, this value is added onto up until -
 					// the max stuck counter is reached and the `stuck` event is called.
 					stuckCounter: 0,
+					maxStuckCounter: PathwaySingleton.MAX_STUCK_COUNTER,
 					pathID: null, // ID of the path that was generated. Used to cancel the path.
-					path: null,
+					path: [],
 					positionFromCenter: pOptions.center,
 					moving: null,
 					mode: mode,
@@ -193,6 +207,11 @@ class PathwaySingleton {
 				}
 			}
 
+			// If max stuck counter is found in options, set it.
+			if (typeof(pOptions.maxStuckCounter) === 'number') {
+				instanceData.maxStuckCounter = pOptions.maxStuckCounter;
+			}
+
 			// Enable diagonals if found in passed options.
 			if (pOptions.diagonal) {
 				// Enables diagonals
@@ -211,9 +230,13 @@ class PathwaySingleton {
 			// Assign what tiles can be used
 			instanceData.easystar.setAcceptableTiles(gridInfo.acceptedTiles);
 
+			console.log(gridInfo);
+
+			// Get the dimensions of the map that was passed.
+			const mapSize = VYLO.Map.getMapSize(pInstance.mapName);
 			// Get the end nodes position so we can get the endTile
-			const endNodeX = Utils.clamp(Utils.clamp(pDestination.x - 1, 0, mapSize.x) * this.tileSize.width + this.tileSize.width / 2, 0, mapSize.xPos - this.tileSize.width);
-			const endNodeY = Utils.clamp(Utils.clamp(pDestination.y - 1, 0, mapSize.y) * this.tileSize.height + this.tileSize.height / 2, 0, mapSize.yPos - this.tileSize.height);
+			const endNodeX = Utils.clamp(Utils.clamp(pDestination.x, 0, mapSize.x) * this.tileSize.width + this.tileSize.width / 2, 0, mapSize.xPos - this.tileSize.width);
+			const endNodeY = Utils.clamp(Utils.clamp(pDestination.y, 0, mapSize.y) * this.tileSize.height + this.tileSize.height / 2, 0, mapSize.yPos - this.tileSize.height);
 			// Get the end time tile
 			const endTile = VYLO.Map.getLocByPos(endNodeX, endNodeY, pInstance.mapName);
 			// Get the start node from the originTile
@@ -232,15 +255,15 @@ class PathwaySingleton {
 				endTileOverlay.plane = 0;
 				endTileOverlay.touchOpacity = 0;
 				endTileOverlay.touchOpacity = 0;
-				endTileOverlay.setTransition({ alpha: 0 }, -1, debuggerDuration);
+				endTileOverlay.setTransition({ alpha: 0 }, -1, PathwaySingleton.DEBUGGER_DURATION);
 				endTile.addOverlay(endTileOverlay);
 				setTimeout(() => {
 					endTile.removeOverlay(endTileOverlay);
-				}, debuggerDuration);
+				}, PathwaySingleton.DEBUGGER_DURATION);
 			}
 
 			// If the origin tile is invalid to be walked on.
-			if (this.isTileInvalid(originTile)) {
+			if (this.isTileInvalid(originTile, ignoreList)) {
 				/**
 				 * The axis that are blocked.
 				 * @type {Object}
@@ -268,14 +291,14 @@ class PathwaySingleton {
 					}
 					
 					// Get the nearest node
-					let nearestNode = this.getNearestNode(pInstance, startNode, instancePosition.x, instancePosition.y, blockedAxis, true);
+					let nearestNode = this.getNearestNode(pInstance, startNode, instancePosition.x, instancePosition.y, blockedAxis, true, ignoreList);
 					
 					// If the west axis is blocked.
 					if (blockedAxis.west) {
 						// Get the tile to the east of the instance
 						const tileRight = VYLO.Map.getLocByPos(instancePosition.x + this.tileSize.width / 2, instancePosition.y, pInstance.mapName);
 						// If the tile to the east is invalid then we shift to the next node.
-						if (this.isTileInvalid(tileRight)) {
+						if (this.isTileInvalid(tileRight, ignoreList)) {
 							nearestNode.x++;
 						}
 					}
@@ -284,7 +307,7 @@ class PathwaySingleton {
 						// Get the tile to the west of the instance
 						const tileLeft = VYLO.Map.getLocByPos(instancePosition.x - this.tileSize.width / 2, instancePosition.y, pInstance.mapName);
 						// If the tile to the west is invalid then we shift to the next node.
-						if (this.isTileInvalid(tileLeft)) {
+						if (this.isTileInvalid(tileLeft, ignoreList)) {
 							nearestNode.x--;
 						}
 					}
@@ -293,7 +316,7 @@ class PathwaySingleton {
 						// Get the tile to the north of the instance
 						const tileUp = VYLO.Map.getLocByPos(instancePosition.x, instancePosition.y + this.tileSize.height / 2, pInstance.mapName);
 						// If the tile to the north is invalid then we shift to the next node.
-						if (this.isTileInvalid(tileUp)) {
+						if (this.isTileInvalid(tileUp, ignoreList)) {
 							nearestNode.y++;
 						}
 					}
@@ -301,7 +324,7 @@ class PathwaySingleton {
 					if (blockedAxis.south) {
 						// Get the tile to the south of the instance
 						const tileDown = VYLO.Map.getLocByPos(instancePosition.x, instancePosition.y - this.tileSize.height / 2, pInstance.mapName);
-						if (this.isTileInvalid(tileDown)) {
+						if (this.isTileInvalid(tileDown, ignoreList)) {
 							nearestNode.y--;
 						}
 					}
@@ -321,35 +344,36 @@ class PathwaySingleton {
 						startTileOverlay.plane = 0;
 						startTileOverlay.touchOpacity = 0;
 						startTileOverlay.touchOpacity = 0;
-						startTileOverlay.setTransition({ alpha: 0 }, -1, debuggerDuration);
+						startTileOverlay.setTransition({ alpha: 0 }, -1, PathwaySingleton.DEBUGGER_DURATION);
 						startTile.addOverlay(startTileOverlay);
 						setTimeout(() => {
 							endTile.removeOverlay(startTileOverlay);
-						}, debuggerDuration);
+						}, PathwaySingleton.DEBUGGER_DURATION);
 					}
 					// No path was found because all axis are blocked or the option to find the nearest valid path is not toggled on.
 					// So fire the path not found event.	
 					if (typeof(self.onPathNotFound) === 'function') {
 						self.onPathNotFound();
 					}
+					console.log('path not found, origin tile')
 					this.end(pInstance);
 					return;
 				}
 			}
-	
 			// If the end tile is invalid to be walked on.
 			/**
 			 * @todo Create a closest to path instead.
 			 */
-			if (this.isTileInvalid(endTile)) {
+			if (this.isTileInvalid(endTile, ignoreList)) {
 				if (pOptions.nearest) {
-					const nearestNode = this.getNearestNode(pInstance, endNode, endNodeX, endNodeY);
+					const nearestNode = this.getNearestNode(pInstance, endNode, endNodeX, endNodeY, undefined, undefined, ignoreList);
 					endNode = nearestNode;
 				} else {
 					// No path was found due to tend tile not being walkable and
 					if (typeof(self.onPathNotFound) === 'function') {
 						self.onPathNotFound();
 					}
+					console.log('path not found, end tile')
 					if (this.debugging) {
 						endTile.getOverlays().filter((pElement) => { 
 							pElement.tint = 0xFF0000; 
@@ -360,26 +384,32 @@ class PathwaySingleton {
 				}
 			}
 			// Generate the path for the player
-			const generatedPath = this.getPath({x: startNode.x, y: startNode.y }, { x: endNode.x, y: endNode.y });
-			// Store the path
-			instanceData.path = generatedPath.path;
-			// Store the pathID
-			instanceData.pathID = generatedPath.pathID;
-			// When a path is found, fire the event function.
-			if (generatedPath.path) {
-				if (typeof(self.onPathFound) === 'function') {
-					self.onPathFound();
-				}
-			// If no path was found, fire the event function.
-			} else {
-				if (typeof(self.onPathNotFound) === 'function') {
-					self.onPathNotFound();
-				}
-				// If no path is found then we end the pathfinding on this instance.
-				this.end(pInstance);
-			}
+			this.getPath(pInstance, { x: startNode.x, y: startNode.y }, { x: endNode.x, y: endNode.y });
 		} else {
 			this.logger.prefix('Pathway-Module').error('Invalid type passed for pInstance. Expecting an object.');
+		}
+	}
+	/**
+	 * Tracks this instance as active.
+	 * @private
+	 * @param {Object} pInstance - The instance to track.
+	 */
+	track(pInstance) {
+		// Add this instance to being tracked.
+		if (!this.activeInstances.includes(pInstance)) {
+			this.activeInstances.push(pInstance);
+			console.log('tracked')
+		}
+	}
+	/**
+	 * Untracks this instance. It is no longer considered active.
+	 * @param {Object} pInstance - The instance to untrack.
+	 */
+	untrack(pInstance) {
+		// Remove this instance from being tracked.
+		if (this.activeInstances.includes(pInstance)) {
+			this.activeInstances.splice(this.activeInstances.indexOf(pInstance), 1);
+			console.log('untracked')
 		}
 	}
 	/**
@@ -408,6 +438,8 @@ class PathwaySingleton {
 			instanceData.trajectory.nextNodePos = null;
 			// Reset stuck counter
 			instanceData.stuckCounter = 0;
+			// Reset the max stuck counter
+			instanceData.maxStuckCounter = PathwaySingleton.MAX_STUCK_COUNTER;
 			// Empty path(s) array
 			instanceData.path.length = 0;
 			// Reset it to not being moved.
@@ -416,13 +448,27 @@ class PathwaySingleton {
 			instanceData.mode = 'collision';
 			// Stop instance from moving via VYLO API.
 			pInstance.move();
+			// Untrack pInstance as an active instance.
+			this.untrack(pInstance);
 		} else {
 			this.logger.prefix('Pathway-Module').error('No instance data found from pInstance. This instance is not engaged in pathfinding.');
 		}
 	}
-	getNearestNode(pInstance, pNode, pNodeX, pNodeY, pBlockedAxis = { west: false, east: false, north: false, south: false }, pStart) {
+	/**
+	 * Gets the nearest node from a starter node. This is used when the node cannot be traveled to, so a node nearby is used as a substitute.
+	 * @private
+	 * @param {Object} pInstance - The instance to get the position from.
+	 * @param {Object} pNode - The starter node. This will be returned if no closer node is found.
+	 * @param {number} pNodeX - The x position of the node.
+	 * @param {number} pNodeY - The y position of the node.
+	 * @param {Object} pBlockedAxis - The axis that are blocked.
+	 * @param {boolean} pStart - If this is a start node.
+	 * @param {Array} pIgnoreList - The list of ignored tiles/instances.
+	 * @returns {Object} The nearest node, or the starter node if one cannot be found.
+	 */
+	getNearestNode(pInstance, pNode, pNodeX, pNodeY, pBlockedAxis = { west: false, east: false, north: false, south: false }, pStart, pIgnoreList) {
 		const instancePosition = this.getPositionFromInstance(pInstance);
-		if (pNode) {
+		if (typeof(pNode) === 'object') {
 			/**
 			 * Object holding nearest tiles.
 			 */
@@ -431,18 +477,18 @@ class PathwaySingleton {
 			 * Object holding rejected tiles.
 			 */
 			let rejectedTiles = {};
-			// The nearest node to use to travel to.
-			let nodeToUse;
+			// Loop through nearby tiles based on the position of the node
+			// To find a closer valid node.
 			for (let i = 1; i <= PathwaySingleton.MAX_NEAREST_TILE_SEARCH; i++) {
 				const tileLeft = VYLO.Map.getLocByPos(pNodeX - (i * this.tileSize.width / 2), pNodeY, pInstance.mapName);
 				const tileRight = VYLO.Map.getLocByPos(pNodeX + (i * this.tileSize.width / 2), pNodeY, pInstance.mapName);
 				const tileUp = VYLO.Map.getLocByPos(pNodeX, pNodeY - (i * this.tileSize.height / 2), pInstance.mapName);
 				const tileDown = VYLO.Map.getLocByPos(pNodeX, pNodeY + (i * this.tileSize.height / 2), pInstance.mapName);
 
-				if (tileLeft && !pBlockedAxis.west && !(((tileLeft.density && !ignoreList.includes(tileLeft)) || tileLeft.getContents().filter((pElement) => {
+				if (tileLeft && !pBlockedAxis.west && !(((tileLeft.density && !pIgnoreList.includes(tileLeft)) || tileLeft.getContents().filter((pElement) => {
 					// Only use this if pStart is true
 					const withinYAxis = !pStart ? true : Utils.within(instancePosition.y, pElement.y + pElement.yOrigin, pElement.yOrigin + pElement.height);
-					if (pElement.density && !ignoreList.includes(pElement) && withinYAxis) {
+					if (pElement.density && !pIgnoreList.includes(pElement) && withinYAxis) {
 						return pElement.density;
 					}
 					}).length)))
@@ -454,10 +500,10 @@ class PathwaySingleton {
 					if (i <= 1) pBlockedAxis.west = true;
 				}
 
-				if (tileRight && !pBlockedAxis.east && !(((tileRight.density && !ignoreList.includes(tileRight)) || tileRight.getContents().filter((pElement) => {
+				if (tileRight && !pBlockedAxis.east && !(((tileRight.density && !pIgnoreList.includes(tileRight)) || tileRight.getContents().filter((pElement) => {
 					// Only use this if pStart is true
 					const withinYAxis = !pStart ? true : Utils.within(instancePosition.y, pElement.y + pElement.yOrigin, pElement.yOrigin + pElement.height);
-					if (pElement.density && !ignoreList.includes(pElement) && withinYAxis) {
+					if (pElement.density && !pIgnoreList.includes(pElement) && withinYAxis) {
 						return pElement.density;
 					}
 					}).length)))
@@ -469,10 +515,10 @@ class PathwaySingleton {
 					if (i <= 1) pBlockedAxis.east = true;
 				}
 
-				if (tileUp && !pBlockedAxis.north && !(((tileUp.density && !ignoreList.includes(tileUp)) || tileUp.getContents().filter((pElement) => {
+				if (tileUp && !pBlockedAxis.north && !(((tileUp.density && !pIgnoreList.includes(tileUp)) || tileUp.getContents().filter((pElement) => {
 					// Only use this if pStart is true
 					const withinXAxis = !pStart ? true : Utils.within(instancePosition.x, pElement.x + pElement.xOrigin, pElement.xOrigin + pElement.width);
-					if (pElement.density && !ignoreList.includes(pElement) && withinXAxis) {
+					if (pElement.density && !pIgnoreList.includes(pElement) && withinXAxis) {
 						return pElement.density;
 					}
 					}).length))) 
@@ -484,10 +530,10 @@ class PathwaySingleton {
 					if (i <= 1) pBlockedAxis.north = true;
 				}
 
-				if (tileDown && !pBlockedAxis.south && !(((tileDown.density && !ignoreList.includes(tileDown)) || tileDown.getContents().filter((pElement) => {
+				if (tileDown && !pBlockedAxis.south && !(((tileDown.density && !pIgnoreList.includes(tileDown)) || tileDown.getContents().filter((pElement) => {
 					// Only use this if pStart is true
 					const withinXAxis = !pStart ? true : Utils.within(instancePosition.x, pElement.x + pElement.xOrigin, pElement.xOrigin + pElement.width);
-					if (pElement.density && !ignoreList.includes(pElement) && withinXAxis) {
+					if (pElement.density && !pIgnoreList.includes(pElement) && withinXAxis) {
 						return pElement.density;
 					}
 					}).length))) 
@@ -499,11 +545,11 @@ class PathwaySingleton {
 					if (i <= 1) pBlockedAxis.south = true;
 				}
 			}
-
+			// The nearest node
 			let nearestNode;
 			
 			if (this.debugging) {
-				for (const rT in rejectedTiles) {
+				for (const tile in rejectedTiles) {
 					const overlay = VYLO.newDiob();
 					overlay.tint = 0xFF0000;
 					overlay.atlasName = '';
@@ -515,15 +561,15 @@ class PathwaySingleton {
 					overlay.plane = 0;
 					overlay.mouseOpacity = 0;
 					overlay.touchOpacity = 0;
-					overlay.setTransition({ alpha: 0 }, -1, debuggerDuration);
-					rejectedTiles[rT].addOverlay(overlay);
+					overlay.setTransition({ alpha: 0 }, -1, PathwaySingleton.DEBUGGER_DURATION);
+					rejectedTiles[tile].addOverlay(overlay);
 					setTimeout(() => {
-						rejectedTiles[rT].removeOverlay(overlay);
-					}, debuggerDuration);
+						rejectedTiles[tile].removeOverlay(overlay);
+					}, PathwaySingleton.DEBUGGER_DURATION);
 				}
 			}
 
-			for (const nT in nearestTiles) {
+			for (const tile in nearestTiles) {
 				if (this.debugging) {
 					const overlay = VYLO.newDiob();
 					overlay.tint = 0xFF0000;
@@ -536,30 +582,30 @@ class PathwaySingleton {
 					overlay.plane = 0;
 					overlay.mouseOpacity = 0;
 					overlay.touchOpacity = 0;
-					overlay.setTransition({ alpha: 0 }, -1, debuggerDuration);
-					nearestTiles[nT].addOverlay(overlay);
+					overlay.setTransition({ alpha: 0 }, -1, PathwaySingleton.DEBUGGER_DURATION);
+					nearestTiles[tile].addOverlay(overlay);
 					setTimeout(() => {
-						nearestTiles[nT].removeOverlay(overlay);
-					}, debuggerDuration);
+						nearestTiles[tile].removeOverlay(overlay);
+					}, PathwaySingleton.DEBUGGER_DURATION);
 				}
-
-				const node = this.tileToNode(nearestTiles[nT]);
-				if (nearestNode) {
-					const nearestNodeDistance = Utils.getDistance(pNode, nearestNode);
-					const distance = Utils.getDistance(pNode, node);
-					// This means the nearest node has been changed now, since we found one with a closer distance
-					if (distance < nearestNodeDistance) {
-						nearestNode = node;
-					}
-				} else {
-					nearestNode = node;
-				}
+				// Get the node from the nearest tile found.
+				nearestNode = this.tileToNode(nearestTiles[tile]);
 			}
-			nodeToUse = nearestNode ? nearestNode : pNode;
-			return nodeToUse;
+			// Choose which node to use. If a node has been found then we use that one. 
+			// Otherwise we use the node that we started with.
+			return nearestNode ? nearestNode : pNode;
 		}
 	}
-
+	/**
+	 * Gets the blocking sides from pInstance.
+	 * @private
+	 * @param {Object} pInstance - The instance to get blocking sides from.
+	 * @param {number} pStartNodeX - The start x position.
+	 * @param {number} pStartNodeY - The start y position.
+	 * @param {number} pEndNodeX - The end x position.
+	 * @param {number} pEndNodeY - The end y position.
+	 * @returns {Object} The sides that are blocked.
+	 */
 	getBlockingSides(pInstance, pStartNodeX, pStartNodeY, pEndNodeX, pEndNodeY) {
 		const instancePosition = this.getPositionFromInstance(pInstance);
 		const obstacleBlockingLeft = (pEndNodeX <= instancePosition.x && pStartNodeX >= instancePosition.x);
@@ -575,8 +621,8 @@ class PathwaySingleton {
 	}
 	/**
 	 * Gets the position from the instance based on the pathfinding info. Centered position from the icon, or geometrical or from top left origin.
-	 * @param {Object} pInstance - The instance to get the position from.
 	 * @private
+	 * @param {Object} pInstance - The instance to get the position from.
 	 * @returns {Object} - The position of the instance.
 	 */
 	getPositionFromInstance(pInstance) {
@@ -602,140 +648,147 @@ class PathwaySingleton {
 	}
 	/**
 	 * Updates active instances on the pathfinder.
+	 * @private
 	 * @returns 
 	 */
 	update() {
-		const instance = null;
-		// Get the instance data for this instance
-		const instanceData = this.instanceWeakMap.get(instance);
-		if (instanceData) {
-			// Get current timestamp
-			const now = Date.now();
-			// Get the elapsed ms from the last tick
-			this.elapsedMS = now - this.lastTime;
-			// Get the delta time between the last tick
-			this.deltaTime = (this.elapsedMS / 1000);
-			// If the delta time grows too large, we clamp it
-			if (this.deltaTime >= PathwaySingleton.MAX_DELTA_TIME) {
-				this.deltaTime = PathwaySingleton.CLAMPED_DELTA_TIME;
-			}
-			
-			// Calculate the path
-			instanceData.easystar.calculate();
+		// Loop active instances and update.
+		this.activeInstances.forEach((pInstance) => {
+			// Get the instance data for this instance
+			const instanceData = this.instanceWeakMap.get(pInstance);
+			if (instanceData) {
+				// Get current timestamp
+				const now = Date.now();
+				// Get the elapsed ms from the last tick
+				this.elapsedMS = now - this.lastTime;
+				// Get the delta time between the last tick
+				this.deltaTime = (this.elapsedMS / 1000);
+				// If the delta time grows too large, we clamp it
+				if (this.deltaTime >= PathwaySingleton.MAX_DELTA_TIME) {
+					this.deltaTime = PathwaySingleton.CLAMPED_DELTA_TIME;
+				}
+				
+				// Calculate the path
+				instanceData.easystar.calculate();
 
-			// If this instance is being moved
-			if (instanceData.path.length || instanceData.moving) {
-				// Get the position of the instance
-				const instancePosition = this.getPositionFromInstance(instance);
-				// If the instance is not moving
-				if (!instanceData.moving) {
-					// Get the next node to travel to.
-					const node = instanceData.path.shift();
-					// Get the position of that node in real world coordinates.
-					const nodePos = { x: (node.x * this.tileSize.width) - this.tileSize.width / 2, y: (node.y * this.tileSize.height) - this.tileSize.height / 2 };
-					// Debug mode to visualize the next node
-					if (this.debugging) {
-						const nextTile = VYLO.Map.getLocByPos(nodePos.x, nodePos.y, instance.mapName);
-						const nextPathInTileVisual = VYLO.newDiob();
-						nextPathInTileVisual.atlasName = '';
-						nextPathInTileVisual.width = this.tileSize.width;
-						nextPathInTileVisual.height = this.tileSize.height;
-						nextPathInTileVisual.tint = 0x005aff;
-						nextPathInTileVisual.alpha = 0.8;
-						nextPathInTileVisual.plane = 0;
-						nextPathInTileVisual.mouseOpacity = 0;
-						nextPathInTileVisual.touchOpacity = 0;
-						nextPathInTileVisual.setTransition({ alpha: 0 }, -1, debuggerDuration);
-						nextTile.addOverlay(nextPathInTileVisual);
-						setTimeout(() => {
-							nextTile.removeOverlay(nextPathInTileVisual);
-						}, debuggerDuration);
-					}
-					
-					// Update the trajectory of the instance to be moved in.
-					instanceData.trajectory.angle = Utils.getAngle2(instancePosition, nodePos);
-					// Store the next node position
-					instanceData.trajectory.nextNodePos = nodePos;
-					// Get the trajectory of where to move the instance
-					instanceData.trajectory.x = Math.cos(instanceData.trajectory.angle);
-					instanceData.trajectory.y = -Math.sin(instanceData.trajectory.angle);
-					// Update the direction of the instance.
-					instance.dir = Utils.getDirection(instanceData.trajectory.angle);
-					// Move the instance with collision mode or positional mode
-					if (instanceData.mode === 'collision') {
-						instance.movePos(instanceData.trajectory.x, instanceData.trajectory.y);
-					} else if (instanceData.mode === 'position') {
-						instance.setPos(instanceData.trajectory.x, instanceData.trajectory.y, instance.mapName);
-					}
-					instanceData.moving = true;
-
-					// Debug mode to visualize the angle to move in
-					if (this.debugging) {
-						const pathAngle = VYLO.newDiob();
-						pathAngle.atlasName = '';
-						pathAngle.tint = 0xFFFFFF;
-						pathAngle.width = this.tileSize.width;
-						pathAngle.height = 5;
-						pathAngle.anchor = 0;
-						pathAngle.plane = 0;
-						pathAngle.mouseOpacity = 0;
-						pathAngle.touchOpacity = 0;
-						pathAngle.density = 0;
-						pathAngle.angle = instanceData.trajectory.angle;
-						pathAngle.setPos(instancePosition.x, instancePosition.y, self.mapName);
-						pathAngle.setTransition({ alpha: 0 }, -1, debuggerDuration);
-						setTimeout(() => {
-							VYLO.delDiob(pathAngle);
-						}, debuggerDuration);
-					}
-				} else {
-					// Get the distance from the instance's position to the next node's position.
-					const distance = Math.floor(Utils.getDistance(instancePosition, instanceData.trajectory.nextNodePos));
-					// Stop moving when you are this close distance.
-					if (distance <= instance.moveSettings.stepSize) {
-						// Stop moving
-						instanceData.moving = false;
-						// Reset stuck counter when moving has "stopped".
-						instanceData.stuckCounter = 0;
-						// If there is no more nodes left in the path
-						if (!instanceData.path.length) {
-							// You have completed the path. Call the event function if supplied.
-							if (typeof(self.onPathComplete) === 'function') {
-								// Passes the ID so that the developer can use it for tracking
-								self.onPathComplete(instanceData.pathID);
+				// If this instance is being moved
+				if (Array.isArray(instanceData.path) && (instanceData.path.length || instanceData.moving)) {
+					// Get the position of the instance
+					const instancePosition = this.getPositionFromInstance(pInstance);
+					// If the instance is not moving
+					if (!instanceData.moving) {
+						// Get the next node to travel to.
+						const node = instanceData.path.shift();
+						// Get the position of that node in real world coordinates.
+						const nodePos = { x: (node.x * this.tileSize.width) - this.tileSize.width / 2, y: (node.y * this.tileSize.height) - this.tileSize.height / 2 };
+						// Debug mode to visualize the next node
+						if (this.debugging) {
+							const nextTile = VYLO.Map.getLocByPos(nodePos.x, nodePos.y, pInstance.mapName);
+							if (nextTile) {
+								const nextPathInTileVisual = VYLO.newDiob();
+								nextPathInTileVisual.atlasName = '';
+								nextPathInTileVisual.width = this.tileSize.width;
+								nextPathInTileVisual.height = this.tileSize.height;
+								nextPathInTileVisual.tint = 0x005aff;
+								nextPathInTileVisual.alpha = 0.8;
+								nextPathInTileVisual.plane = 0;
+								nextPathInTileVisual.mouseOpacity = 0;
+								nextPathInTileVisual.touchOpacity = 0;
+								nextPathInTileVisual.setTransition({ alpha: 0 }, -1, PathwaySingleton.DEBUGGER_DURATION);
+								nextTile.addOverlay(nextPathInTileVisual);
+								setTimeout(() => {
+									nextTile.removeOverlay(nextPathInTileVisual);
+								}, PathwaySingleton.DEBUGGER_DURATION);
 							}
-							this.end(instance);
 						}
-					} else {
-						instanceData.trajectory.angle = Utils.getAngle2(instancePosition, instanceData.trajectory.nextNodePos);
+						
+						// Update the trajectory of the instance to be moved in.
+						instanceData.trajectory.angle = Utils.getAngle2(instancePosition, nodePos);
+						// Store the next node position
+						instanceData.trajectory.nextNodePos = nodePos;
+						// Get the trajectory of where to move the instance
 						instanceData.trajectory.x = Math.cos(instanceData.trajectory.angle);
 						instanceData.trajectory.y = -Math.sin(instanceData.trajectory.angle);
-						instance.dir = Utils.getDireciton(instanceData.trajectory.angle);
-						instance.movePos(instanceData.trajectory.x, instanceData.trajectory.y);
+						// Update the direction of the instance.
+						pInstance.dir = Utils.getDirection(instanceData.trajectory.angle);
+						// Move the instance with collision mode or positional mode
+						if (instanceData.mode === 'collision') {
+							pInstance.movePos(instanceData.trajectory.x, instanceData.trajectory.y);
+						} else if (instanceData.mode === 'position') {
+							pInstance.setPos(instanceData.trajectory.x, instanceData.trajectory.y, pInstance.mapName);
+						}
 						instanceData.moving = true;
-					}
-				}
-				// If the instance's position is in the same spot it was in the last tick
-				if (instancePosition.x === instanceData.previousPosition.x && instancePosition.y === instanceData.previousPosition.y) {
-					// Increment the stuck counter
-					instanceData.stuckCounter++;
-					// Chekck if the stuck counter is greater or equal to the max stuck counter
-					if (instanceData.stuckCounter >= PathwaySingleton.MAX_STUCK_COUNTER) {
-						// End this pathfinding.
-						this.end(instance);
-						// Call the stuck event if defined.
-						if (typeof(self.onPathStuck) === 'function') {
-							self.onPathStuck();
-							return;
+
+						console.log(`instanceData:`, { ...instanceData }, `angle: ${instanceData.trajectory.angle}, dir: ${pInstance.dir}, node:`, node, `nodePos:`, nodePos)
+
+						// Debug mode to visualize the angle to move in
+						if (this.debugging) {
+							const pathAngle = VYLO.newDiob();
+							pathAngle.atlasName = '';
+							pathAngle.tint = 0xFFFFFF;
+							pathAngle.width = this.tileSize.width;
+							pathAngle.height = 5;
+							pathAngle.anchor = 0;
+							pathAngle.plane = 0;
+							pathAngle.mouseOpacity = 0;
+							pathAngle.touchOpacity = 0;
+							pathAngle.density = 0;
+							pathAngle.angle = instanceData.trajectory.angle;
+							pathAngle.setPos(instancePosition.x, instancePosition.y, self.mapName);
+							pathAngle.setTransition({ alpha: 0 }, -1, PathwaySingleton.DEBUGGER_DURATION);
+							setTimeout(() => {
+								VYLO.delDiob(pathAngle);
+							}, PathwaySingleton.DEBUGGER_DURATION);
+						}
+					} else {
+						// Get the distance from the instance's position to the next node's position.
+						const distance = Math.floor(Utils.getDistance(instancePosition, instanceData.trajectory.nextNodePos));
+						// Stop moving when you are this close distance.
+						if (distance <= pInstance.moveSettings.stepSize) {
+							// Stop moving
+							instanceData.moving = false;
+							// Reset stuck counter when moving has "stopped".
+							instanceData.stuckCounter = 0;
+							// If there is no more nodes left in the path
+							if (!instanceData.path.length) {
+								// You have completed the path. Call the event function if supplied.
+								if (typeof(self.onPathComplete) === 'function') {
+									// Passes the ID so that the developer can use it for tracking
+									self.onPathComplete(instanceData.pathID);
+								}
+								this.end(pInstance);
+							}
+						} else {
+							instanceData.trajectory.angle = Utils.getAngle2(instancePosition, instanceData.trajectory.nextNodePos);
+							instanceData.trajectory.x = Math.cos(instanceData.trajectory.angle);
+							instanceData.trajectory.y = -Math.sin(instanceData.trajectory.angle);
+							pInstance.dir = Utils.getDirection(instanceData.trajectory.angle);
+							pInstance.movePos(instanceData.trajectory.x, instanceData.trajectory.y);
+							instanceData.moving = true;
 						}
 					}
+					// If the instance's position is in the same spot it was in the last tick
+					if (instancePosition.x === instanceData.previousPosition.x && instancePosition.y === instanceData.previousPosition.y) {
+						// Increment the stuck counter
+						instanceData.stuckCounter++;
+						// Chekck if the stuck counter is greater or equal to the max stuck counter
+						if (instanceData.stuckCounter >= instanceData.maxStuckCounter) {
+							// End this pathfinding.
+							this.end(pInstance);
+							// Call the stuck event if defined.
+							if (typeof(self.onPathStuck) === 'function') {
+								self.onPathStuck();
+								return;
+							}
+						}
+					}
+					// Store the previous position as the position of this tick
+					instanceData.previousPosition = instancePosition;
 				}
-				// Store the previous position as the position of this tick
-				instanceData.previousPosition = instancePosition;
+				// Store this tick's time
+				this.lastTime = now;
 			}
-			// Store this tick's time
-			this.lastTime = now;
-		}
+		});
 	}
 	/**
 	 * Sets the tilesize of this system.
@@ -761,63 +814,88 @@ class PathwaySingleton {
 	}
 	/**
 	 * Checks to see if pTile is invalid for movement.
+	 * @private
 	 * @param {Object} pTile - The tile to check the validity of.
+	 * @param {Array} pIgnoreList - The list of ignored tiles/instances.
 	 * @returns {boolean} - If this tile is valid or invalid.
 	 */
-	isTileInvalid(pTile) {
-		// If this tile in invalid as its dense and not on the ignored list.
-		const invalidTile = pTile.density && !ignoreList.includes(pTile);
-		// We check to see if there are any instances that exist on this tile that would "block" the instance from moving onto it and potentially making it stuck.
-		const invalidInstacesOnTile = pTile.getContents().filter((pElement) => { 
-			if (pElement.density && !ignoreList.includes(pElement)) {
-				return pElement.density;
-			}
-		});
+	isTileInvalid(pTile, pIgnoreList) {
+		// If this tile is dense and not on the ignored list, it's invalid.
+		const invalidTile = pTile.density && !pIgnoreList.includes(pTile);
+	
+		// Check if there are any dense instances on this tile that are not on the ignore list.
+		const invalidInstancesOnTile = pTile.getContents().some(pElement => pElement.density && !pIgnoreList.includes(pElement));
+	
 		// If this tile is invalid.
-		return (pTile && (invalidTile || invalidInstacesOnTile.length));
+		return invalidTile || invalidInstancesOnTile;
 	}
 	/**
-	 * 
+	 * Generates a path from the origin point to the end point with obstacles in mind.
+	 * @private
+	 * @param {Object} pInstance - The instance to grab data from.
 	 * @param {Object} pOrigin - An object containing the start x and y position. 
 	 * @property {number} pOrigin.x - The start x coordinate.
 	 * @property {number} pOrigin.y -The start y coordinate.
 	 * @param {Object} pDestination - An object containing the end x and y position to travel to.
 	 * @property {number} pDestination.x - The end x coordinate.
 	 * @property {number} pDestination.y - The end y coordinate.
-	 * @returns {Array} An array containing the path from the start position to the end position.
+	 * @returns {Promise} A promise that resolves with an object containing the path from the start position to the end position.
 	 */
-	async getPath(pOrigin, pDestination) {
-		return new Promise((pResolve) => {
+	getPath(pInstance, pOrigin, pDestination) {
+		return new Promise((pResolve, pReject) => {
+			// Get the instance data
+			const instanceData = this.instanceWeakMap.get(pInstance);
+			if (!instanceData) {
+				this.logger.prefix('Pathway-Module').error('Instance data not found!');
+				pReject();
+				return;
+			}
+			
+			/**
+			 * The path generated.
+			 * @private
+			 * @type {Array}
+			 */
+			let path;
+			console.log('instanceData', instanceData)
+			console.log('pOrigin', pOrigin, 'pDestination', pDestination)
+			console.log('about to find path')
+			
 			// Find the path
-			const pathID = this.easystar.findPath(pOrigin.x, pOrigin.y, pDestination.x, pDestination.y, (pPath) => {
+			const pathID = instanceData.easystar.findPath(pOrigin.x, pOrigin.y, pDestination.x, pDestination.y, (pPath) => {
 				// Check if the path is valid.
 				if (Array.isArray(pPath) && pPath.length) {
-					// Offset the nodes by 1, because VYLO xCoord and yCoord start at 1.
-					pPath = pPath.map((pElement) => {
-						++pElement.x;
-						++pElement.y;
-						return pElement;
-					});
+					// // Offset the nodes by 1, because VYLO xCoord and yCoord start at 1.
+					path = pPath.map((pElement) => ({
+						x: pElement.x + 1,
+						y: pElement.y + 1
+					}));
 					// Remove the node you start on.
-					pPath.shift();
-					// Resolve with the path and pathID
-					pResolve({
-						path: pPath,
-						pathID: pathID
-					});
-				// If no path was found or it was an empty path
-				} else if (!Array.isArray(pPath) || !pPath.length) {
-					// Resolve with the an empty path and no pathID
-					pResolve({
-						path: null,
-						pathID: null
-					});
+					path.shift();
+					// Store the path
+					instanceData.path = path;
+					// Store the pathID
+					instanceData.pathID = pathID;
+					if (typeof(self.onPathFound) === 'function') {
+						self.onPathFound();
+					}
+					console.log('path found', path, pathID)
+				} else {
+					if (typeof(self.onPathNotFound) === 'function') {
+						self.onPathNotFound();
+					}
+					console.log('path not found')
+					// If no path is found then we end the pathfinding on this instance.
+					this.end(pInstance);
 				}
 			});
+			// Track pInstance as an active instance.
+			this.track(pInstance);
 		});
 	}
 	/**
 	 * Converts an array to an 2D array.
+	 * @private
 	 * @param {Array} pArray - The array to convert to a 2D array.
 	 * @param {number} pLengthOfSubArray - The length of the subarray.
 	 * @returns {Array} The 2D array.
@@ -832,6 +910,7 @@ class PathwaySingleton {
 	}
 	/**
 	 * Converts a tile to a node position.
+	 * @private
 	 * @param {Object}} pTile - The tile to convert into a node position.
 	 * @returns {Object} The node.
 	 */
@@ -850,6 +929,7 @@ class PathwaySingleton {
 	}
 	/**
 	 * Converts a node to a tile.
+	 * @private
 	 * @param {string} pMapName - The mapname where the tile should come from.
 	 * @param {Object} pNode - The node to convert into a tile.
 	 * @returns {Object} The tile.
@@ -860,6 +940,7 @@ class PathwaySingleton {
 	}
 	/**
 	 * Finds the index of a value in a 2D array.
+	 * @private
 	 * @param {Array} pArray - The 2D array to search in.
 	 * @param {any} pValue - The value to find in the 2D array.
 	 * @returns {Array<number>} Returns an array containing the row and column indices of the found value, or undefined if not found.
@@ -874,6 +955,7 @@ class PathwaySingleton {
 	}
 	/**
 	 * Converts map tiles to grids.
+	 * @private
 	 * @param {string} pMapName - The mapname where the tile should come from.
 	 * @param {Array} pIgnoreList - The ignore list to use for this grid.
 	 * @returns {Object|undefined} An object containing the grid created, an array of tiles that are to be accepted in the pathfinding system, and the weights of each tile.
@@ -902,7 +984,8 @@ class PathwaySingleton {
 					}
 
 					// Loop through the tiles array to build weights and accepted tile lists.
-					tilesArray.map((pTile) => {
+					const grid = tilesArray.map((pTile) => {
+						// A weight of 0 indicates no weight.
 						let weight = typeof(pTile.pathwayWeight) === 'number' ? pTile.pathwayWeight : 0;
 
 						// Check if the tile or any of its contents are dense
@@ -918,7 +1001,9 @@ class PathwaySingleton {
 						}
 
 						// Add weight to acceptedTiles if not already present
-						if (weight !== PathwaySingleton.NO_TRAVEL_WEIGHT) {
+						// If the weight is 0, then it means its already accepted to be walked on.
+						// If the weight is NO_TRAVEL_WEIGHT this means it cant be walked on.
+						if (weight !== PathwaySingleton.NO_TRAVEL_WEIGHT && weight !== 0) {
 							if (!acceptedTiles.includes(weight)) acceptedTiles.push(weight);
 							if (!weights.includes(weight)) weights.push(weight);
 						}
@@ -928,7 +1013,7 @@ class PathwaySingleton {
 
 					return { 
 						'acceptedTiles': acceptedTiles, 
-						'grid': this.toTwoDimensionalArray(tilesArray, mapSize.x), 
+						'grid': this.toTwoDimensionalArray(grid, mapSize.x), 
 						'weights': weights 
 					};
 				} else {
@@ -943,5 +1028,23 @@ class PathwaySingleton {
 		}
 	}
 }
+const Pathway = new PathwaySingleton();
+// Check if this is a server environment
+const server = (typeof(window) === 'undefined');
+// Update API bound to Pathway
+const update = Pathway.update.bind(Pathway);
 
-export const Pathway = new PathwaySingleton();
+// If on the server we use an interval
+if (server) {
+	// Update interval
+	const updateInterval = setInterval(update, 16);
+// Otherwise we use raf
+} else {
+	const updateLoop = () => {
+		update();
+		requestAnimationFrame(updateLoop);
+	}
+	requestAnimationFrame(updateLoop);
+}
+
+export { Pathway };
