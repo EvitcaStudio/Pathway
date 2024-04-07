@@ -1,52 +1,33 @@
-# EPathfinder
-A plugin that will enable pathfinding functionality.  
-Uses https://github.com/prettymuchbryce/easystarjs to generate paths    
+# Pathway
+A module that will enable pathfinding functionality in the Vylocity Game Engine   
 
 ## Implementation 
 
-### `CLIENT-SIDE`  
-#### #INCLUDE SCRIPT epathfinder.min.js  
-### `SERVER-SIDE` 
-#### #INCLUDE SERSCRIPT epathfinder.min.js  
-
-## How to reference  
-### `Javascript`
-#### EPathfinder  
-  
-### `VyScript`  
-#### EPathfinder
+```js
+import {Pathway} from 'pathway/src/pathway.mjs';
+```
 
 ## API   
 
-###  EPathfinder.toggleDebug()
-   - `desc`: Turn on/off the debugging mode of this plugin, which throws additional logs/warnings. Will also show the paths as the instance moves along it. Should be turned off in production code.  
+###  instance.pathwayWeight   
+   - `desc`: The weight of this instance in the pathfinder system, higher values will try to make the pathfinder generate paths that do not include this instance  
 
-###  diobInstance.EPathfinderWeight   
-   - `desc`: The weight of this diob in the pathfinder system, higher values will try to make the pathfinder generate paths that do not include this instance  
-
-###  diobInstance.goTo(pX, pY, pDiagonal, pNearest, pExclude)  
-   - `pX`: The xCoordinate to move to `integer`  
-   - `pY`: The yCoordinate to move to `integer`  
-   - `pDiagonal`: Whether or not the pathfinder allows diagonal moves `boolean`  
-   - `pNearest`: Whether or not the path will find the nearest path if the provided coordinates are blocked `boolean`  
-   - `pExclude`: An array of diobs that will be ignored when calculating the path `array`  
+###  Pathway.to(pInstance, pDestination, pOptions) 
+   - `pInstance`: The instance to move. `object`
+   - `pDestination.x`: The xCoordinate to move to `integer`  
+   - `pDestination.y`: The yCoordinate to move to `integer`  
+   - `pOptions.diagonal`: Whether or not the pathfinder allows diagonal moves `boolean`  
+   - `pOptions.center` Whether the position of this sprite is based in the center. If set to true, the center of the sprite will be used as the position. If no icon is found then the center of the geometrical bounds will be used as the center. `boolean`
+   - `pOptions.mode` How this instance will move. `collision` for moving with collisions in mind (movePos). `position` for moving with no collisions in mind (setPos). `string`
+   - `pOptions.nearest`: Whether or not the path will find the nearest path if the provided coordinates are blocked `boolean`  
+   - `pOptions.ignore`: An array of diobs that will be ignored when calculating the path `array`  
    - `desc`: Moves this `diobInstance` to the provided coordinates by walking along a generated path free of obstacles. Returns a `pathID` if a path is generated  
 
-###  diobInstance.cancelPath()  
+###  Pathway.end(pInstance)  
+   - `pInstance`: The instance to end the pathfinding on.
    - `desc`: Cancels the current path if there is one and stops this instance from moving    
 
-###  diobInstance.onPathFound(pPath, pPathReversed) `event`  
-   - `pPath`: The path that was calculated `array` 
-   - `pPathReversed`: The reversed path that was calculated `array`  
-   - `desc`: This event function is called when a path has been found after calling `this.goTo`    
+This module expects the `VYLO` variable to be exposed globally.
 
-###  diobInstance.onPathNotFound() `event`  
-   - `desc`: This event function is called when no path was found after calling `this.goTo`    
-
-###  diobInstance.onPathComplete(pPathID) `event`  
-   - `pPathID`: The ID of the path that was completed `string`  
-   - `desc`: This event function is called when this instance has arrived at its destination  
-
-###  diobInstance.onPathStuck(pPathID) `event`  
-   - `pPathID`: The ID of the path that got stuck `string`
-   - `desc`: This event function is called when this instance has become stuck somewhere along its path  
+### Events coming soon!
+### More API coming soon!

@@ -3,19 +3,12 @@ import { Logger } from './vendor/logger.min.mjs';
 import { EasyStar } from './vendor/easystar-0.4.4.min.js';
 
 /**
- * @todo Remove adding overlays
  * @todo Test on server
- * @todo Remove tick / delta time ?? Move the instance in PPS (pixels per second) stop storing original step size and only allow player to input speed, or read from move settings.
- * @todo make debugging class
- * @todo Add in README that this is expecting VYLO variable to be global.
- * @todo storedMapTiles variable should be cached on a "global" level. As a static func on the pathway class. To get cached info.
- * @todo cachedResourcesInfo variable should be cached on a "global" level. As a static func on the pathway class.
+ * @todo Make debugging class
  * @todo Add tweakable stuck data. Allowing devs to change the stuck counter and etc.
- * @todo Allow devs to "pass" data to the pathway class. Such as assigning the tile size. Pathway.setTileSize(32) The default will be 32. This will be used in calculations.
- * @todo pathwayWeight is an API you can attach to instances.
  */
 
-class Pathway {
+class PathwaySingleton {
 	/**
 	 * The maximum amount of ticks an instance can be in the same position before the pathfinder deems it "stuck". The user will be able to tweak values up to this max value.
 	 * @private
@@ -69,7 +62,7 @@ class Pathway {
 	 * @private
 	 * @type {Object}
 	 */
-	tileSize = { ...Pathway.DEFAULT_TILE_SIZE };
+	tileSize = { ...PathwaySingleton.DEFAULT_TILE_SIZE };
 	/**
 	 * The version of the module.
 	 */
@@ -440,7 +433,7 @@ class Pathway {
 			let rejectedTiles = {};
 			// The nearest node to use to travel to.
 			let nodeToUse;
-			for (let i = 1; i <= Pathway.MAX_NEAREST_TILE_SEARCH; i++) {
+			for (let i = 1; i <= PathwaySingleton.MAX_NEAREST_TILE_SEARCH; i++) {
 				const tileLeft = VYLO.Map.getLocByPos(pNodeX - (i * this.tileSize.width / 2), pNodeY, pInstance.mapName);
 				const tileRight = VYLO.Map.getLocByPos(pNodeX + (i * this.tileSize.width / 2), pNodeY, pInstance.mapName);
 				const tileUp = VYLO.Map.getLocByPos(pNodeX, pNodeY - (i * this.tileSize.height / 2), pInstance.mapName);
@@ -623,8 +616,8 @@ class Pathway {
 			// Get the delta time between the last tick
 			this.deltaTime = (this.elapsedMS / 1000);
 			// If the delta time grows too large, we clamp it
-			if (this.deltaTime >= Pathway.MAX_DELTA_TIME) {
-				this.deltaTime = Pathway.CLAMPED_DELTA_TIME;
+			if (this.deltaTime >= PathwaySingleton.MAX_DELTA_TIME) {
+				this.deltaTime = PathwaySingleton.CLAMPED_DELTA_TIME;
 			}
 			
 			// Calculate the path
@@ -727,7 +720,7 @@ class Pathway {
 					// Increment the stuck counter
 					instanceData.stuckCounter++;
 					// Chekck if the stuck counter is greater or equal to the max stuck counter
-					if (instanceData.stuckCounter >= Pathway.MAX_STUCK_COUNTER) {
+					if (instanceData.stuckCounter >= PathwaySingleton.MAX_STUCK_COUNTER) {
 						// End this pathfinding.
 						this.end(instance);
 						// Call the stuck event if defined.
@@ -844,8 +837,8 @@ class Pathway {
 	 */
 	tileToNode(pTile) {
 		if (typeof(pTile.mapName) === 'string') {
-			if (Pathway.storedMapTiles[pTile.mapName]) {
-				const index = this.getIndexOf2DArray(Pathway.storedMapTiles[pTile.mapName].tiles2d, pTile);
+			if (PathwaySingleton.storedMapTiles[pTile.mapName]) {
+				const index = this.getIndexOf2DArray(PathwaySingleton.storedMapTiles[pTile.mapName].tiles2d, pTile);
 				const node = { x: index[1], y: index[0] };
 				return node;
 			} else {
@@ -899,13 +892,13 @@ class Pathway {
 					const mapSize = VYLO.Map.getMapSize(pMapName);
 
 					// We check if we have stored tiles from this map before. If so we cache them.
-					if (Pathway.storedMapTiles[pMapName]) {
+					if (PathwaySingleton.storedMapTiles[pMapName]) {
 						// We get the tile array from memory and clone it.
-						tilesArray = [...Pathway.storedMapTiles[pMapName].tiles];
+						tilesArray = [...PathwaySingleton.storedMapTiles[pMapName].tiles];
 					} else {
 						tilesArray = VYLO.Map.getTiles(pMapName);
 						// We store a copy of this array, because that array gets manipulated
-						Pathway.storedMapTiles[pMapName] = { tiles: [...tilesArray], tiles2d: this.toTwoDimensionalArray([...tilesArray], mapSize.x) };
+						PathwaySingleton.storedMapTiles[pMapName] = { tiles: [...tilesArray], tiles2d: this.toTwoDimensionalArray([...tilesArray], mapSize.x) };
 					}
 
 					// Loop through the tiles array to build weights and accepted tile lists.
@@ -914,7 +907,7 @@ class Pathway {
 
 						// Check if the tile or any of its contents are dense
 						if (pTile.density || pTile.getContents().some(instance => instance.density && !pIgnoreList.includes(instance))) {
-							weight = Pathway.NO_TRAVEL_WEIGHT;
+							weight = PathwaySingleton.NO_TRAVEL_WEIGHT;
 						} else {
 							// Accumulate weights of instances on the tile
 							for (const instance of pTile.getContents()) {
@@ -925,7 +918,7 @@ class Pathway {
 						}
 
 						// Add weight to acceptedTiles if not already present
-						if (weight !== Pathway.NO_TRAVEL_WEIGHT) {
+						if (weight !== PathwaySingleton.NO_TRAVEL_WEIGHT) {
 							if (!acceptedTiles.includes(weight)) acceptedTiles.push(weight);
 							if (!weights.includes(weight)) weights.push(weight);
 						}
@@ -951,4 +944,4 @@ class Pathway {
 	}
 }
 
-export const Pathway = new Pathway();
+export const Pathway = new PathwaySingleton();
