@@ -4,7 +4,7 @@ A module that will enable pathfinding functionality in the Vylocity Game Engine
 ## Implementation 
 
 ```js
-import {Pathway} from 'pathway/src/pathway.mjs';
+import { Pathway } from './pathway.min.mjs';
 ```
 
 ## API   
@@ -17,18 +17,17 @@ import {Pathway} from 'pathway/src/pathway.mjs';
    - `pDestination.x`: The xCoordinate to move to `integer`  
    - `pDestination.y`: The yCoordinate to move to `integer`  
    - `pOptions.diagonal`: Whether or not the pathfinder allows diagonal moves `boolean`  
-   - `pOptions.center` Whether the position of this sprite is based in the center. If set to true, the center of the sprite will be used as the position. If no icon is found then the center of the geometrical bounds will be used as the center. `boolean`
-   - `pOptions.mode` How this instance will move. `collision` for moving with collisions in mind (movePos). `position` for moving with no collisions in mind (setPos). `string`
-   - `pOptions.nearest`: Whether or not the path will find the nearest path if the provided coordinates are blocked `boolean`  
+   - `pOptions.mode` How this instance will move. `collision` for moving with collisions in mind (movePos). `position` for moving with no collisions in mind (setPos). `string` 
    - `pOptions.ignore`: An array of diobs that will be ignored when calculating the path `array`  
-   - `pOptions.maxStuckCounter` The maximum amount of ticks of pInstance being in the same position as the last tick before its considered stuck. `number`
-   - `desc`: Moves this `diobInstance` to the provided coordinates by walking along a generated path free of obstacles. Returns a `pathID` if a path is generated  
+   - `pOptions.maxStuckCounter` The maximum amount of ticks of pInstance being in the same position as the last tick before its considered stuck. `number`  
+	- `pOptions.onPathComplete` - Callback for when pInstance makes it to the `function`  
+	- `pOptions.onPathFound` - Callback for when pInstance finds a path. The first parameter is the path that was generated. `function`  
+	- `pOptions.onPathStuck` - Callback for when pInstance gets stuck on a path. `function`   
+	- `pOptions.onPathNotFound` - Callback for when no path is found. `function`  
+   - `desc`: Moves `pInstance` to the provided coordinates by walking along a generated path free of obstacles. Returns a `pathID` if a path is generated  
 
 ###  Pathway.end(pInstance)  
    - `pInstance`: The instance to end the pathfinding on.
    - `desc`: Cancels the current path if there is one and stops this instance from moving    
 
 This module expects the `VYLO` variable to be exposed globally.
-
-### Events coming soon!
-### More API coming soon!
