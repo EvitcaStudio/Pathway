@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl">
+  <title data-ice="title">Home | Pathway</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A plugin that will enable pathfinding functionality."><meta property="og:type" content="website"><meta property="og:url" content="https://github.com/EvitcaStudio/Pathway#readme"><meta property="og:site_name" content="Pathway"><meta property="og:title" content="Pathway"><meta property="og:image" content="./evitcastudio_round_branding.png"><meta property="og:description" content="A plugin that will enable pathfinding functionality."><meta property="og:author" content="https://github.com/doubleactii"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="Pathway"><meta property="twitter:description" content="A plugin that will enable pathfinding functionality."><meta property="twitter:image" content="./evitcastudio_round_branding.png"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.png" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/EvitcaStudio/Pathway"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/pathway.mjs~PathwaySingleton.html">PathwaySingleton</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Pathway">Pathway</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="pathway">Pathway</h1><p>A module that will enable pathfinding functionality in the Vylocity Game Engine   </p>
+<h2 id="implementation">Implementation</h2><pre><code class="lang-js"><code class="source-code prettyprint">import { Pathway } from &apos;./pathway.min.mjs&apos;;</code>
+</code></pre>
+<h2 id="api">API</h2><h3 id="instance-pathwayweight">instance.pathwayWeight</h3><ul>
+<li><code>desc</code>: The weight of this instance in the pathfinder system, higher values will try to make the pathfinder generate paths that do not include this instance  </li>
+</ul>
+<h3 id="pathway-to-pinstance--pdestination--poptions-">Pathway.to(pInstance, pDestination, pOptions)</h3><ul>
+<li><code>pInstance</code>: The instance to move. <code>object</code></li>
+<li><code>pDestination.x</code>: The xCoordinate to move to <code>integer</code>  </li>
+<li><code>pDestination.y</code>: The yCoordinate to move to <code>integer</code>  </li>
+<li><code>pOptions.diagonal</code>: Whether or not the pathfinder allows diagonal moves <code>boolean</code>  </li>
+<li><code>pOptions.mode</code>: How this instance will move. <code>collision</code> for moving with collisions in mind (movePos). <code>position</code> for moving with no collisions in mind (setPos). <code>string</code> </li>
+<li><code>pOptions.pixelsPerSecond</code>: The speed in pixels this instance moves per second. This setting only works when <code>pOptions.mode</code> is set to <code>position</code>.<code>number</code>   </li>
+<li><code>pOptions.ignore</code>: An array of diobs that will be ignored when calculating the path <code>array</code>  </li>
+<li><code>pOptions.minDistance</code>: The minimum distance this pathway system will use to calculate if you have reached the (next) node. <code>number</code>  </li>
+<li><code>pOptions.maxStuckCounter</code>: The maximum amount of ticks of pInstance being in the same position as the last tick before its considered stuck. <code>number</code>  <ul>
+<li><code>pOptions.onPathComplete</code>: Callback for when pInstance makes it to the <code>function</code>  </li>
+<li><code>pOptions.onPathFound</code>: Callback for when pInstance finds a path. The first parameter is the path that was generated. <code>function</code>  </li>
+<li><code>pOptions.onPathStuck</code>: Callback for when pInstance gets stuck on a path. <code>function</code>  </li>
+<li><code>pOptions.onPathNotFound</code>: Callback for when no path is found. <code>function</code>  </li>
+</ul>
+</li>
+<li><code>desc</code>: Moves <code>pInstance</code> to the provided coordinates by walking along a generated path free of obstacles.</li>
+</ul>
+<h3 id="pathway-end-pinstance-">Pathway.end(pInstance)</h3><ul>
+<li><code>pInstance</code>: The instance to end the pathfinding on.</li>
+<li><code>desc</code>: Cancels the current path if there is one and stops this instance from moving    </li>
+</ul>
+<h3 id="pathway-settilesize-ptilesize-">Pathway.setTileSize(pTileSize)</h3><ul>
+<li><code>pTileSize</code>: The size of the tileset. <code>number</code> | <code>object</code></li>
+<li><code>desc</code>: Sets the tile size internally for this pathway system to reference. This is how pathway will determine node positions.</li>
+</ul>
+<p>This module expects the <code>VYLO</code> variable to be exposed globally.</p>
+</div>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

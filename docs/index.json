@@ -1,0 +1,1700 @@
+[
+  {
+    "__docId__": 1,
+    "kind": "external",
+    "name": "Infinity",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Infinity",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 2,
+    "kind": "external",
+    "name": "NaN",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~NaN",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 3,
+    "kind": "external",
+    "name": "undefined",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~undefined",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 4,
+    "kind": "external",
+    "name": "null",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~null",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 5,
+    "kind": "external",
+    "name": "Object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Object",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 6,
+    "kind": "external",
+    "name": "object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~object",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 7,
+    "kind": "external",
+    "name": "Function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Function",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 8,
+    "kind": "external",
+    "name": "function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~function",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 9,
+    "kind": "external",
+    "name": "Boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Boolean",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 10,
+    "kind": "external",
+    "name": "boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~boolean",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 11,
+    "kind": "external",
+    "name": "Symbol",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Symbol",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 12,
+    "kind": "external",
+    "name": "Error",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Error",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 13,
+    "kind": "external",
+    "name": "EvalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~EvalError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 14,
+    "kind": "external",
+    "name": "InternalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~InternalError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 15,
+    "kind": "external",
+    "name": "RangeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~RangeError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 16,
+    "kind": "external",
+    "name": "ReferenceError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~ReferenceError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 17,
+    "kind": "external",
+    "name": "SyntaxError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~SyntaxError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 18,
+    "kind": "external",
+    "name": "TypeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~TypeError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 19,
+    "kind": "external",
+    "name": "URIError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~URIError",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 20,
+    "kind": "external",
+    "name": "Number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Number",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 21,
+    "kind": "external",
+    "name": "number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~number",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 22,
+    "kind": "external",
+    "name": "Date",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Date",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 23,
+    "kind": "external",
+    "name": "String",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~String",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 24,
+    "kind": "external",
+    "name": "string",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~string",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 25,
+    "kind": "external",
+    "name": "RegExp",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~RegExp",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 26,
+    "kind": "external",
+    "name": "Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 27,
+    "kind": "external",
+    "name": "Int8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Int8Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 28,
+    "kind": "external",
+    "name": "Uint8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Uint8Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 29,
+    "kind": "external",
+    "name": "Uint8ClampedArray",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Uint8ClampedArray",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 30,
+    "kind": "external",
+    "name": "Int16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Int16Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 31,
+    "kind": "external",
+    "name": "Uint16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Uint16Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 32,
+    "kind": "external",
+    "name": "Int32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Int32Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 33,
+    "kind": "external",
+    "name": "Uint32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Uint32Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 34,
+    "kind": "external",
+    "name": "Float32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Float32Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 35,
+    "kind": "external",
+    "name": "Float64Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Float64Array",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 36,
+    "kind": "external",
+    "name": "Map",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Map",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 37,
+    "kind": "external",
+    "name": "Set",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Set",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 38,
+    "kind": "external",
+    "name": "WeakMap",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~WeakMap",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 39,
+    "kind": "external",
+    "name": "WeakSet",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~WeakSet",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 40,
+    "kind": "external",
+    "name": "ArrayBuffer",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~ArrayBuffer",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 41,
+    "kind": "external",
+    "name": "DataView",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~DataView",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 42,
+    "kind": "external",
+    "name": "JSON",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~JSON",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 43,
+    "kind": "external",
+    "name": "Promise",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Promise",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 44,
+    "kind": "external",
+    "name": "Generator",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Generator",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 45,
+    "kind": "external",
+    "name": "GeneratorFunction",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~GeneratorFunction",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 46,
+    "kind": "external",
+    "name": "Reflect",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Reflect",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 47,
+    "kind": "external",
+    "name": "Proxy",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
+    "memberof": "src/.external-ecmascript.js",
+    "static": true,
+    "longname": "src/.external-ecmascript.js~Proxy",
+    "access": "public",
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 48,
+    "kind": "file",
+    "name": "src/pathway.mjs",
+    "content": "import { Utils } from './vendor/utils.min.mjs';\r\nimport { Logger } from './vendor/logger.min.mjs';\r\nimport { EasyStar } from './vendor/easystar-0.4.4.min.js';\r\n\r\n/**\r\n * @todo Test on server\r\n * @todo Make debugging class\r\n */\r\nclass PathwaySingleton {\r\n\t/**\r\n\t * The maximum amount of ticks an instance can be in the same position before the pathfinder deems it \"stuck\". The user will be able to tweak values up to this max value.\r\n\t * @private\r\n\t * @type {number}\r\n\t */\r\n\tstatic MAX_STUCK_COUNTER = 100;\r\n\t/**\r\n\t * The max amount of delta time between ticks. If this limit is passed, it will be clamped.\r\n\t * @private\r\n\t * @type {number}\r\n\t */\r\n\tstatic MAX_DELTA_TIME = 0.03333333333;\r\n\t/**\r\n\t * A static weight to be applied when a tile should be considered trickier to travel on.\r\n\t * @private\r\n\t * @type {number}\r\n\t */\r\n\tstatic AVERSION_WEIGHT = 10;\r\n\t/**\r\n\t * The weight that indicates that this tile is walkable. This is used as the default weight of every instance unless otherwise stated.\r\n\t * @private\r\n\t * @type {number}\r\n\t */\r\n\tstatic PASSABLE_WEIGHT = 0;\r\n\t/**\r\n\t * A static weight to be applied when a tile should be not be traveled to at all.\r\n\t * @private\r\n\t * @type {number}\r\n\t */\r\n\tstatic NO_TRAVEL_WEIGHT = -1;\r\n\t/**\r\n\t * The default amount of pixels per second to move the instance when using `position` mode.\r\n\t * @private\r\n\t * @type {number}\r\n\t */\r\n\tstatic DEFAULT_PIXELS_PER_SECOND = 120;\r\n\t/**\r\n\t * The minimum distance away from a node before this system determines it has made it to that node.\r\n\t * @private\r\n\t * @type {number}\r\n\t */\r\n\tstatic DEFAULT_MINIMUM_DISTANCE = 2;\r\n\t/**\r\n\t * The default mode this pathway system uses.\r\n\t * @private\r\n\t * @type {string}\r\n\t */\r\n\tstatic DEFAULT_MODE = 'collision';\r\n\t/**\r\n\t * An object that stores the map tiles in normal format and in 2D format.\r\n\t * @private\r\n\t * @type {Object}\r\n\t */\r\n\tstatic storedMapTiles = {};\r\n\t/**\r\n\t * The tile size to use if no tile size has been assigned.\r\n\t * @private\r\n\t * @type {number}\r\n\t */\r\n\tstatic DEFAULT_TILE_SIZE = { width: 32, height: 32 };\r\n\t/**\r\n\t * The tile size to use for this system.\r\n\t * @private\r\n\t * @type {Object}\r\n\t */\r\n\ttileSize = { ...PathwaySingleton.DEFAULT_TILE_SIZE };\r\n\t/**\r\n\t * The version of the module.\r\n\t */\r\n\tversion = \"VERSION_REPLACE_ME\";\r\n\t/**\r\n\t * A weakmap storing the data of instances used in this pathfinder.\r\n\t * @private\r\n\t * @type {WeakMap}\r\n\t */\r\n\tinstanceWeakMap = new WeakMap();\r\n\t/**\r\n\t * The last tracked time in the ticker.\r\n\t * @private\r\n\t * @type {number}\r\n\t */\r\n\tlastTime = 0;\r\n\t/**\r\n\t * The delta time between the current and last tick.\r\n\t * @private\r\n\t * @type {number}\r\n\t */\r\n\tdeltaTime = 0;\r\n\t/**\r\n\t * The time in ms between the current and last tick.\r\n\t * @private\r\n\t * @type {number}\r\n\t */\r\n\telapsedMS = 0;\r\n\t/**\r\n\t * An array of active instances that are currently pathfinding.\r\n\t * @private\r\n\t * @type {Array}\r\n\t */\r\n\tactiveInstances = [];\r\n\t/**\r\n\t * @private\r\n\t */\r\n\tconstructor() {\r\n        // Create a logger\r\n        /** The logger module this module uses to log errors / logs\r\n         * @private\r\n         * @type {Object}\r\n         */\r\n        this.logger = new Logger();\r\n        this.logger.registerType('Pathway-Module', '#ff6600');\r\n\t}\r\n\t/**\r\n\t * Moves pInstance to the destination position with pOptions in mind.\r\n\t * @param {Object} pInstance - The instance to move to the destination. The origin position will be retrived from this instance as well.\r\n\t * @param {Object} pDestination - The end position to travel to.\r\n\t * @property {number} pDestination.x - The end x coordinate.\r\n\t * @property {number} pDestination.y - The end y coordinate.\r\n\t * @param {Object} pOptions - An object of settings on how to move pInstance to pDestination.\r\n\t * @property {boolean} [pOptions.diagonal = false] - Whether or not the pathfinder allows diagonal moves.\r\n\t * @property {Array} pOptions.ignore - An array of diobs that will be ignored when calculating the path.\r\n\t * @property {number} [pOptions.minDistance = 2] = The minimum distance this pathway system will use to calculate if you have reached the (next) node.  \r\n\t * @property {number} [pOptions.maxStuckCounter = 100] - The maximum amount of ticks of pInstance being in the same position as the last tick before its considered stuck.\r\n\t * @property {string} [pOptions.mode = 'collision'] - How this instance will move. `collision` for moving with collisions in mind (movePos). `position` for moving with no collisions in mind (setPos) Must use pOptions.pixelsPerSecond when using `position` mode. \r\n\t * @property {string} [pOptions.pixelsPerSecond = 120] - The speed in pixels this instance moves per second. This setting only works when pOptions.mode is set to `position`.   \r\n\t * @property {Function} pOptions.onPathComplete - Callback for when pInstance makes it to the destination node.\r\n\t * @property {Function} pOptions.onPathFound - Callback for when pInstance finds a path.\r\n\t * @property {Function} pOptions.onPathStuck - Callback for when pInstance gets stuck on a path.\r\n\t * @property {Function} pOptions.onPathNotFound - Callback for when no path is found.\r\n\t */\r\n\tto(pInstance, pDestination, pOptions) {\r\n\t\tif (typeof(pInstance) === 'object') {\r\n\t\t\t// If this instance is not on a mapname.\r\n\t\t\tif (!pInstance.mapName) {\r\n\t\t\t\tthis.logger.prefix('Pathway-Module').error('Cannot generate a path. pInstance is not on a map.');\r\n\t\t\t\treturn;\r\n\t\t\t}\r\n\r\n\t\t\t// If there is no destination object passed return.\r\n\t\t\tif (typeof(pDestination) !== 'object') {\r\n\t\t\t\tthis.logger.prefix('Pathway-Module').error('Invalid type passed for pDestination. Expecting an object.');\r\n\t\t\t\treturn;\r\n\t\t\t}\r\n\r\n\t\t\t// Get the instance data for this instance\r\n\t\t\tlet instanceData = this.instanceWeakMap.get(pInstance);\r\n\r\n\t\t\tif (!instanceData) {\r\n\t\t\t\t// Set the instance data\r\n\t\t\t\tinstanceData = {\r\n\t\t\t\t\ttrajectory: { \r\n\t\t\t\t\t\tangle: 0, \r\n\t\t\t\t\t\tx: 0, \r\n\t\t\t\t\t\ty: 0, \r\n\t\t\t\t\t\tnextNodePos: null,\r\n\t\t\t\t\t},\r\n\t\t\t\t\t// The current position of the instance.\r\n\t\t\t\t\tcurrentPosition: { x: 0, y: 0 },\r\n\t\t\t\t\t// The previous position of the instance in the tick before.\r\n\t\t\t\t\tpreviousPosition: { x: 0, y: 0 },\r\n\t\t\t\t\t// The stuck counter of this instance. When this instance is in the same position for multiple ticks, this value is added onto up until -\r\n\t\t\t\t\t// the max stuck counter is reached and the `stuck` event is called.\r\n\t\t\t\t\tstuckCounter: 0,\r\n\t\t\t\t\tmaxStuckCounter: PathwaySingleton.MAX_STUCK_COUNTER,\r\n\t\t\t\t\tpathID: null, // ID of the path that was generated. Used to cancel the path.\r\n\t\t\t\t\tpath: [],\r\n\t\t\t\t\tmoving: null,\r\n\t\t\t\t\tmode: PathwaySingleton.DEFAULT_MODE,\r\n\t\t\t\t\tpixelsPerSecond: PathwaySingleton.DEFAULT_PIXELS_PER_SECOND,\r\n\t\t\t\t\tminDistance: PathwaySingleton.DEFAULT_MINIMUM_DISTANCE,\r\n\t\t\t\t\tevents: {\r\n\t\t\t\t\t\tonPathStuck: null,\r\n\t\t\t\t\t\tonPathComplete: null,\r\n\t\t\t\t\t\tonPathFound: null,\r\n\t\t\t\t\t\tonPathNotFound: null,\r\n\t\t\t\t\t},\r\n\t\t\t\t\teasystar: new EasyStar.js()\r\n\t\t\t\t};\r\n\t\t\t\t// If you have a large grid, then it is possible that these calculations could slow down the browser. \r\n\t\t\t\t// For this reason, it might be a good idea to give EasyStar a smaller iterationsPerCalculation\r\n\t\t\t\t// https://github.com/prettymuchbryce/easystarjs\r\n\t\t\t\tinstanceData.easystar.setIterationsPerCalculation(1000);\r\n\t\t\t\t// Assign the instance data\r\n\t\t\t\tthis.instanceWeakMap.set(pInstance, instanceData);\r\n\t\t\t} else {\r\n\t\t\t\t// If this instance has data already, we reset it\r\n\t\t\t\tthis.end(pInstance);\r\n\t\t\t}\r\n\r\n\t\t\t/**\r\n\t\t\t * An exclusion list of tiles.\r\n\t\t\t * @type {Array}\r\n\t\t\t */\r\n\t\t\tlet ignoreList = [];\r\n\r\n\t\t\t// If there are options passed. Parse them.\r\n\t\t\tif (typeof(pOptions) === 'object') {\r\n\t\t\t\t// If max stuck counter is found in options, set it.\r\n\t\t\t\tif (typeof(pOptions.maxStuckCounter) === 'number') {\r\n\t\t\t\t\tinstanceData.maxStuckCounter = pOptions.maxStuckCounter;\r\n\t\t\t\t}\r\n\r\n\t\t\t\t// Enable diagonals if found in passed options.\r\n\t\t\t\t// This can cause some \"issues\" such as trying to cut through corners.\r\n\t\t\t\tif (pOptions.diagonal) {\r\n\t\t\t\t\tinstanceData.easystar.enableDiagonals();\r\n\t\t\t\t\tinstanceData.easystar.enableCornerCutting();\r\n\t\t\t\t}\r\n\r\n\t\t\t\t// Set the positioning mode\r\n\t\t\t\tif (pOptions.mode) {\r\n\t\t\t\t\t// Get the mode, if an invalid mode is passed, we default to the default mode.\r\n\t\t\t\t\tconst mode = (pOptions.mode === 'collision' || pOptions.mode === 'position') ? pOptions.mode : PathwaySingleton.DEFAULT_MODE;\r\n\t\t\t\t\tinstanceData.mode = mode;\r\n\t\t\t\t}\r\n\r\n\t\t\t\t// Assign pixels per second \r\n\t\t\t\tif (typeof(pOptions.pixelsPerSecond) === 'number') {\r\n\t\t\t\t\tinstanceData.pixelsPerSecond = pOptions.pixelsPerSecond;\r\n\t\t\t\t}\r\n\r\n\t\t\t\t// Assign the min distance\r\n\t\t\t\tif (typeof(pOptions.minDistance) === 'number') {\r\n\t\t\t\t\tinstanceData.minDistance = pOptions.minDistance;\r\n\t\t\t\t}\r\n\r\n\t\t\t\t// Assign events\r\n\t\t\t\tif (typeof(pOptions.onPathComplete) === 'function') {\r\n\t\t\t\t\tinstanceData.events.onPathComplete = pOptions.onPathComplete;\r\n\t\t\t\t}\r\n\r\n\t\t\t\tif (typeof(pOptions.onPathFound) === 'function') {\r\n\t\t\t\t\tinstanceData.events.onPathFound = pOptions.onPathFound;\r\n\t\t\t\t}\r\n\r\n\t\t\t\tif (typeof(pOptions.onPathNotFound) === 'function') {\r\n\t\t\t\t\tinstanceData.events.onPathNotFound = pOptions.onPathNotFound;\r\n\t\t\t\t}\r\n\r\n\t\t\t\tif (typeof(pOptions.onPathStuck) === 'function') {\r\n\t\t\t\t\tinstanceData.events.onPathStuck = pOptions.onPathStuck;\r\n\t\t\t\t}\r\n\r\n\t\t\t\t// Copy the contents of the ignore array to the ignore list we manage.\r\n\t\t\t\tif (Array.isArray(pOptions.ignore)) {\r\n\t\t\t\t\tignoreList.push(...pOptions.ignore);\r\n\t\t\t\t}\r\n\t\t\t}\r\n\r\n\t\t\t// Grab the pos of the instance so we can locate the starting tile its on.\r\n\t\t\t// This is also used as the startingNode position.\r\n\t\t\tconst instancePosition = this.getPositionFromInstance(pInstance);\r\n\t\t\t// Get the origin tile the instance is on.\r\n\t\t\tconst originTile = VYLO.Map.getLocByPos(instancePosition.x, instancePosition.y, pInstance.mapName);\r\n\r\n\t\t\t// We add the starting tile to the ignore list so that it is ignored.\r\n\t\t\tif (!ignoreList.includes(originTile)) {\t\r\n\t\t\t\tignoreList.push(originTile);\r\n\t\t\t}\r\n\t\t\t// We also add the instance to the ignore list so that it is ignored.\r\n\t\t\tif (!ignoreList.includes(pInstance)) {\r\n\t\t\t\tignoreList.push(pInstance);\r\n\t\t\t}\r\n\r\n\t\t\t// Build the 2D array grid that represents the map\r\n\t\t\tconst gridInfo = this.mapTilesToGrid(pInstance.mapName, ignoreList);\r\n\t\t\t\r\n\t\t\t// Assign the grid to easystar\r\n\t\t\tinstanceData.easystar.setGrid(gridInfo.grid);\r\n\t\t\t\r\n\t\t\t// Assign the weight of each tile\r\n\t\t\tgridInfo.weights.forEach((pWeight) => {\r\n\t\t\t\tinstanceData.easystar.setTileCost(pWeight, pWeight);\r\n\t\t\t});\r\n\r\n\t\t\t// Assign what tiles can be used\r\n\t\t\tinstanceData.easystar.setAcceptableTiles(gridInfo.acceptedTiles);\r\n\r\n\t\t\t// Get the dimensions of the map that was passed.\r\n\t\t\tconst mapSize = VYLO.Map.getMapSize(pInstance.mapName);\r\n\r\n\t\t\t// Get the end nodes position so we can get the destinationTile\r\n\t\t\tconst endNodeX = Utils.clamp(Utils.clamp(pDestination.x, 0, mapSize.x) * this.tileSize.width + this.tileSize.width / 2, 0, mapSize.xPos - this.tileSize.width);\r\n\t\t\tconst endNodeY = Utils.clamp(Utils.clamp(pDestination.y, 0, mapSize.y) * this.tileSize.height + this.tileSize.height / 2, 0, mapSize.yPos - this.tileSize.height);\r\n\t\t\t// Get the end time tile\r\n\t\t\tconst destinationTile = VYLO.Map.getLocByPos(endNodeX, endNodeY, pInstance.mapName);\r\n\t\t\t\r\n\t\t\t// Get the start node from the originTile\r\n\t\t\tlet startNode = this.tileToNode(originTile);\r\n\t\t\t\r\n\t\t\t// Get the end node from the destinationTile\r\n\t\t\tlet endNode = this.tileToNode(destinationTile);\r\n\r\n\t\t\t// If the origin tile or end tile is invalid to be walked on then return no path found.\r\n\t\t\tif (this.isTileInvalid(originTile, ignoreList) || this.isTileInvalid(destinationTile, ignoreList)) {\r\n\t\t\t\t// So fire the path not found event.\t\r\n\t\t\t\tif (typeof(instanceData.events.onPathNotFound) === 'function') {\r\n\t\t\t\t\tinstanceData.events.onPathNotFound();\r\n\t\t\t\t}\r\n\t\t\t\tthis.end(pInstance);\r\n\t\t\t\treturn;\r\n\t\t\t}\r\n\t\t\t// Generate the path for the player\r\n\t\t\tthis.getPath(pInstance, { x: startNode.x, y: startNode.y }, { x: endNode.x, y: endNode.y });\r\n\t\t} else {\r\n\t\t\tthis.logger.prefix('Pathway-Module').error('Invalid type passed for pInstance. Expecting an object.');\r\n\t\t}\r\n\t}\r\n\t/**\r\n\t * Tracks this instance as active.\r\n\t * @private\r\n\t * @param {Object} pInstance - The instance to track.\r\n\t */\r\n\ttrack(pInstance) {\r\n\t\t// Add this instance to being tracked.\r\n\t\tif (!this.activeInstances.includes(pInstance)) {\r\n\t\t\tthis.activeInstances.push(pInstance);\r\n\t\t}\r\n\t}\r\n\t/**\r\n\t * Untracks this instance. It is no longer considered active.\r\n\t * @private\r\n\t * @param {Object} pInstance - The instance to untrack.\r\n\t */\r\n\tuntrack(pInstance) {\r\n\t\t// Remove this instance from being tracked.\r\n\t\tif (this.activeInstances.includes(pInstance)) {\r\n\t\t\tthis.activeInstances.splice(this.activeInstances.indexOf(pInstance), 1);\r\n\t\t}\r\n\t}\r\n\t/**\r\n\t * Ends the current pathfinding for pInstance.\r\n\t * @param {Object} pInstance - The instance to terminate pathfinding on.\r\n\t */\r\n\tend(pInstance) {\r\n\t\t// Get the instance data for this instance\r\n\t\tconst instanceData = this.instanceWeakMap.get(pInstance);\r\n\t\tif (instanceData) {\r\n\t\t\t// We are ending the pathfinding. So we get the path ID so we can cancel calculations being made for this path.\r\n\t\t\tif (instanceData.pathID) {\r\n\t\t\t\tinstanceData.easystar.cancelPath(instanceData.pathID);\r\n\t\t\t\tinstanceData.pathID = null;\r\n\t\t\t}\r\n\t\t\t// Disable diagonals in the event they were enabled in a previous call\r\n\t\t\tinstanceData.easystar.disableDiagonals();\r\n\t\t\t// Disable corner cutting in the event it was enabled in a previous call\r\n\t\t\tinstanceData.easystar.disableCornerCutting();\r\n\t\t\t// Reset trajectory data\r\n\t\t\tinstanceData.trajectory.x = 0;\r\n\t\t\tinstanceData.trajectory.y = 0;\r\n\t\t\tinstanceData.trajectory.angle = 0;\r\n\t\t\tinstanceData.trajectory.nextNodePos = null;\r\n\t\t\t// Reset events\r\n\t\t\tinstanceData.events.onPathStuck = null;\r\n\t\t\tinstanceData.events.onPathComplete = null;\r\n\t\t\tinstanceData.events.onPathFound = null;\r\n\t\t\tinstanceData.events.onPathNotFound = null;\r\n\t\t\t// Reset stuck counter\r\n\t\t\tinstanceData.stuckCounter = 0;\r\n\t\t\t// Reset the max stuck counter\r\n\t\t\tinstanceData.maxStuckCounter = PathwaySingleton.MAX_STUCK_COUNTER;\r\n\t\t\t// Empty path(s) array\r\n\t\t\tinstanceData.path.length = 0;\r\n\t\t\t// Reset it to not being moved.\r\n\t\t\tinstanceData.moving = false;\r\n\t\t\t// Reset the mode\r\n\t\t\tinstanceData.mode = 'collision';\r\n\t\t\t// Reset the pixels per second.\r\n\t\t\tinstanceData.pixelsPerSecond = PathwaySingleton.DEFAULT_PIXELS_PER_SECOND;\r\n\t\t\t// Reset the min distance\r\n\t\t\tinstanceData.minDistance = PathwaySingleton.DEFAULT_MINIMUM_DISTANCE;\r\n\t\t\t// Stop instance from moving via VYLO API.\r\n\t\t\tpInstance.move();\r\n\t\t\t// Untrack pInstance as an active instance.\r\n\t\t\tthis.untrack(pInstance);\r\n\t\t} else {\r\n\t\t\tthis.logger.prefix('Pathway-Module').error('No instance data found from pInstance. This instance is not engaged in pathfinding.');\r\n\t\t}\r\n\t}\r\n\t/**\r\n\t * Gets the position from the instance based on the pathfinding info. Centered position from the geometrical.\r\n\t * @private\r\n\t * @param {Object} pInstance - The instance to get the position from.\r\n\t * @returns {Object} - The position of the instance.\r\n\t */\r\n\tgetPositionFromInstance(pInstance) {\r\n\t\tconst instanceData = this.instanceWeakMap.get(pInstance);\r\n\t\tif (instanceData) {\r\n\t\t\tinstanceData.currentPosition.x = Math.floor(pInstance.x + pInstance.xOrigin + pInstance.width / 2);\r\n\t\t\tinstanceData.currentPosition.y = Math.floor(pInstance.y + pInstance.yOrigin + pInstance.height / 2);\r\n\t\t\treturn instanceData.currentPosition;\r\n\t\t}\r\n\t}\r\n\t/**\r\n\t * Updates active instances on the pathfinder.\r\n\t * @private\r\n\t */\r\n\tupdate() {\r\n\t\t// Get current timestamp\r\n\t\tconst now = Date.now();\r\n\t\t// Get the elapsed ms from the last tick\r\n\t\tthis.elapsedMS = now - this.lastTime;\r\n\t\t// Get the delta time between the last tick\r\n\t\tthis.deltaTime = (this.elapsedMS / 1000);\r\n\t\t// If the delta time grows too large, we clamp it\r\n\t\tif (this.deltaTime >= PathwaySingleton.MAX_DELTA_TIME) {\r\n\t\t\tthis.deltaTime = PathwaySingleton.MAX_DELTA_TIME;\r\n\t\t}\r\n\t\t// Loop active instances and update.\r\n\t\tthis.activeInstances.forEach((pInstance) => {\r\n\t\t\t// Get the instance data for this instance\r\n\t\t\tconst instanceData = this.instanceWeakMap.get(pInstance);\r\n\t\t\tif (instanceData) {\r\n\t\t\t\t// Calculate the path\r\n\t\t\t\tinstanceData.easystar.calculate();\r\n\r\n\t\t\t\t// If this instance is being moved\r\n\t\t\t\tif (Array.isArray(instanceData.path) && (instanceData.path.length || instanceData.moving)) {\r\n\t\t\t\t\t// Get the position of the instance\r\n\t\t\t\t\tconst instancePosition = this.getPositionFromInstance(pInstance);\r\n\t\t\t\t\t// If the instance is not moving\r\n\t\t\t\t\tif (!instanceData.moving) {\r\n\t\t\t\t\t\t// Get the next node to travel to.\r\n\t\t\t\t\t\tconst node = instanceData.path.shift();\r\n\t\t\t\t\t\t// Get the position of that node in real world coordinates. We subtract half of the tileSize to get the center of the node's posiiton.\r\n\t\t\t\t\t\tconst nodePos = { \r\n\t\t\t\t\t\t\tx: (node.x * this.tileSize.width) - this.tileSize.width / 2, \r\n\t\t\t\t\t\t\ty: (node.y * this.tileSize.height) - this.tileSize.height / 2 \r\n\t\t\t\t\t\t};\r\n\t\t\t\t\t\t// Store the next node position\r\n\t\t\t\t\t\tinstanceData.trajectory.nextNodePos = nodePos;\r\n\t\t\t\t\t\t// Get the angle from the instance's position to the next node\r\n\t\t\t\t\t\tinstanceData.trajectory.angle = Utils.getAngle2(instancePosition, instanceData.trajectory.nextNodePos);\r\n\t\t\t\t\t\t// Get the trajectory of where to move the instance based on the angle\r\n\t\t\t\t\t\tinstanceData.trajectory.x = Math.cos(instanceData.trajectory.angle);\r\n\t\t\t\t\t\tinstanceData.trajectory.y = -Math.sin(instanceData.trajectory.angle);\r\n\t\t\t\t\t\t// Update the direction of the instance based on the angle to the next node\r\n\t\t\t\t\t\tpInstance.dir = Utils.getDirection(instanceData.trajectory.angle);\r\n\t\t\t\t\t\t// Move the instance with collision mode or positional mode\r\n\t\t\t\t\t\tif (instanceData.mode === 'collision') {\r\n\t\t\t\t\t\t\tpInstance.movePos(instanceData.trajectory.x, instanceData.trajectory.y);\r\n\t\t\t\t\t\t} else if (instanceData.mode === 'position') {\r\n\t\t\t\t\t\t\tconst speed = instanceData.pixelsPerSecond * this.deltaTime;\r\n\t\t\t\t\t\t\tpInstance.setPos(pInstance.x + speed * instanceData.trajectory.x, pInstance.y + speed * instanceData.trajectory.y, pInstance.mapName);\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t\tinstanceData.moving = true;\r\n\t\t\t\t\t} else {\r\n\t\t\t\t\t\t// Get the distance from the instance's position to the next node's position.\r\n\t\t\t\t\t\tconst distance = Utils.getDistance(instancePosition, instanceData.trajectory.nextNodePos);\r\n\t\t\t\t\t\t// Stop moving when you are this close distance.\r\n\t\t\t\t\t\tif (distance <= instanceData.minDistance) {\r\n\t\t\t\t\t\t\t// Stop moving\r\n\t\t\t\t\t\t\tinstanceData.moving = false;\r\n\t\t\t\t\t\t\t// Reset stuck counter when moving has \"stopped\".\r\n\t\t\t\t\t\t\tinstanceData.stuckCounter = 0;\r\n\t\t\t\t\t\t\t// If there is no more nodes left in the path\r\n\t\t\t\t\t\t\tif (!instanceData.path.length) {\r\n\t\t\t\t\t\t\t\t// You have completed the path. Call the event function if supplied.\r\n\t\t\t\t\t\t\t\tif (typeof(instanceData.events.onPathComplete) === 'function') {\r\n\t\t\t\t\t\t\t\t\tinstanceData.events.onPathComplete();\r\n\t\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t\t\tthis.end(pInstance);\r\n\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t} else {\r\n\t\t\t\t\t\t\tinstanceData.trajectory.angle = Utils.getAngle2(instancePosition, instanceData.trajectory.nextNodePos);\r\n\t\t\t\t\t\t\tinstanceData.trajectory.x = Math.cos(instanceData.trajectory.angle);\r\n\t\t\t\t\t\t\tinstanceData.trajectory.y = -Math.sin(instanceData.trajectory.angle);\r\n\t\t\t\t\t\t\tpInstance.dir = Utils.getDirection(instanceData.trajectory.angle);\r\n\t\t\t\t\t\t\t// Move the instance with collision mode or positional mode\r\n\t\t\t\t\t\t\tif (instanceData.mode === 'collision') {\r\n\t\t\t\t\t\t\t\tpInstance.movePos(instanceData.trajectory.x, instanceData.trajectory.y);\r\n\t\t\t\t\t\t\t} else if (instanceData.mode === 'position') {\r\n\t\t\t\t\t\t\t\tconst speed = instanceData.pixelsPerSecond * this.deltaTime;\r\n\t\t\t\t\t\t\t\tpInstance.setPos(pInstance.x + speed * instanceData.trajectory.x, pInstance.y + speed * instanceData.trajectory.y, pInstance.mapName);\r\n\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t\tinstanceData.moving = true;\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t}\r\n\t\t\t\t\t// If the instance's position is in the same spot it was in the last tick\r\n\t\t\t\t\tif (instancePosition.x === instanceData.previousPosition.x && instancePosition.y === instanceData.previousPosition.y) {\r\n\t\t\t\t\t\t// Increment the stuck counter\r\n\t\t\t\t\t\tinstanceData.stuckCounter++;\r\n\t\t\t\t\t\t// Chekck if the stuck counter is greater or equal to the max stuck counter\r\n\t\t\t\t\t\tif (instanceData.stuckCounter >= instanceData.maxStuckCounter) {\r\n\t\t\t\t\t\t\t// Call the stuck event if defined.\r\n\t\t\t\t\t\t\tif (typeof(instanceData.events.onPathStuck) === 'function') {\r\n\t\t\t\t\t\t\t\tinstanceData.events.onPathStuck();\r\n\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t\t// End this pathfinding.\r\n\t\t\t\t\t\t\tthis.end(pInstance);\r\n\t\t\t\t\t\t\treturn;\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t}\r\n\t\t\t\t\t// Store the previous position as the position of this tick\r\n\t\t\t\t\tinstanceData.previousPosition = instancePosition;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t});\r\n\t\t// Store this tick's time\r\n\t\tthis.lastTime = now;\r\n\t}\r\n\t/**\r\n\t * Sets the tilesize of this system.\r\n\t * @param {number} pTileSize - The tilesize of the game.\r\n\t */\r\n\tsetTileSize(pTileSize) {\r\n\t\tif (typeof(pTileSize) === 'number') {\r\n\t\t\tthis.tileSize = { width: pTileSize, height: pTileSize };\r\n\t\t} else if(typeof(pTileSize) === 'object') {\r\n\t\t\tconst width = pTileSize.width;\r\n\t\t\tconst height = pTileSize.height;\r\n\t\t\t// Assign the tilesize width\r\n\t\t\tif (typeof(width) === 'number') {\r\n\t\t\t\tthis.tileSize.width = width;\r\n\t\t\t}\r\n\t\t\t// Assign the tilesize height\r\n\t\t\tif (typeof(height) === 'number') {\r\n\t\t\t\tthis.tileSize.height = height;\r\n\t\t\t}\r\n\t\t} else {\r\n\t\t\tthis.logger.prefix('Pathway-Module').error('Invalid type used for pTileSize');\r\n\t\t}\r\n\t}\r\n\t/**\r\n\t * Checks to see if pTile is invalid for movement.\r\n\t * @private\r\n\t * @param {Object} pTile - The tile to check the validity of.\r\n\t * @param {Array} pIgnoreList - The list of ignored tiles/instances.\r\n\t * @returns {boolean} - If this tile is valid or invalid.\r\n\t */\r\n\tisTileInvalid(pTile, pIgnoreList) {\r\n\t\t// If this tile is dense and not on the ignored list, it's invalid.\r\n\t\tconst invalidTile = pTile.density && !pIgnoreList.includes(pTile);\r\n\t\r\n\t\t// Check if there are any dense instances on this tile that are not on the ignore list. A instance can be on the tile and dense as long as it has a pathwayWeight. This is allowing the pathway system to determine if its worth traveling that tile while that dense instance exists on it.\r\n\t\tconst invalidInstancesOnTile = pTile.getContents().some(pElement => pElement.density && !pElement.pathwayWeight && !pIgnoreList.includes(pElement));\r\n\t\r\n\t\t// If this tile is invalid.\r\n\t\treturn invalidTile || invalidInstancesOnTile;\r\n\t}\r\n\t/**\r\n\t * Generates a path from the origin point to the end point with obstacles in mind.\r\n\t * @private\r\n\t * @param {Object} pInstance - The instance to grab data from.\r\n\t * @param {Object} pOrigin - An object containing the start x and y position. \r\n\t * @property {number} pOrigin.x - The start x coordinate.\r\n\t * @property {number} pOrigin.y -The start y coordinate.\r\n\t * @param {Object} pDestination - An object containing the end x and y position to travel to.\r\n\t * @property {number} pDestination.x - The end x coordinate.\r\n\t * @property {number} pDestination.y - The end y coordinate.\r\n\t * @returns {Promise} A promise that resolves with an object containing the path from the start position to the end position.\r\n\t */\r\n\tgetPath(pInstance, pOrigin, pDestination) {\r\n\t\treturn new Promise((pResolve, pReject) => {\r\n\t\t\t// Get the instance data\r\n\t\t\tconst instanceData = this.instanceWeakMap.get(pInstance);\r\n\t\t\tif (!instanceData) {\r\n\t\t\t\tthis.logger.prefix('Pathway-Module').error('Instance data not found!');\r\n\t\t\t\tpReject();\r\n\t\t\t\treturn;\r\n\t\t\t}\r\n\t\t\t\r\n\t\t\t/**\r\n\t\t\t * The path generated.\r\n\t\t\t * @private\r\n\t\t\t * @type {Array}\r\n\t\t\t */\r\n\t\t\tlet path;\r\n\t\t\t\r\n\t\t\t// Find the path\r\n\t\t\tconst pathID = instanceData.easystar.findPath(pOrigin.x, pOrigin.y, pDestination.x, pDestination.y, (pPath) => {\r\n\t\t\t\t// Check if the path is valid.\r\n\t\t\t\tif (Array.isArray(pPath) && pPath.length) {\r\n\t\t\t\t\t// // // Offset the nodes by 1, because VYLO xCoord and yCoord start at 1.\r\n\t\t\t\t\tpath = pPath.map((pElement) => ({\r\n\t\t\t\t\t\tx: ++pElement.x,\r\n\t\t\t\t\t\ty: ++pElement.y\r\n\t\t\t\t\t}));\r\n\t\t\t\t\t// Remove the node you start on.\r\n\t\t\t\t\tpath.shift();\r\n\t\t\t\t\t// Store the path\r\n\t\t\t\t\tinstanceData.path = path;\r\n\t\t\t\t\t// Store the pathID\r\n\t\t\t\t\tinstanceData.pathID = pathID;\r\n\t\t\t\t\t// Call event when path is found\r\n\t\t\t\t\tif (typeof(instanceData.events.onPathFound) === 'function') {\r\n\t\t\t\t\t\tinstanceData.events.onPathFound(path);\r\n\t\t\t\t\t}\r\n\t\t\t\t} else {\r\n\t\t\t\t\t// Call event when no path is found\r\n\t\t\t\t\tif (typeof(instanceData.events.onPathNotFound) === 'function') {\r\n\t\t\t\t\t\tinstanceData.events.onPathNotFound();\r\n\t\t\t\t\t}\r\n\t\t\t\t\t// If no path is found then we end the pathfinding on this instance.\r\n\t\t\t\t\tthis.end(pInstance);\r\n\t\t\t\t}\r\n\t\t\t});\r\n\t\t\t// Track pInstance as an active instance.\r\n\t\t\tthis.track(pInstance);\r\n\t\t});\r\n\t}\r\n\t/**\r\n\t * Converts an array to an 2D array.\r\n\t * @private\r\n\t * @param {Array} pArray - The array to convert to a 2D array.\r\n\t * @param {number} pLengthOfSubArray - The length of the subarray.\r\n\t * @returns {Array} The 2D array.\r\n\t */\r\n\ttoTwoDimensionalArray(pArray, pLengthOfSubArray) {\r\n\t\tlet i = 0;\r\n\t\tconst result = [];\r\n\t\twhile (i < pArray.length) {\r\n\t\t\tresult.push(pArray.slice(i, i+= pLengthOfSubArray));\r\n\t\t}\r\n\t\treturn result;\r\n\t}\r\n\t/**\r\n\t * Converts a tile to a node position.\r\n\t * @private\r\n\t * @param {Object}} pTile - The tile to convert into a node position.\r\n\t * @returns {Object} The node.\r\n\t */\r\n\ttileToNode(pTile) {\r\n\t\tif (typeof(pTile.mapName) === 'string') {\r\n\t\t\tif (PathwaySingleton.storedMapTiles[pTile.mapName]) {\r\n\t\t\t\tconst index = this.getIndexOf2DArray(PathwaySingleton.storedMapTiles[pTile.mapName].tiles2d, pTile);\r\n\t\t\t\tconst node = { x: index[1], y: index[0] };\r\n\t\t\t\treturn node;\r\n\t\t\t} else {\r\n\t\t\t\tthis.logger.prefix('Pathway-Module').error('There is no stored grid for the map this tile belongs to.');\r\n\t\t\t}\r\n\t\t} else {\r\n\t\t\tthis.logger.prefix('Pathway-Module').error('Invalid mapname found on pTile');\r\n\t\t}\r\n\t}\r\n\t/**\r\n\t * Finds the index of a value in a 2D array.\r\n\t * @private\r\n\t * @param {Array} pArray - The 2D array to search in.\r\n\t * @param {any} pValue - The value to find in the 2D array.\r\n\t * @returns {Array<number>} Returns an array containing the row and column indices of the found value, or undefined if not found.\r\n\t */\r\n\tgetIndexOf2DArray(pArray, pValue) {\r\n\t\tfor (let i = 0; i < pArray.length; i++) {\r\n\t\t\tlet index = pArray[i].indexOf(pValue);\r\n\t\t\tif (index > -1) {\r\n\t\t\t\treturn [i, index];\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n\t/**\r\n\t * Converts map tiles to grids.\r\n\t * @private\r\n\t * @param {string} pMapName - The mapname where the tile should come from.\r\n\t * @param {Array} pIgnoreList - The ignore list to use for this grid.\r\n\t * @returns {Object|undefined} An object containing the grid created, an array of tiles that are to be accepted in the pathfinding system, and the weights of each tile.\r\n\t */\r\n\tmapTilesToGrid(pMapName, pIgnoreList) {\r\n\t\tif (typeof(pMapName) === 'string') {\r\n\t\t\tif (Array.isArray(pIgnoreList)) {\r\n\t\t\t\t// We check if this is a valid mapname found in VYLO.\r\n\t\t\t\tif (VYLO.Map.getMaps().includes(pMapName)) {\r\n\t\t\t\t\t// An array of tiles that we get from the map\r\n\t\t\t\t\tlet tilesArray;\r\n\t\t\t\t\t// An array of accepted tiles to be walked on.\r\n\t\t\t\t\tconst acceptedTiles = [0];\r\n\t\t\t\t\t// An array holding the weights of tiles.\r\n\t\t\t\t\tconst weights = [];\r\n\t\t\t\t\t// Get the dimensions of the map that was passed.\r\n\t\t\t\t\tconst mapSize = VYLO.Map.getMapSize(pMapName);\r\n\r\n\t\t\t\t\t// We check if we have stored tiles from this map before. If so we cache them.\r\n\t\t\t\t\tif (PathwaySingleton.storedMapTiles[pMapName]) {\r\n\t\t\t\t\t\t// We get the tile array from memory.\r\n\t\t\t\t\t\ttilesArray = PathwaySingleton.storedMapTiles[pMapName].tiles;\r\n\t\t\t\t\t} else {\r\n\t\t\t\t\t\ttilesArray = VYLO.Map.getTiles(pMapName);\r\n\t\t\t\t\t\t// We store this tiles array\r\n\t\t\t\t\t\tPathwaySingleton.storedMapTiles[pMapName] = { tiles: tilesArray, tiles2d: this.toTwoDimensionalArray(tilesArray, mapSize.x) };\r\n\t\t\t\t\t}\r\n\r\n\t\t\t\t\t// Loop through the tiles array to build weights and accepted tile lists.\r\n\t\t\t\t\tconst grid = tilesArray.map((pTile) => {\r\n\t\t\t\t\t\t// A weight of PathwaySingleton.PASSABLE_WEIGHT indicates no weight.\r\n\t\t\t\t\t\tlet weight = typeof(pTile.pathwayWeight) === 'number' ? pTile.pathwayWeight : PathwaySingleton.PASSABLE_WEIGHT;\r\n\r\n\t\t\t\t\t\t// Check if the tile or any of its contents are dense and have no pathwayWeight. As if it has a pathway weight, this tile is travelable. Just less desirable.\r\n\t\t\t\t\t\tif (pTile.density || pTile.getContents().some(instance => instance.density && !instance.pathwayWeight && !pIgnoreList.includes(instance))) {\r\n\t\t\t\t\t\t\tweight = PathwaySingleton.NO_TRAVEL_WEIGHT;\r\n\t\t\t\t\t\t} else {\r\n\t\t\t\t\t\t\t// Accumulate weights of instances on the tile\r\n\t\t\t\t\t\t\tfor (const instance of pTile.getContents()) {\r\n\t\t\t\t\t\t\t\tif (typeof(instance.pathwayWeight) === 'number') {\r\n\t\t\t\t\t\t\t\t\tweight += instance.pathwayWeight;\r\n\t\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t}\r\n\r\n\t\t\t\t\t\t// Add weight to acceptedTiles if not already present\r\n\t\t\t\t\t\t// If the weight is PathwaySingleton.PASSABLE_WEIGHT, then it means its already accepted to be walked on.\r\n\t\t\t\t\t\t// If the weight is NO_TRAVEL_WEIGHT this means it cant be walked on.\r\n\t\t\t\t\t\tif (weight !== PathwaySingleton.NO_TRAVEL_WEIGHT && weight !== PathwaySingleton.PASSABLE_WEIGHT) {\r\n\t\t\t\t\t\t\tif (!acceptedTiles.includes(weight)) acceptedTiles.push(weight);\r\n\t\t\t\t\t\t\tif (!weights.includes(weight)) weights.push(weight);\r\n\t\t\t\t\t\t}\r\n\r\n\t\t\t\t\t\treturn weight;\r\n\t\t\t\t\t});\r\n\r\n\t\t\t\t\treturn { \r\n\t\t\t\t\t\t'acceptedTiles': acceptedTiles, \r\n\t\t\t\t\t\t'grid': this.toTwoDimensionalArray(grid, mapSize.x), \r\n\t\t\t\t\t\t'weights': weights \r\n\t\t\t\t\t};\r\n\t\t\t\t} else {\r\n\t\t\t\t\tthis.logger.prefix('Pathway-Module').error('pMapName was not found in VYLO.');\r\n\t\t\t\t\treturn;\r\n\t\t\t\t}\r\n\t\t\t} else {\r\n\t\t\t\tthis.logger.prefix('Pathway-Module').error('Invalid type for pIgnoreList.');\r\n\t\t\t}\r\n\t\t} else {\r\n\t\t\tthis.logger.prefix('Pathway-Module').error('Invalid type for pMapName.');\r\n\t\t}\r\n\t}\r\n}\r\n/**\r\n * The module instantiated for use.\r\n * @type {PathwaySingleton}\r\n */\r\nconst Pathway = new PathwaySingleton();\r\n/**\r\n * Check if this is a server environment\r\n * @ignore\r\n */\r\nconst server = (typeof(window) === 'undefined');\r\n/**\r\n * Update API bound to Pathway\r\n * @ignore\r\n */\r\nconst update = Pathway.update.bind(Pathway);\r\n\r\n// If on the server we use an interval\r\nif (server) {\r\n\t// Update interval\r\n\tconst updateInterval = setInterval(update, 16);\r\n// Otherwise we use raf\r\n} else {\r\n\tconst updateLoop = () => {\r\n\t\tupdate();\r\n\t\trequestAnimationFrame(updateLoop);\r\n\t}\r\n\trequestAnimationFrame(updateLoop);\r\n}\r\n\r\nexport { Pathway };",
+    "static": true,
+    "longname": "C:/Users/jared/Documents/Github/Pathway/src/pathway.mjs",
+    "access": "public",
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 49,
+    "kind": "variable",
+    "name": "server",
+    "memberof": "src/pathway.mjs",
+    "static": true,
+    "longname": "src/pathway.mjs~server",
+    "access": "public",
+    "export": false,
+    "importPath": "pathway",
+    "importStyle": null,
+    "description": "Check if this is a server environment",
+    "lineNumber": 745,
+    "ignore": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 50,
+    "kind": "variable",
+    "name": "update",
+    "memberof": "src/pathway.mjs",
+    "static": true,
+    "longname": "src/pathway.mjs~update",
+    "access": "public",
+    "export": false,
+    "importPath": "pathway",
+    "importStyle": null,
+    "description": "Update API bound to Pathway",
+    "lineNumber": 750,
+    "ignore": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 51,
+    "kind": "variable",
+    "name": "Pathway",
+    "memberof": "src/pathway.mjs",
+    "static": true,
+    "longname": "src/pathway.mjs~Pathway",
+    "access": "public",
+    "export": true,
+    "importPath": "pathway",
+    "importStyle": "{Pathway}",
+    "description": "The module instantiated for use.",
+    "lineNumber": 740,
+    "type": {
+      "nullable": null,
+      "types": [
+        "PathwaySingleton"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 52,
+    "kind": "class",
+    "name": "PathwaySingleton",
+    "memberof": "src/pathway.mjs",
+    "static": true,
+    "longname": "src/pathway.mjs~PathwaySingleton",
+    "access": "public",
+    "export": true,
+    "importPath": "pathway",
+    "importStyle": null,
+    "description": "",
+    "lineNumber": 9,
+    "todo": [
+      "Test on server",
+      "Make debugging class"
+    ],
+    "pseudoExport": true,
+    "interface": false
+  },
+  {
+    "__docId__": 53,
+    "kind": "member",
+    "name": "MAX_STUCK_COUNTER",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "static": true,
+    "longname": "src/pathway.mjs~PathwaySingleton.MAX_STUCK_COUNTER",
+    "access": "private",
+    "description": "The maximum amount of ticks an instance can be in the same position before the pathfinder deems it \"stuck\". The user will be able to tweak values up to this max value.",
+    "lineNumber": 15,
+    "type": {
+      "nullable": null,
+      "types": [
+        "number"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 54,
+    "kind": "member",
+    "name": "MAX_DELTA_TIME",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "static": true,
+    "longname": "src/pathway.mjs~PathwaySingleton.MAX_DELTA_TIME",
+    "access": "private",
+    "description": "The max amount of delta time between ticks. If this limit is passed, it will be clamped.",
+    "lineNumber": 21,
+    "type": {
+      "nullable": null,
+      "types": [
+        "number"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 55,
+    "kind": "member",
+    "name": "AVERSION_WEIGHT",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "static": true,
+    "longname": "src/pathway.mjs~PathwaySingleton.AVERSION_WEIGHT",
+    "access": "private",
+    "description": "A static weight to be applied when a tile should be considered trickier to travel on.",
+    "lineNumber": 27,
+    "type": {
+      "nullable": null,
+      "types": [
+        "number"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 56,
+    "kind": "member",
+    "name": "PASSABLE_WEIGHT",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "static": true,
+    "longname": "src/pathway.mjs~PathwaySingleton.PASSABLE_WEIGHT",
+    "access": "private",
+    "description": "The weight that indicates that this tile is walkable. This is used as the default weight of every instance unless otherwise stated.",
+    "lineNumber": 33,
+    "type": {
+      "nullable": null,
+      "types": [
+        "number"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 57,
+    "kind": "member",
+    "name": "NO_TRAVEL_WEIGHT",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "static": true,
+    "longname": "src/pathway.mjs~PathwaySingleton.NO_TRAVEL_WEIGHT",
+    "access": "private",
+    "description": "A static weight to be applied when a tile should be not be traveled to at all.",
+    "lineNumber": 39,
+    "type": {
+      "nullable": null,
+      "types": [
+        "number"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 58,
+    "kind": "member",
+    "name": "DEFAULT_PIXELS_PER_SECOND",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "static": true,
+    "longname": "src/pathway.mjs~PathwaySingleton.DEFAULT_PIXELS_PER_SECOND",
+    "access": "private",
+    "description": "The default amount of pixels per second to move the instance when using `position` mode.",
+    "lineNumber": 45,
+    "type": {
+      "nullable": null,
+      "types": [
+        "number"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 59,
+    "kind": "member",
+    "name": "DEFAULT_MINIMUM_DISTANCE",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "static": true,
+    "longname": "src/pathway.mjs~PathwaySingleton.DEFAULT_MINIMUM_DISTANCE",
+    "access": "private",
+    "description": "The minimum distance away from a node before this system determines it has made it to that node.",
+    "lineNumber": 51,
+    "type": {
+      "nullable": null,
+      "types": [
+        "number"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 60,
+    "kind": "member",
+    "name": "DEFAULT_MODE",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "static": true,
+    "longname": "src/pathway.mjs~PathwaySingleton.DEFAULT_MODE",
+    "access": "private",
+    "description": "The default mode this pathway system uses.",
+    "lineNumber": 57,
+    "type": {
+      "nullable": null,
+      "types": [
+        "string"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 61,
+    "kind": "member",
+    "name": "storedMapTiles",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "static": true,
+    "longname": "src/pathway.mjs~PathwaySingleton.storedMapTiles",
+    "access": "private",
+    "description": "An object that stores the map tiles in normal format and in 2D format.",
+    "lineNumber": 63,
+    "type": {
+      "nullable": null,
+      "types": [
+        "Object"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 62,
+    "kind": "member",
+    "name": "DEFAULT_TILE_SIZE",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "static": true,
+    "longname": "src/pathway.mjs~PathwaySingleton.DEFAULT_TILE_SIZE",
+    "access": "private",
+    "description": "The tile size to use if no tile size has been assigned.",
+    "lineNumber": 69,
+    "type": {
+      "nullable": null,
+      "types": [
+        "number"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 63,
+    "kind": "member",
+    "name": "tileSize",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#tileSize",
+    "access": "private",
+    "description": "The tile size to use for this system.",
+    "lineNumber": 75,
+    "type": {
+      "nullable": null,
+      "types": [
+        "Object"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 64,
+    "kind": "member",
+    "name": "version",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#version",
+    "access": "public",
+    "description": "The version of the module.",
+    "lineNumber": 79,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 65,
+    "kind": "member",
+    "name": "instanceWeakMap",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#instanceWeakMap",
+    "access": "private",
+    "description": "A weakmap storing the data of instances used in this pathfinder.",
+    "lineNumber": 85,
+    "type": {
+      "nullable": null,
+      "types": [
+        "WeakMap"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 66,
+    "kind": "member",
+    "name": "lastTime",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#lastTime",
+    "access": "private",
+    "description": "The last tracked time in the ticker.",
+    "lineNumber": 91,
+    "type": {
+      "nullable": null,
+      "types": [
+        "number"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 67,
+    "kind": "member",
+    "name": "deltaTime",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#deltaTime",
+    "access": "private",
+    "description": "The delta time between the current and last tick.",
+    "lineNumber": 97,
+    "type": {
+      "nullable": null,
+      "types": [
+        "number"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 68,
+    "kind": "member",
+    "name": "elapsedMS",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#elapsedMS",
+    "access": "private",
+    "description": "The time in ms between the current and last tick.",
+    "lineNumber": 103,
+    "type": {
+      "nullable": null,
+      "types": [
+        "number"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 69,
+    "kind": "member",
+    "name": "activeInstances",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#activeInstances",
+    "access": "private",
+    "description": "An array of active instances that are currently pathfinding.",
+    "lineNumber": 109,
+    "type": {
+      "nullable": null,
+      "types": [
+        "Array"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 70,
+    "kind": "constructor",
+    "name": "constructor",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#constructor",
+    "access": "private",
+    "description": "",
+    "lineNumber": 113
+  },
+  {
+    "__docId__": 71,
+    "kind": "member",
+    "name": "logger",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#logger",
+    "access": "private",
+    "description": "The logger module this module uses to log errors / logs",
+    "lineNumber": 119,
+    "type": {
+      "nullable": null,
+      "types": [
+        "Object"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 72,
+    "kind": "method",
+    "name": "to",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#to",
+    "access": "public",
+    "description": "Moves pInstance to the destination position with pOptions in mind.",
+    "lineNumber": 140,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pInstance",
+        "description": "The instance to move to the destination. The origin position will be retrived from this instance as well."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pDestination",
+        "description": "The end position to travel to."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pOptions",
+        "description": "An object of settings on how to move pInstance to pDestination."
+      }
+    ],
+    "properties": [
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pDestination.x",
+        "description": "The end x coordinate."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pDestination.y",
+        "description": "The end y coordinate."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "boolean"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": " false",
+        "defaultRaw": false,
+        "name": "pOptions.diagonal",
+        "description": "Whether or not the pathfinder allows diagonal moves."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Array"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pOptions.ignore",
+        "description": "An array of diobs that will be ignored when calculating the path."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": " 2",
+        "defaultRaw": 2,
+        "name": "pOptions.minDistance",
+        "description": "= The minimum distance this pathway system will use to calculate if you have reached the (next) node."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": " 100",
+        "defaultRaw": 100,
+        "name": "pOptions.maxStuckCounter",
+        "description": "The maximum amount of ticks of pInstance being in the same position as the last tick before its considered stuck."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": " 'collision'",
+        "defaultRaw": " 'collision'",
+        "name": "pOptions.mode",
+        "description": "How this instance will move. `collision` for moving with collisions in mind (movePos). `position` for moving with no collisions in mind (setPos) Must use pOptions.pixelsPerSecond when using `position` mode."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": " 120",
+        "defaultRaw": 120,
+        "name": "pOptions.pixelsPerSecond",
+        "description": "The speed in pixels this instance moves per second. This setting only works when pOptions.mode is set to `position`."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Function"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pOptions.onPathComplete",
+        "description": "Callback for when pInstance makes it to the destination node."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Function"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pOptions.onPathFound",
+        "description": "Callback for when pInstance finds a path."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Function"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pOptions.onPathStuck",
+        "description": "Callback for when pInstance gets stuck on a path."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Function"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pOptions.onPathNotFound",
+        "description": "Callback for when no path is found."
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 73,
+    "kind": "method",
+    "name": "track",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#track",
+    "access": "private",
+    "description": "Tracks this instance as active.",
+    "lineNumber": 323,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pInstance",
+        "description": "The instance to track."
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 74,
+    "kind": "method",
+    "name": "untrack",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#untrack",
+    "access": "private",
+    "description": "Untracks this instance. It is no longer considered active.",
+    "lineNumber": 334,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pInstance",
+        "description": "The instance to untrack."
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 75,
+    "kind": "method",
+    "name": "end",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#end",
+    "access": "public",
+    "description": "Ends the current pathfinding for pInstance.",
+    "lineNumber": 344,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pInstance",
+        "description": "The instance to terminate pathfinding on."
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 76,
+    "kind": "method",
+    "name": "getPositionFromInstance",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#getPositionFromInstance",
+    "access": "private",
+    "description": "Gets the position from the instance based on the pathfinding info. Centered position from the geometrical.",
+    "lineNumber": 395,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Object} - The position of the instance."
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pInstance",
+        "description": "The instance to get the position from."
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Object"
+      ],
+      "spread": false,
+      "description": "The position of the instance."
+    }
+  },
+  {
+    "__docId__": 77,
+    "kind": "method",
+    "name": "update",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#update",
+    "access": "private",
+    "description": "Updates active instances on the pathfinder.",
+    "lineNumber": 407,
+    "params": [],
+    "return": null
+  },
+  {
+    "__docId__": 82,
+    "kind": "method",
+    "name": "setTileSize",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#setTileSize",
+    "access": "public",
+    "description": "Sets the tilesize of this system.",
+    "lineNumber": 515,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pTileSize",
+        "description": "The tilesize of the game."
+      }
+    ],
+    "return": null
+  },
+  {
+    "__docId__": 84,
+    "kind": "method",
+    "name": "isTileInvalid",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#isTileInvalid",
+    "access": "private",
+    "description": "Checks to see if pTile is invalid for movement.",
+    "lineNumber": 540,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{boolean} - If this tile is valid or invalid."
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pTile",
+        "description": "The tile to check the validity of."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Array"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pIgnoreList",
+        "description": "The list of ignored tiles/instances."
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "boolean"
+      ],
+      "spread": false,
+      "description": "If this tile is valid or invalid."
+    }
+  },
+  {
+    "__docId__": 85,
+    "kind": "method",
+    "name": "getPath",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#getPath",
+    "access": "private",
+    "description": "Generates a path from the origin point to the end point with obstacles in mind.",
+    "lineNumber": 562,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise} A promise that resolves with an object containing the path from the start position to the end position."
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pInstance",
+        "description": "The instance to grab data from."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pOrigin",
+        "description": "An object containing the start x and y position."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pDestination",
+        "description": "An object containing the end x and y position to travel to."
+      }
+    ],
+    "properties": [
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pOrigin.x",
+        "description": "The start x coordinate."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pOrigin.y",
+        "description": "The start y coordinate."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pDestination.x",
+        "description": "The end x coordinate."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pDestination.y",
+        "description": "The end y coordinate."
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": "A promise that resolves with an object containing the path from the start position to the end position."
+    }
+  },
+  {
+    "__docId__": 86,
+    "kind": "method",
+    "name": "toTwoDimensionalArray",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#toTwoDimensionalArray",
+    "access": "private",
+    "description": "Converts an array to an 2D array.",
+    "lineNumber": 618,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Array} The 2D array."
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Array"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pArray",
+        "description": "The array to convert to a 2D array."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pLengthOfSubArray",
+        "description": "The length of the subarray."
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Array"
+      ],
+      "spread": false,
+      "description": "The 2D array."
+    }
+  },
+  {
+    "__docId__": 87,
+    "kind": "method",
+    "name": "tileToNode",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#tileToNode",
+    "access": "private",
+    "description": "Converts a tile to a node position.",
+    "lineNumber": 632,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Object} The node."
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object}"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pTile",
+        "description": "The tile to convert into a node position."
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Object"
+      ],
+      "spread": false,
+      "description": "The node."
+    }
+  },
+  {
+    "__docId__": 88,
+    "kind": "method",
+    "name": "getIndexOf2DArray",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#getIndexOf2DArray",
+    "access": "private",
+    "description": "Finds the index of a value in a 2D array.",
+    "lineNumber": 652,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Array<number>} Returns an array containing the row and column indices of the found value, or undefined if not found."
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Array"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pArray",
+        "description": "The 2D array to search in."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "any"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pValue",
+        "description": "The value to find in the 2D array."
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Array<number>"
+      ],
+      "spread": false,
+      "description": "Returns an array containing the row and column indices of the found value, or undefined if not found."
+    }
+  },
+  {
+    "__docId__": 89,
+    "kind": "method",
+    "name": "mapTilesToGrid",
+    "memberof": "src/pathway.mjs~PathwaySingleton",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/pathway.mjs~PathwaySingleton#mapTilesToGrid",
+    "access": "private",
+    "description": "Converts map tiles to grids.",
+    "lineNumber": 667,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Object|undefined} An object containing the grid created, an array of tiles that are to be accepted in the pathfinding system, and the weights of each tile."
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pMapName",
+        "description": "The mapname where the tile should come from."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Array"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pIgnoreList",
+        "description": "The ignore list to use for this grid."
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Object",
+        "undefined"
+      ],
+      "spread": false,
+      "description": "An object containing the grid created, an array of tiles that are to be accepted in the pathfinding system, and the weights of each tile."
+    }
+  },
+  {
+    "kind": "index",
+    "content": "# Pathway\r\nA module that will enable pathfinding functionality in the Vylocity Game Engine   \r\n\r\n## Implementation \r\n\r\n```js\r\nimport { Pathway } from './pathway.min.mjs';\r\n```\r\n\r\n## API   \r\n\r\n###  instance.pathwayWeight   \r\n   - `desc`: The weight of this instance in the pathfinder system, higher values will try to make the pathfinder generate paths that do not include this instance  \r\n\r\n###  Pathway.to(pInstance, pDestination, pOptions) \r\n   - `pInstance`: The instance to move. `object`\r\n   - `pDestination.x`: The xCoordinate to move to `integer`  \r\n   - `pDestination.y`: The yCoordinate to move to `integer`  \r\n   - `pOptions.diagonal`: Whether or not the pathfinder allows diagonal moves `boolean`  \r\n   - `pOptions.mode`: How this instance will move. `collision` for moving with collisions in mind (movePos). `position` for moving with no collisions in mind (setPos). `string` \r\n   - `pOptions.pixelsPerSecond`: The speed in pixels this instance moves per second. This setting only works when `pOptions.mode` is set to `position`.`number`   \r\n   - `pOptions.ignore`: An array of diobs that will be ignored when calculating the path `array`  \r\n   - `pOptions.minDistance`: The minimum distance this pathway system will use to calculate if you have reached the (next) node. `number`  \r\n   - `pOptions.maxStuckCounter`: The maximum amount of ticks of pInstance being in the same position as the last tick before its considered stuck. `number`  \r\n\t- `pOptions.onPathComplete`: Callback for when pInstance makes it to the `function`  \r\n\t- `pOptions.onPathFound`: Callback for when pInstance finds a path. The first parameter is the path that was generated. `function`  \r\n\t- `pOptions.onPathStuck`: Callback for when pInstance gets stuck on a path. `function`  \r\n\t- `pOptions.onPathNotFound`: Callback for when no path is found. `function`  \r\n   - `desc`: Moves `pInstance` to the provided coordinates by walking along a generated path free of obstacles.\r\n\r\n###  Pathway.end(pInstance)  \r\n   - `pInstance`: The instance to end the pathfinding on.\r\n   - `desc`: Cancels the current path if there is one and stops this instance from moving    \r\n   \r\n### Pathway.setTileSize(pTileSize)\r\n  - `pTileSize`: The size of the tileset. `number` | `object`\r\n  - `desc`: Sets the tile size internally for this pathway system to reference. This is how pathway will determine node positions.\r\n\r\nThis module expects the `VYLO` variable to be exposed globally.",
+    "longname": "C:\\Users\\jared\\Documents\\Github\\Pathway\\README.md",
+    "name": "./README.md",
+    "static": true,
+    "access": "public"
+  },
+  {
+    "kind": "packageJSON",
+    "content": "{\r\n  \"name\": \"pathway\",\r\n  \"version\": \"1.0.0\",\r\n  \"description\": \"A module that will enable pathfinding functionality in the Vylocity Game Engine.\",\r\n  \"main\": \"src/pathway.mjs\",\r\n  \"scripts\": {\r\n    \"test\": \"echo \\\"Error: no test specified\\\" && exit 1\",\r\n    \"build\": \"npx webpack && npm run build:minify && node add-version-script.js && node add-banner-script.js\",\r\n    \"build:minify\": \"uglifyjs dist/pathway.min.mjs -m -c --comments -o dist/pathway.min.mjs\",\r\n    \"build:prod\": \"npx webpack --mode production && npm run build:minify && node add-version-script.js && node add-banner-script.js && npm run build:docs\",\r\n    \"build:docs\": \"esdoc -c esdoc.json\"\r\n  },\r\n  \"author\": \"https://github.com/doubleactii\",\r\n  \"license\": \"SEE LICENSE IN LICENSE.md\",\r\n  \"repository\": {\r\n    \"type\": \"git\",\r\n    \"url\": \"https://github.com/EvitcaStudio/Pathway\"\r\n  },\r\n  \"bugs\": {\r\n    \"url\": \"https://github.com/EvitcaStudio/Pathway/issues\"\r\n  },\r\n  \"homepage\": \"https://github.com/EvitcaStudio/Pathway#readme\",\r\n  \"devDependencies\": {\r\n    \"@babel/preset-env\": \"^7.24.4\",\r\n    \"babel-loader\": \"^9.1.3\",\r\n    \"esdoc\": \"^1.1.0\",\r\n    \"esdoc-ecmascript-proposal-plugin\": \"^1.0.0\",\r\n    \"esdoc-standard-plugin\": \"^1.0.0\",\r\n    \"uglify-js\": \"^3.17.4\",\r\n    \"webpack\": \"^5.91.0\",\r\n    \"webpack-cli\": \"^5.1.4\"\r\n  }\r\n}\r\n",
+    "longname": "C:\\Users\\jared\\Documents\\Github\\Pathway\\package.json",
+    "name": "package.json",
+    "static": true,
+    "access": "public"
+  }
+]
