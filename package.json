@@ -2,7 +2,7 @@
   "name": "pathway",
   "version": "1.0.0",
   "description": "A module that will enable pathfinding functionality in the Vylocity Game Engine.",
-  "main": "dist/pathway.mjs",
+  "main": "src/pathway.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx webpack && npm run build:minify && node add-version-script.js && node add-banner-script.js",

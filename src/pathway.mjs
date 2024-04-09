@@ -733,10 +733,20 @@ class PathwaySingleton {
 		}
 	}
 }
+/**
+ * The module instantiated for use.
+ * @type {PathwaySingleton}
+ */
 const Pathway = new PathwaySingleton();
-// Check if this is a server environment
+/**
+ * Check if this is a server environment
+ * @ignore
+ */
 const server = (typeof(window) === 'undefined');
-// Update API bound to Pathway
+/**
+ * Update API bound to Pathway
+ * @ignore
+ */
 const update = Pathway.update.bind(Pathway);
 
 // If on the server we use an interval
