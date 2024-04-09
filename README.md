@@ -31,5 +31,9 @@ import { Pathway } from './pathway.min.mjs';
 ###  Pathway.end(pInstance)  
    - `pInstance`: The instance to end the pathfinding on.
    - `desc`: Cancels the current path if there is one and stops this instance from moving    
+   
+### Pathway.setTileSize(pTileSize)
+  - `pTileSize`: The size of the tileset. `number` | `object`
+  - `desc`: Sets the tile size internally for this pathway system to reference. This is how pathway will determine node positions.
 
 This module expects the `VYLO` variable to be exposed globally.
