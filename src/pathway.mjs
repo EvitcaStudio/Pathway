@@ -21,23 +21,41 @@ class PathwaySingleton {
 	 */
 	static MAX_DELTA_TIME = 0.03333333333;
 	/**
-	 * The clamped delta time to use when the delta time grows past MAX_DELTA_TIME.
-	 * @private
-	 * @type {number}
-	 */
-	static CLAMPED_DELTA_TIME = 0.01666666666;
-	/**
 	 * A static weight to be applied when a tile should be considered trickier to travel on.
 	 * @private
 	 * @type {number}
 	 */
 	static AVERSION_WEIGHT = 10;
 	/**
+	 * The weight that indicates that this tile is walkable. This is used as the default weight of every instance unless otherwise stated.
+	 * @private
+	 * @type {number}
+	 */
+	static PASSABLE_WEIGHT = 0;
+	/**
 	 * A static weight to be applied when a tile should be not be traveled to at all.
 	 * @private
 	 * @type {number}
 	 */
 	static NO_TRAVEL_WEIGHT = -1;
+	/**
+	 * The default amount of pixels per second to move the instance when using `position` mode.
+	 * @private
+	 * @type {number}
+	 */
+	static DEFAULT_PIXELS_PER_SECOND = 120;
+	/**
+	 * The minimum distance away from a node before this system determines it has made it to that node.
+	 * @private
+	 * @type {number}
+	 */
+	static DEFAULT_MINIMUM_DISTANCE = 2;
+	/**
+	 * The default mode this pathway system uses.
+	 * @private
+	 * @type {string}
+	 */
+	static DEFAULT_MODE = 'collision';
 	/**
 	 * An object that stores the map tiles in normal format and in 2D format.
 	 * @private
@@ -109,10 +127,12 @@ class PathwaySingleton {
 	 * @property {number} pDestination.x - The end x coordinate.
 	 * @property {number} pDestination.y - The end y coordinate.
 	 * @param {Object} pOptions - An object of settings on how to move pInstance to pDestination.
-	 * @property {boolean} pOptions.diagonal - Whether or not the pathfinder allows diagonal moves.
+	 * @property {boolean} [pOptions.diagonal = false] - Whether or not the pathfinder allows diagonal moves.
 	 * @property {Array} pOptions.ignore - An array of diobs that will be ignored when calculating the path.
-	 * @property {number} pOptions.maxStuckCounter - The maximum amount of ticks of pInstance being in the same position as the last tick before its considered stuck.
-	 * @property {string} pOptions.mode - How this instance will move. `collision` for moving with collisions in mind (movePos). `position` for moving with no collisions in mind (setPos). 
+	 * @property {number} [pOptions.minDistance = 2] = The minimum distance this pathway system will use to calculate if you have reached the (next) node.  
+	 * @property {number} [pOptions.maxStuckCounter = 100] - The maximum amount of ticks of pInstance being in the same position as the last tick before its considered stuck.
+	 * @property {string} [pOptions.mode = 'collision'] - How this instance will move. `collision` for moving with collisions in mind (movePos). `position` for moving with no collisions in mind (setPos) Must use pOptions.pixelsPerSecond when using `position` mode. 
+	 * @property {string} [pOptions.pixelsPerSecond = 120] - The speed in pixels this instance moves per second. This setting only works when pOptions.mode is set to `position`.   
 	 * @property {Function} pOptions.onPathComplete - Callback for when pInstance makes it to the destination node.
 	 * @property {Function} pOptions.onPathFound - Callback for when pInstance finds a path.
 	 * @property {Function} pOptions.onPathStuck - Callback for when pInstance gets stuck on a path.
@@ -125,19 +145,12 @@ class PathwaySingleton {
 				this.logger.prefix('Pathway-Module').error('Cannot generate a path. pInstance is not on a map.');
 				return;
 			}
+
 			// If there is no destination object passed return.
 			if (typeof(pDestination) !== 'object') {
 				this.logger.prefix('Pathway-Module').error('Invalid type passed for pDestination. Expecting an object.');
 				return;
 			}
-			// If there is no options object passed return.
-			if (typeof(pOptions) !== 'object') {
-				this.logger.prefix('Pathway-Module').error('Invalid type passed for pOptions. Expecting an object.');
-				return;
-			}
-
-			// Get the mode
-			const mode = (pOptions.mode === 'collision' ? 'collision' : 'position');
 
 			// Get the instance data for this instance
 			let instanceData = this.instanceWeakMap.get(pInstance);
@@ -162,7 +175,9 @@ class PathwaySingleton {
 					pathID: null, // ID of the path that was generated. Used to cancel the path.
 					path: [],
 					moving: null,
-					mode: mode,
+					mode: PathwaySingleton.DEFAULT_MODE,
+					pixelsPerSecond: PathwaySingleton.DEFAULT_PIXELS_PER_SECOND,
+					minDistance: PathwaySingleton.DEFAULT_MINIMUM_DISTANCE,
 					events: {
 						onPathStuck: null,
 						onPathComplete: null,
@@ -182,38 +197,64 @@ class PathwaySingleton {
 				this.end(pInstance);
 			}
 
-			// If max stuck counter is found in options, set it.
-			if (typeof(pOptions.maxStuckCounter) === 'number') {
-				instanceData.maxStuckCounter = pOptions.maxStuckCounter;
-			}
+			/**
+			 * An exclusion list of tiles.
+			 * @type {Array}
+			 */
+			let ignoreList = [];
 
-			// Enable diagonals if found in passed options.
-			// This can cause some "issues" such as trying to cut through corners.
-			if (pOptions.diagonal) {
-				instanceData.easystar.enableDiagonals();
-				instanceData.easystar.enableCornerCutting();
-			}
+			// If there are options passed. Parse them.
+			if (typeof(pOptions) === 'object') {
+				// If max stuck counter is found in options, set it.
+				if (typeof(pOptions.maxStuckCounter) === 'number') {
+					instanceData.maxStuckCounter = pOptions.maxStuckCounter;
+				}
 
-			// Set the positioning mode
-			if (pOptions.mode) {
-				instanceData.mode = mode;
-			}
+				// Enable diagonals if found in passed options.
+				// This can cause some "issues" such as trying to cut through corners.
+				if (pOptions.diagonal) {
+					instanceData.easystar.enableDiagonals();
+					instanceData.easystar.enableCornerCutting();
+				}
 
-			// Assign events
-			if (typeof(pOptions.onPathComplete) === 'function') {
-				instanceData.events.onPathComplete = pOptions.onPathComplete;
-			}
+				// Set the positioning mode
+				if (pOptions.mode) {
+					// Get the mode, if an invalid mode is passed, we default to the default mode.
+					const mode = (pOptions.mode === 'collision' || pOptions.mode === 'position') ? pOptions.mode : PathwaySingleton.DEFAULT_MODE;
+					instanceData.mode = mode;
+				}
 
-			if (typeof(pOptions.onPathFound) === 'function') {
-				instanceData.events.onPathFound = pOptions.onPathFound;
-			}
+				// Assign pixels per second 
+				if (typeof(pOptions.pixelsPerSecond) === 'number') {
+					instanceData.pixelsPerSecond = pOptions.pixelsPerSecond;
+				}
 
-			if (typeof(pOptions.onPathNotFound) === 'function') {
-				instanceData.events.onPathNotFound = pOptions.onPathNotFound;
-			}
+				// Assign the min distance
+				if (typeof(pOptions.minDistance) === 'number') {
+					instanceData.minDistance = pOptions.minDistance;
+				}
 
-			if (typeof(pOptions.onPathStuck) === 'function') {
-				instanceData.events.onPathStuck = pOptions.onPathStuck;
+				// Assign events
+				if (typeof(pOptions.onPathComplete) === 'function') {
+					instanceData.events.onPathComplete = pOptions.onPathComplete;
+				}
+
+				if (typeof(pOptions.onPathFound) === 'function') {
+					instanceData.events.onPathFound = pOptions.onPathFound;
+				}
+
+				if (typeof(pOptions.onPathNotFound) === 'function') {
+					instanceData.events.onPathNotFound = pOptions.onPathNotFound;
+				}
+
+				if (typeof(pOptions.onPathStuck) === 'function') {
+					instanceData.events.onPathStuck = pOptions.onPathStuck;
+				}
+
+				// Copy the contents of the ignore array to the ignore list we manage.
+				if (Array.isArray(pOptions.ignore)) {
+					ignoreList.push(...pOptions.ignore);
+				}
 			}
 
 			// Grab the pos of the instance so we can locate the starting tile its on.
@@ -222,22 +263,13 @@ class PathwaySingleton {
 			// Get the origin tile the instance is on.
 			const originTile = VYLO.Map.getLocByPos(instancePosition.x, instancePosition.y, pInstance.mapName);
 
-			/**
-			 * An exclusion list of tiles.
-			 * @type {Array}
-			 */
-			let ignoreList;
-		
-			if (Array.isArray(pOptions.ignore)) {
-				ignoreList = [...pOptions.ignore];
-				// We add the starting tile to the ignore list so that it is ignored.
-				if (!ignoreList.includes(originTile)) {	
-					ignoreList.push(originTile);
-				}
-				// We also add the instance to the ignore list so that it is ignored.
-				if (!ignoreList.includes(pInstance)) {
-					ignoreList.push(pInstance);
-				}
+			// We add the starting tile to the ignore list so that it is ignored.
+			if (!ignoreList.includes(originTile)) {	
+				ignoreList.push(originTile);
+			}
+			// We also add the instance to the ignore list so that it is ignored.
+			if (!ignoreList.includes(pInstance)) {
+				ignoreList.push(pInstance);
 			}
 
 			// Build the 2D array grid that represents the map
@@ -342,6 +374,10 @@ class PathwaySingleton {
 			instanceData.moving = false;
 			// Reset the mode
 			instanceData.mode = 'collision';
+			// Reset the pixels per second.
+			instanceData.pixelsPerSecond = PathwaySingleton.DEFAULT_PIXELS_PER_SECOND;
+			// Reset the min distance
+			instanceData.minDistance = PathwaySingleton.DEFAULT_MINIMUM_DISTANCE;
 			// Stop instance from moving via VYLO API.
 			pInstance.move();
 			// Untrack pInstance as an active instance.
@@ -377,7 +413,7 @@ class PathwaySingleton {
 		this.deltaTime = (this.elapsedMS / 1000);
 		// If the delta time grows too large, we clamp it
 		if (this.deltaTime >= PathwaySingleton.MAX_DELTA_TIME) {
-			this.deltaTime = PathwaySingleton.CLAMPED_DELTA_TIME;
+			this.deltaTime = PathwaySingleton.MAX_DELTA_TIME;
 		}
 		// Loop active instances and update.
 		this.activeInstances.forEach((pInstance) => {
@@ -395,7 +431,7 @@ class PathwaySingleton {
 					if (!instanceData.moving) {
 						// Get the next node to travel to.
 						const node = instanceData.path.shift();
-						// Get the position of that node in real world coordinates.
+						// Get the position of that node in real world coordinates. We subtract half of the tileSize to get the center of the node's posiiton.
 						const nodePos = { 
 							x: (node.x * this.tileSize.width) - this.tileSize.width / 2, 
 							y: (node.y * this.tileSize.height) - this.tileSize.height / 2 
@@ -413,14 +449,15 @@ class PathwaySingleton {
 						if (instanceData.mode === 'collision') {
 							pInstance.movePos(instanceData.trajectory.x, instanceData.trajectory.y);
 						} else if (instanceData.mode === 'position') {
-							pInstance.setPos(instanceData.trajectory.x, instanceData.trajectory.y, pInstance.mapName);
+							const speed = instanceData.pixelsPerSecond * this.deltaTime;
+							pInstance.setPos(pInstance.x + speed * instanceData.trajectory.x, pInstance.y + speed * instanceData.trajectory.y, pInstance.mapName);
 						}
 						instanceData.moving = true;
 					} else {
 						// Get the distance from the instance's position to the next node's position.
 						const distance = Utils.getDistance(instancePosition, instanceData.trajectory.nextNodePos);
 						// Stop moving when you are this close distance.
-						if (distance <= pInstance.moveSettings.stepSize) {
+						if (distance <= instanceData.minDistance) {
 							// Stop moving
 							instanceData.moving = false;
 							// Reset stuck counter when moving has "stopped".
@@ -442,7 +479,8 @@ class PathwaySingleton {
 							if (instanceData.mode === 'collision') {
 								pInstance.movePos(instanceData.trajectory.x, instanceData.trajectory.y);
 							} else if (instanceData.mode === 'position') {
-								pInstance.setPos(instanceData.trajectory.x, instanceData.trajectory.y, pInstance.mapName);
+								const speed = instanceData.pixelsPerSecond * this.deltaTime;
+								pInstance.setPos(pInstance.x + speed * instanceData.trajectory.x, pInstance.y + speed * instanceData.trajectory.y, pInstance.mapName);
 							}
 							instanceData.moving = true;
 						}
@@ -503,8 +541,8 @@ class PathwaySingleton {
 		// If this tile is dense and not on the ignored list, it's invalid.
 		const invalidTile = pTile.density && !pIgnoreList.includes(pTile);
 	
-		// Check if there are any dense instances on this tile that are not on the ignore list.
-		const invalidInstancesOnTile = pTile.getContents().some(pElement => pElement.density && !pIgnoreList.includes(pElement));
+		// Check if there are any dense instances on this tile that are not on the ignore list. A instance can be on the tile and dense as long as it has a pathwayWeight. This is allowing the pathway system to determine if its worth traveling that tile while that dense instance exists on it.
+		const invalidInstancesOnTile = pTile.getContents().some(pElement => pElement.density && !pElement.pathwayWeight && !pIgnoreList.includes(pElement));
 	
 		// If this tile is invalid.
 		return invalidTile || invalidInstancesOnTile;
@@ -652,11 +690,11 @@ class PathwaySingleton {
 
 					// Loop through the tiles array to build weights and accepted tile lists.
 					const grid = tilesArray.map((pTile) => {
-						// A weight of 0 indicates no weight.
-						let weight = typeof(pTile.pathwayWeight) === 'number' ? pTile.pathwayWeight : 0;
+						// A weight of PathwaySingleton.PASSABLE_WEIGHT indicates no weight.
+						let weight = typeof(pTile.pathwayWeight) === 'number' ? pTile.pathwayWeight : PathwaySingleton.PASSABLE_WEIGHT;
 
-						// Check if the tile or any of its contents are dense
-						if (pTile.density || pTile.getContents().some(instance => instance.density && !pIgnoreList.includes(instance))) {
+						// Check if the tile or any of its contents are dense and have no pathwayWeight. As if it has a pathway weight, this tile is travelable. Just less desirable.
+						if (pTile.density || pTile.getContents().some(instance => instance.density && !instance.pathwayWeight && !pIgnoreList.includes(instance))) {
 							weight = PathwaySingleton.NO_TRAVEL_WEIGHT;
 						} else {
 							// Accumulate weights of instances on the tile
@@ -668,9 +706,9 @@ class PathwaySingleton {
 						}
 
 						// Add weight to acceptedTiles if not already present
-						// If the weight is 0, then it means its already accepted to be walked on.
+						// If the weight is PathwaySingleton.PASSABLE_WEIGHT, then it means its already accepted to be walked on.
 						// If the weight is NO_TRAVEL_WEIGHT this means it cant be walked on.
-						if (weight !== PathwaySingleton.NO_TRAVEL_WEIGHT && weight !== 0) {
+						if (weight !== PathwaySingleton.NO_TRAVEL_WEIGHT && weight !== PathwaySingleton.PASSABLE_WEIGHT) {
 							if (!acceptedTiles.includes(weight)) acceptedTiles.push(weight);
 							if (!weights.includes(weight)) weights.push(weight);
 						}
