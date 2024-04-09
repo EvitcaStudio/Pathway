@@ -6,7 +6,6 @@ import { EasyStar } from './vendor/easystar-0.4.4.min.js';
  * @todo Test on server
  * @todo Make debugging class
  */
-
 class PathwaySingleton {
 	/**
 	 * The maximum amount of ticks an instance can be in the same position before the pathfinder deems it "stuck". The user will be able to tweak values up to this max value.
@@ -138,7 +137,7 @@ class PathwaySingleton {
 	 * @property {Function} pOptions.onPathStuck - Callback for when pInstance gets stuck on a path.
 	 * @property {Function} pOptions.onPathNotFound - Callback for when no path is found.
 	 */
-	async to(pInstance, pDestination, pOptions) {
+	to(pInstance, pDestination, pOptions) {
 		if (typeof(pInstance) === 'object') {
 			// If this instance is not on a mapname.
 			if (!pInstance.mapName) {
@@ -329,6 +328,7 @@ class PathwaySingleton {
 	}
 	/**
 	 * Untracks this instance. It is no longer considered active.
+	 * @private
 	 * @param {Object} pInstance - The instance to untrack.
 	 */
 	untrack(pInstance) {
