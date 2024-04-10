@@ -43,6 +43,7 @@ import { EasyStar } from &apos;./vendor/easystar-0.4.4.min.js&apos;;
 /**
  * @todo Test on server
  * @todo Make debugging class
+ * @private
  */
 class PathwaySingleton {
 	/**
@@ -58,12 +59,6 @@ class PathwaySingleton {
 	 */
 	static MAX_DELTA_TIME = 0.03333333333;
 	/**
-	 * A static weight to be applied when a tile should be considered trickier to travel on.
-	 * @private
-	 * @type {number}
-	 */
-	static AVERSION_WEIGHT = 10;
-	/**
 	 * The weight that indicates that this tile is walkable. This is used as the default weight of every instance unless otherwise stated.
 	 * @private
 	 * @type {number}
@@ -74,7 +69,7 @@ class PathwaySingleton {
 	 * @private
 	 * @type {number}
 	 */
-	static NO_TRAVEL_WEIGHT = -1;
+	static IMPASSABLE_WEIGHT = -1;
 	/**
 	 * The default amount of pixels per second to move the instance when using `position` mode.
 	 * @private
@@ -165,7 +160,7 @@ class PathwaySingleton {
 	 * @property {number} pDestination.y - The end y coordinate.
 	 * @param {Object} pOptions - An object of settings on how to move pInstance to pDestination.
 	 * @property {boolean} [pOptions.diagonal = false] - Whether or not the pathfinder allows diagonal moves.
-	 * @property {Array} pOptions.ignore - An array of diobs that will be ignored when calculating the path.
+	 * @property {Array} pOptions.exclude - An array of diobs that will be excluded when calculating the path.
 	 * @property {number} [pOptions.minDistance = 2] = The minimum distance this pathway system will use to calculate if you have reached the (next) node.  
 	 * @property {number} [pOptions.maxStuckCounter = 100] - The maximum amount of ticks of pInstance being in the same position as the last tick before its considered stuck.
 	 * @property {string} [pOptions.mode = &apos;collision&apos;] - How this instance will move. `collision` for moving with collisions in mind (movePos). `position` for moving with no collisions in mind (setPos) Must use pOptions.pixelsPerSecond when using `position` mode. 
@@ -238,7 +233,7 @@ class PathwaySingleton {
 			 * An exclusion list of tiles.
 			 * @type {Array}
 			 */
-			let ignoreList = [];
+			let excludeList = [];
 
 			// If there are options passed. Parse them.
 			if (typeof(pOptions) === &apos;object&apos;) {
@@ -288,29 +283,19 @@ class PathwaySingleton {
 					instanceData.events.onPathStuck = pOptions.onPathStuck;
 				}
 
-				// Copy the contents of the ignore array to the ignore list we manage.
-				if (Array.isArray(pOptions.ignore)) {
-					ignoreList.push(...pOptions.ignore);
+				// Copy the contents of the exclude array to the exclude list we manage.
+				if (Array.isArray(pOptions.exclude)) {
+					excludeList.push(...pOptions.exclude);
 				}
 			}
 
-			// Grab the pos of the instance so we can locate the starting tile its on.
-			// This is also used as the startingNode position.
-			const instancePosition = this.getPositionFromInstance(pInstance);
-			// Get the origin tile the instance is on.
-			const originTile = VYLO.Map.getLocByPos(instancePosition.x, instancePosition.y, pInstance.mapName);
-
-			// We add the starting tile to the ignore list so that it is ignored.
-			if (!ignoreList.includes(originTile)) {	
-				ignoreList.push(originTile);
-			}
-			// We also add the instance to the ignore list so that it is ignored.
-			if (!ignoreList.includes(pInstance)) {
-				ignoreList.push(pInstance);
+			// We add the instance to the exclude list so that it is excluded.
+			if (!excludeList.includes(pInstance)) {
+				excludeList.push(pInstance);
 			}
 
 			// Build the 2D array grid that represents the map
-			const gridInfo = this.mapTilesToGrid(pInstance.mapName, ignoreList);
+			const gridInfo = this.mapTilesToGrid(pInstance.mapName, excludeList);
 			
 			// Assign the grid to easystar
 			instanceData.easystar.setGrid(gridInfo.grid);
@@ -323,6 +308,11 @@ class PathwaySingleton {
 			// Assign what tiles can be used
 			instanceData.easystar.setAcceptableTiles(gridInfo.acceptedTiles);
 
+			// Grab the pos of the instance so we can locate the starting tile its on.
+			// This is also used as the startingNode position.
+			const instancePosition = this.getPositionFromInstance(pInstance);
+			// Get the origin tile the instance is on.
+			const originTile = VYLO.Map.getLocByPos(instancePosition.x, instancePosition.y, pInstance.mapName);
 			// Get the dimensions of the map that was passed.
 			const mapSize = VYLO.Map.getMapSize(pInstance.mapName);
 
@@ -332,23 +322,30 @@ class PathwaySingleton {
 			// Get the end time tile
 			const destinationTile = VYLO.Map.getLocByPos(endNodeX, endNodeY, pInstance.mapName);
 			
-			// Get the start node from the originTile
-			let startNode = this.tileToNode(originTile);
-			
-			// Get the end node from the destinationTile
-			let endNode = this.tileToNode(destinationTile);
+			// Make sure these have resolved to actual tiles.
+			if (originTile &amp;&amp; destinationTile) {
+				if (this.isTileAccessible(originTile, excludeList) &amp;&amp; this.isTileAccessible(destinationTile, excludeList)) {
+					// Get the start node from the originTile
+					let startNode = this.tileToNode(originTile);
+					
+					// Get the end node from the destinationTile
+					let endNode = this.tileToNode(destinationTile);
 
-			// If the origin tile or end tile is invalid to be walked on then return no path found.
-			if (this.isTileInvalid(originTile, ignoreList) || this.isTileInvalid(destinationTile, ignoreList)) {
-				// So fire the path not found event.	
-				if (typeof(instanceData.events.onPathNotFound) === &apos;function&apos;) {
-					instanceData.events.onPathNotFound();
+					// Generate the path for the player
+					this.getPath(pInstance, { x: startNode.x, y: startNode.y }, { x: endNode.x, y: endNode.y });				
+				// If the origin tile or end tile is not accessible to be walked on then return no path found.
+				} else {
+					// So fire the path not found event.	
+					if (typeof(instanceData.events.onPathNotFound) === &apos;function&apos;) {
+						instanceData.events.onPathNotFound();
+					}
+					this.end(pInstance);
+					return;
 				}
-				this.end(pInstance);
+			} else {
+				this.logger.prefix(&apos;Pathway-Module&apos;).error(&apos;Origin tile or destination tile cannot be found.&apos;);
 				return;
 			}
-			// Generate the path for the player
-			this.getPath(pInstance, { x: startNode.x, y: startNode.y }, { x: endNode.x, y: endNode.y });
 		} else {
 			this.logger.prefix(&apos;Pathway-Module&apos;).error(&apos;Invalid type passed for pInstance. Expecting an object.&apos;);
 		}
@@ -569,21 +566,23 @@ class PathwaySingleton {
 		}
 	}
 	/**
-	 * Checks to see if pTile is invalid for movement.
+	 * Checks to see if pTile is accessible for movement.
 	 * @private
 	 * @param {Object} pTile - The tile to check the validity of.
-	 * @param {Array} pIgnoreList - The list of ignored tiles/instances.
-	 * @returns {boolean} - If this tile is valid or invalid.
+	 * @param {Array} pExclusionList - The list of excluded tiles/instances.
+	 * @returns {boolean} - If this tile is accessible.
 	 */
-	isTileInvalid(pTile, pIgnoreList) {
-		// If this tile is dense and not on the ignored list, it&apos;s invalid.
-		const invalidTile = pTile.density &amp;&amp; !pIgnoreList.includes(pTile);
-	
-		// Check if there are any dense instances on this tile that are not on the ignore list. A instance can be on the tile and dense as long as it has a pathwayWeight. This is allowing the pathway system to determine if its worth traveling that tile while that dense instance exists on it.
-		const invalidInstancesOnTile = pTile.getContents().some(pElement =&gt; pElement.density &amp;&amp; !pElement.pathwayWeight &amp;&amp; !pIgnoreList.includes(pElement));
-	
-		// If this tile is invalid.
-		return invalidTile || invalidInstancesOnTile;
+	isTileAccessible(pTile, pExclusionList) {
+		// If the tile is in the exclude list, we simply say it is accessible. This prevents the tile&apos;s contents from being searched. 
+		// There is a possibility it could actually be an obstacle on this tile blocking movement from being completed. Use with caution.
+		const isExcluded = (pInstance) =&gt; pExclusionList.includes(pInstance);
+		// This instance is impassible because it is dense and has no pathwayWeight, or it was explicitely set to be impassable.
+		const isImpassable = (pInstance) =&gt; (pInstance.pathwayWeight === PathwaySingleton.IMPASSABLE_WEIGHT) || pInstance.density &amp;&amp; (!pInstance.pathwayWeight &amp;&amp; pInstance.pathwayWeight !== PathwaySingleton.PASSABLE_WEIGHT);
+		// If this tile has dense instances that are not being excluded, doesn&apos;t have a pathwayWeight set, or are explicitely set to be impassable.
+		const hasImpassableContent = (pInstance) =&gt; pInstance.getContents().some((pInstance) =&gt; {
+			return isImpassable(pInstance) &amp;&amp; !isExcluded(pInstance);
+		});
+		return isExcluded(pTile) || (!isImpassable(pTile) &amp;&amp; !hasImpassableContent(pTile));
 	}
 	/**
 	 * Generates a path from the origin point to the end point with obstacles in mind.
@@ -595,56 +594,52 @@ class PathwaySingleton {
 	 * @param {Object} pDestination - An object containing the end x and y position to travel to.
 	 * @property {number} pDestination.x - The end x coordinate.
 	 * @property {number} pDestination.y - The end y coordinate.
-	 * @returns {Promise} A promise that resolves with an object containing the path from the start position to the end position.
 	 */
 	getPath(pInstance, pOrigin, pDestination) {
-		return new Promise((pResolve, pReject) =&gt; {
-			// Get the instance data
-			const instanceData = this.instanceWeakMap.get(pInstance);
-			if (!instanceData) {
-				this.logger.prefix(&apos;Pathway-Module&apos;).error(&apos;Instance data not found!&apos;);
-				pReject();
-				return;
-			}
-			
-			/**
-			 * The path generated.
-			 * @private
-			 * @type {Array}
-			 */
-			let path;
-			
-			// Find the path
-			const pathID = instanceData.easystar.findPath(pOrigin.x, pOrigin.y, pDestination.x, pDestination.y, (pPath) =&gt; {
-				// Check if the path is valid.
-				if (Array.isArray(pPath) &amp;&amp; pPath.length) {
-					// // // Offset the nodes by 1, because VYLO xCoord and yCoord start at 1.
-					path = pPath.map((pElement) =&gt; ({
-						x: ++pElement.x,
-						y: ++pElement.y
-					}));
-					// Remove the node you start on.
-					path.shift();
-					// Store the path
-					instanceData.path = path;
-					// Store the pathID
-					instanceData.pathID = pathID;
-					// Call event when path is found
-					if (typeof(instanceData.events.onPathFound) === &apos;function&apos;) {
-						instanceData.events.onPathFound(path);
-					}
-				} else {
-					// Call event when no path is found
-					if (typeof(instanceData.events.onPathNotFound) === &apos;function&apos;) {
-						instanceData.events.onPathNotFound();
-					}
-					// If no path is found then we end the pathfinding on this instance.
-					this.end(pInstance);
+		// Get the instance data
+		const instanceData = this.instanceWeakMap.get(pInstance);
+		if (!instanceData) {
+			this.logger.prefix(&apos;Pathway-Module&apos;).error(&apos;Instance data not found!&apos;);
+			pReject();
+			return;
+		}
+		
+		// Find the path
+		const pathID = instanceData.easystar.findPath(pOrigin.x, pOrigin.y, pDestination.x, pDestination.y, (pPath) =&gt; {
+			// Check if the path is valid.
+			if (Array.isArray(pPath) &amp;&amp; pPath.length) {
+				/**
+				 * The path generated.
+				 * @private
+				 * @type {Array}
+				 */
+				let path;
+				// Offset the nodes by 1, because VYLO xCoord and yCoord start at 1.
+				path = pPath.map((pElement) =&gt; ({
+					x: ++pElement.x,
+					y: ++pElement.y
+				}));
+				// Remove the node you start on.
+				path.shift();
+				// Store the path
+				instanceData.path = path;
+				// Store the pathID
+				instanceData.pathID = pathID;
+				// Call event when path is found
+				if (typeof(instanceData.events.onPathFound) === &apos;function&apos;) {
+					instanceData.events.onPathFound([...path]);
 				}
-			});
-			// Track pInstance as an active instance.
-			this.track(pInstance);
+			} else {
+				// Call event when no path is found
+				if (typeof(instanceData.events.onPathNotFound) === &apos;function&apos;) {
+					instanceData.events.onPathNotFound();
+				}
+				// If no path is found then we end the pathfinding on this instance.
+				this.end(pInstance);
+			}
 		});
+		// Track pInstance as an active instance.
+		this.track(pInstance);
 	}
 	/**
 	 * Converts an array to an 2D array.
@@ -699,12 +694,12 @@ class PathwaySingleton {
 	 * Converts map tiles to grids.
 	 * @private
 	 * @param {string} pMapName - The mapname where the tile should come from.
-	 * @param {Array} pIgnoreList - The ignore list to use for this grid.
+	 * @param {Array} pExclusionList - The exclude list to use for this grid.
 	 * @returns {Object|undefined} An object containing the grid created, an array of tiles that are to be accepted in the pathfinding system, and the weights of each tile.
 	 */
-	mapTilesToGrid(pMapName, pIgnoreList) {
+	mapTilesToGrid(pMapName, pExclusionList) {
 		if (typeof(pMapName) === &apos;string&apos;) {
-			if (Array.isArray(pIgnoreList)) {
+			if (Array.isArray(pExclusionList)) {
 				// We check if this is a valid mapname found in VYLO.
 				if (VYLO.Map.getMaps().includes(pMapName)) {
 					// An array of tiles that we get from the map
@@ -726,17 +721,33 @@ class PathwaySingleton {
 						PathwaySingleton.storedMapTiles[pMapName] = { tiles: tilesArray, tiles2d: this.toTwoDimensionalArray(tilesArray, mapSize.x) };
 					}
 
+					// This instance is impassible because it is dense and has no pathwayWeight, or it was explicitely set to be impassable.
+					const isImpassable = (pInstance) =&gt; (pInstance.pathwayWeight === PathwaySingleton.IMPASSABLE_WEIGHT) || pInstance.density &amp;&amp; (!pInstance.pathwayWeight &amp;&amp; pInstance.pathwayWeight !== PathwaySingleton.PASSABLE_WEIGHT);
+					
 					// Loop through the tiles array to build weights and accepted tile lists.
 					const grid = tilesArray.map((pTile) =&gt; {
+						// If the tile is in the exclude list, we simply say it is passable. This prevents the tile&apos;s contents from being searched. 
+						// There is a possibility it could actually be an obstacle on this tile blocking movement from being completed. Use with caution.
+						if (pExclusionList.includes(pTile)) return PathwaySingleton.PASSABLE_WEIGHT;
+
 						// A weight of PathwaySingleton.PASSABLE_WEIGHT indicates no weight.
 						let weight = typeof(pTile.pathwayWeight) === &apos;number&apos; ? pTile.pathwayWeight : PathwaySingleton.PASSABLE_WEIGHT;
+						
+						// If this tile is not accessible, we cannot pass it, so we skip this tile.
+						if (!this.isTileAccessible(pTile, pExclusionList)) {
+							return PathwaySingleton.IMPASSABLE_WEIGHT;
+						}
 
-						// Check if the tile or any of its contents are dense and have no pathwayWeight. As if it has a pathway weight, this tile is travelable. Just less desirable.
-						if (pTile.density || pTile.getContents().some(instance =&gt; instance.density &amp;&amp; !instance.pathwayWeight &amp;&amp; !pIgnoreList.includes(instance))) {
-							weight = PathwaySingleton.NO_TRAVEL_WEIGHT;
-						} else {
-							// Accumulate weights of instances on the tile
-							for (const instance of pTile.getContents()) {
+						// Accumulate weights of instances on the tile
+						for (const instance of pTile.getContents()) {
+							// If this instance is to be excluded. We don&apos;t calculate its weight.
+							if (pExclusionList.includes(instance)) continue;
+
+							// If this instance is impassable we skip this tile.
+							if (isImpassable(instance)) {
+								return PathwaySingleton.IMPASSABLE_WEIGHT;
+							} else {
+								// We accumulate the weight of instances
 								if (typeof(instance.pathwayWeight) === &apos;number&apos;) {
 									weight += instance.pathwayWeight;
 								}
@@ -744,9 +755,7 @@ class PathwaySingleton {
 						}
 
 						// Add weight to acceptedTiles if not already present
-						// If the weight is PathwaySingleton.PASSABLE_WEIGHT, then it means its already accepted to be walked on.
-						// If the weight is NO_TRAVEL_WEIGHT this means it cant be walked on.
-						if (weight !== PathwaySingleton.NO_TRAVEL_WEIGHT &amp;&amp; weight !== PathwaySingleton.PASSABLE_WEIGHT) {
+						if (weight !== PathwaySingleton.IMPASSABLE_WEIGHT &amp;&amp; weight !== PathwaySingleton.PASSABLE_WEIGHT) {
 							if (!acceptedTiles.includes(weight)) acceptedTiles.push(weight);
 							if (!weights.includes(weight)) weights.push(weight);
 						}
@@ -764,7 +773,7 @@ class PathwaySingleton {
 					return;
 				}
 			} else {
-				this.logger.prefix(&apos;Pathway-Module&apos;).error(&apos;Invalid type for pIgnoreList.&apos;);
+				this.logger.prefix(&apos;Pathway-Module&apos;).error(&apos;Invalid type for pExclusionList.&apos;);
 			}
 		} else {
 			this.logger.prefix(&apos;Pathway-Module&apos;).error(&apos;Invalid type for pMapName.&apos;);

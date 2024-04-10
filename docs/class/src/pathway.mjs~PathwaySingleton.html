@@ -37,12 +37,12 @@
 
 <div class="content" data-ice="content"><div class="header-notice">
   <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode"></code></pre></div>
-  <span data-ice="access">public</span>
+  <span data-ice="access">private</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/pathway.mjs.html#lineNumber9">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/pathway.mjs.html#lineNumber10">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -80,35 +80,6 @@
   <tbody>
   
   <tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">private</span>
-      <span data-ice="static">static</span>
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/pathway.mjs~PathwaySingleton.html#static-member-AVERSION_WEIGHT">AVERSION_WEIGHT</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>A static weight to be applied when a tile should be considered trickier to travel on.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
     <td>
       <span class="access" data-ice="access">private</span>
       <span data-ice="static">static</span>
@@ -238,6 +209,35 @@
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/pathway.mjs~PathwaySingleton.html#static-member-IMPASSABLE_WEIGHT">IMPASSABLE_WEIGHT</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>A static weight to be applied when a tile should be not be traveled to at all.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      <span data-ice="static">static</span>
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/pathway.mjs~PathwaySingleton.html#static-member-MAX_DELTA_TIME">MAX_DELTA_TIME</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
         </p>
       </div>
@@ -274,35 +274,6 @@
         
         
         <div data-ice="description"><p>The maximum amount of ticks an instance can be in the same position before the pathfinder deems it &quot;stuck&quot;.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">private</span>
-      <span data-ice="static">static</span>
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/pathway.mjs~PathwaySingleton.html#static-member-NO_TRAVEL_WEIGHT">NO_TRAVEL_WEIGHT</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>A static weight to be applied when a tile should be not be traveled to at all.</p>
 </div>
       </div>
     </td>
@@ -793,7 +764,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/pathway.mjs~PathwaySingleton.html#instance-method-getPath">getPath</a></span></span><span class="code" data-ice="signature">(pInstance: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, pOrigin: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, pDestination: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/pathway.mjs~PathwaySingleton.html#instance-method-getPath">getPath</a></span></span><span class="code" data-ice="signature">(pInstance: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, pOrigin: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, pDestination: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
         </p>
       </div>
       <div>
@@ -851,13 +822,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/pathway.mjs~PathwaySingleton.html#instance-method-isTileInvalid">isTileInvalid</a></span></span><span class="code" data-ice="signature">(pTile: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, pIgnoreList: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/pathway.mjs~PathwaySingleton.html#instance-method-isTileAccessible">isTileAccessible</a></span></span><span class="code" data-ice="signature">(pTile: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, pExclusionList: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Checks to see if pTile is invalid for movement.</p>
+        <div data-ice="description"><p>Checks to see if pTile is accessible for movement.</p>
 </div>
       </div>
     </td>
@@ -880,7 +851,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/pathway.mjs~PathwaySingleton.html#instance-method-mapTilesToGrid">mapTilesToGrid</a></span></span><span class="code" data-ice="signature">(pMapName: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, pIgnoreList: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/pathway.mjs~PathwaySingleton.html#instance-method-mapTilesToGrid">mapTilesToGrid</a></span></span><span class="code" data-ice="signature">(pMapName: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, pExclusionList: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span></span>
         </p>
       </div>
       <div>
@@ -1049,50 +1020,6 @@
 <div data-ice="staticMemberDetails"><h2 data-ice="title">Static Private Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="static-member-AVERSION_WEIGHT">
-    <span class="access" data-ice="access">private</span>
-    <span data-ice="static">static</span>
-    
-    
-    
-    
-    <span class="code" data-ice="name">AVERSION_WEIGHT</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber27">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>A static weight to be applied when a tile should be considered trickier to travel on.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="static-member-DEFAULT_MINIMUM_DISTANCE">
     <span class="access" data-ice="access">private</span>
     <span data-ice="static">static</span>
@@ -1104,7 +1031,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber51">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber46">source</a></span></span>
     </span>
   </h3>
 
@@ -1148,7 +1075,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber57">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber52">source</a></span></span>
     </span>
   </h3>
 
@@ -1192,7 +1119,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber45">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber40">source</a></span></span>
     </span>
   </h3>
 
@@ -1236,7 +1163,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber69">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber64">source</a></span></span>
     </span>
   </h3>
 
@@ -1244,6 +1171,50 @@
   
   
   <div data-ice="description"><p>The tile size to use if no tile size has been assigned.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-member-IMPASSABLE_WEIGHT">
+    <span class="access" data-ice="access">private</span>
+    <span data-ice="static">static</span>
+    
+    
+    
+    
+    <span class="code" data-ice="name">IMPASSABLE_WEIGHT</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber34">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>A static weight to be applied when a tile should be not be traveled to at all.</p>
 </div>
 
   
@@ -1280,7 +1251,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber21">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber22">source</a></span></span>
     </span>
   </h3>
 
@@ -1324,7 +1295,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber15">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber16">source</a></span></span>
     </span>
   </h3>
 
@@ -1332,50 +1303,6 @@
   
   
   <div data-ice="description"><p>The maximum amount of ticks an instance can be in the same position before the pathfinder deems it &quot;stuck&quot;. The user will be able to tweak values up to this max value.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="static-member-NO_TRAVEL_WEIGHT">
-    <span class="access" data-ice="access">private</span>
-    <span data-ice="static">static</span>
-    
-    
-    
-    
-    <span class="code" data-ice="name">NO_TRAVEL_WEIGHT</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber39">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>A static weight to be applied when a tile should be not be traveled to at all.</p>
 </div>
 
   
@@ -1412,7 +1339,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber33">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber28">source</a></span></span>
     </span>
   </h3>
 
@@ -1456,7 +1383,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber63">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber58">source</a></span></span>
     </span>
   </h3>
 
@@ -1504,7 +1431,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber113">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber108">source</a></span></span>
     </span>
   </h3>
 
@@ -1550,7 +1477,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber79">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber74">source</a></span></span>
     </span>
   </h3>
 
@@ -1596,7 +1523,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber109">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber104">source</a></span></span>
     </span>
   </h3>
 
@@ -1640,7 +1567,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber97">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber92">source</a></span></span>
     </span>
   </h3>
 
@@ -1684,7 +1611,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber103">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber98">source</a></span></span>
     </span>
   </h3>
 
@@ -1728,7 +1655,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber85">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber80">source</a></span></span>
     </span>
   </h3>
 
@@ -1772,7 +1699,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber91">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber86">source</a></span></span>
     </span>
   </h3>
 
@@ -1816,7 +1743,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber119">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber114">source</a></span></span>
     </span>
   </h3>
 
@@ -1860,7 +1787,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber75">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber70">source</a></span></span>
     </span>
   </h3>
 
@@ -1907,7 +1834,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber344">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber341">source</a></span></span>
     </span>
   </h3>
 
@@ -1968,7 +1895,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber515">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber512">source</a></span></span>
     </span>
   </h3>
 
@@ -2029,7 +1956,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber140">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber135">source</a></span></span>
     </span>
   </h3>
 
@@ -2106,7 +2033,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber652">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber647">source</a></span></span>
     </span>
   </h3>
 
@@ -2183,11 +2110,11 @@
     
     
     
-    <span class="code" data-ice="name">getPath</span><span class="code" data-ice="signature">(pInstance: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, pOrigin: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, pDestination: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span></span>
+    <span class="code" data-ice="name">getPath</span><span class="code" data-ice="signature">(pInstance: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, pOrigin: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, pDestination: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber562">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber560">source</a></span></span>
     </span>
   </h3>
 
@@ -2233,58 +2160,7 @@
 </div>
 </div>
 
-  <div class="return-params" data-ice="returnParams">
-    <h4>Return:</h4>
-    <table>
-      <tbody>
-        <tr>
-          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>A promise that resolves with an object containing the path from the start position to the end position.</p>
-</td>
-        </tr>
-      </tbody>
-    </table>
-    <div data-ice="returnProperties"><div data-ice="properties">
-  <h4 data-ice="title">Return Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">pOrigin.x</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>The start x coordinate.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">pOrigin.y</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>The start y coordinate.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">pDestination.x</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>The end x coordinate.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">pDestination.y</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>The end y coordinate.</p>
-</td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-  </div>
+  
 
   
 
@@ -2313,7 +2189,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber395">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber392">source</a></span></span>
     </span>
   </h3>
 
@@ -2376,25 +2252,25 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-isTileInvalid">
+  <h3 data-ice="anchor" id="instance-method-isTileAccessible">
     <span class="access" data-ice="access">private</span>
     
     
     
     
     
-    <span class="code" data-ice="name">isTileInvalid</span><span class="code" data-ice="signature">(pTile: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, pIgnoreList: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+    <span class="code" data-ice="name">isTileAccessible</span><span class="code" data-ice="signature">(pTile: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, pExclusionList: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber540">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber537">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Checks to see if pTile is invalid for movement.</p>
+  <div data-ice="description"><p>Checks to see if pTile is accessible for movement.</p>
 </div>
 
   
@@ -2415,10 +2291,10 @@
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">pIgnoreList</td>
+      <td data-ice="name" class="code" data-depth="0">pExclusionList</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>The list of ignored tiles/instances.</p>
+      <td data-ice="description"><p>The list of excluded tiles/instances.</p>
 </td>
     </tr>
 </tbody>
@@ -2432,7 +2308,7 @@
       <tbody>
         <tr>
           <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>If this tile is valid or invalid.</p>
+          <td class="return-desc" data-ice="returnDescription"><p>If this tile is accessible.</p>
 </td>
         </tr>
       </tbody>
@@ -2464,11 +2340,11 @@
     
     
     
-    <span class="code" data-ice="name">mapTilesToGrid</span><span class="code" data-ice="signature">(pMapName: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, pIgnoreList: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span></span>
+    <span class="code" data-ice="name">mapTilesToGrid</span><span class="code" data-ice="signature">(pMapName: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, pExclusionList: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber667">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber662">source</a></span></span>
     </span>
   </h3>
 
@@ -2496,10 +2372,10 @@
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">pIgnoreList</td>
+      <td data-ice="name" class="code" data-depth="0">pExclusionList</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>The ignore list to use for this grid.</p>
+      <td data-ice="description"><p>The exclude list to use for this grid.</p>
 </td>
     </tr>
 </tbody>
@@ -2549,7 +2425,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber632">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber627">source</a></span></span>
     </span>
   </h3>
 
@@ -2623,7 +2499,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber618">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber613">source</a></span></span>
     </span>
   </h3>
 
@@ -2704,7 +2580,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber323">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber320">source</a></span></span>
     </span>
   </h3>
 
@@ -2765,7 +2641,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber334">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber331">source</a></span></span>
     </span>
   </h3>
 
@@ -2826,7 +2702,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber407">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/pathway.mjs.html#lineNumber404">source</a></span></span>
     </span>
   </h3>
 

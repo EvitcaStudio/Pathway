@@ -354,9 +354,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/pathway.mjs~pathwaysingleton#istileinvalid",
-    "class/src/pathway.mjs~PathwaySingleton.html#instance-method-isTileInvalid",
-    "src/pathway.mjs~PathwaySingleton#isTileInvalid",
+    "src/pathway.mjs~pathwaysingleton#istileaccessible",
+    "class/src/pathway.mjs~PathwaySingleton.html#instance-method-isTileAccessible",
+    "src/pathway.mjs~PathwaySingleton#isTileAccessible",
     "method"
   ],
   [
@@ -432,12 +432,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/pathway.mjs~pathwaysingleton.aversion_weight",
-    "class/src/pathway.mjs~PathwaySingleton.html#static-member-AVERSION_WEIGHT",
-    "src/pathway.mjs~PathwaySingleton.AVERSION_WEIGHT",
-    "member"
-  ],
-  [
     "src/pathway.mjs~pathwaysingleton.default_minimum_distance",
     "class/src/pathway.mjs~PathwaySingleton.html#static-member-DEFAULT_MINIMUM_DISTANCE",
     "src/pathway.mjs~PathwaySingleton.DEFAULT_MINIMUM_DISTANCE",
@@ -462,6 +456,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/pathway.mjs~pathwaysingleton.impassable_weight",
+    "class/src/pathway.mjs~PathwaySingleton.html#static-member-IMPASSABLE_WEIGHT",
+    "src/pathway.mjs~PathwaySingleton.IMPASSABLE_WEIGHT",
+    "member"
+  ],
+  [
     "src/pathway.mjs~pathwaysingleton.max_delta_time",
     "class/src/pathway.mjs~PathwaySingleton.html#static-member-MAX_DELTA_TIME",
     "src/pathway.mjs~PathwaySingleton.MAX_DELTA_TIME",
@@ -471,12 +471,6 @@ window.esdocSearchIndex = [
     "src/pathway.mjs~pathwaysingleton.max_stuck_counter",
     "class/src/pathway.mjs~PathwaySingleton.html#static-member-MAX_STUCK_COUNTER",
     "src/pathway.mjs~PathwaySingleton.MAX_STUCK_COUNTER",
-    "member"
-  ],
-  [
-    "src/pathway.mjs~pathwaysingleton.no_travel_weight",
-    "class/src/pathway.mjs~PathwaySingleton.html#static-member-NO_TRAVEL_WEIGHT",
-    "src/pathway.mjs~PathwaySingleton.NO_TRAVEL_WEIGHT",
     "member"
   ],
   [

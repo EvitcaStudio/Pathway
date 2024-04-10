@@ -10,7 +10,8 @@ import { Pathway } from './pathway.min.mjs';
 ## API   
 
 ###  instance.pathwayWeight   
-   - `desc`: The weight of this instance in the pathfinder system, higher values will try to make the pathfinder generate paths that do not include this instance  
+   - `type`: `number`  
+   - `desc`: The weight of this instance in the pathfinder system, higher values will try to make the pathfinder generate paths that do not include this instance. A weight of `0` is converying that is is passable. A weight of `-1` means it is impassable. Weights are optional!       
 
 ###  Pathway.to(pInstance, pDestination, pOptions) 
    - `pInstance`: The instance to move. `object`
@@ -19,7 +20,7 @@ import { Pathway } from './pathway.min.mjs';
    - `pOptions.diagonal`: Whether or not the pathfinder allows diagonal moves `boolean`  
    - `pOptions.mode`: How this instance will move. `collision` for moving with collisions in mind (movePos). `position` for moving with no collisions in mind (setPos). `string` 
    - `pOptions.pixelsPerSecond`: The speed in pixels this instance moves per second. This setting only works when `pOptions.mode` is set to `position`.`number`   
-   - `pOptions.ignore`: An array of diobs that will be ignored when calculating the path `array`  
+   - `pOptions.exclude`: An array of diobs that will be excluded when calculating the path `array`  
    - `pOptions.minDistance`: The minimum distance this pathway system will use to calculate if you have reached the (next) node. `number`  
    - `pOptions.maxStuckCounter`: The maximum amount of ticks of pInstance being in the same position as the last tick before its considered stuck. `number`  
 	- `pOptions.onPathComplete`: Callback for when pInstance makes it to the `function`  
@@ -33,7 +34,7 @@ import { Pathway } from './pathway.min.mjs';
    - `desc`: Cancels the current path if there is one and stops this instance from moving    
    
 ### Pathway.setTileSize(pTileSize)
-  - `pTileSize`: The size of the tileset. `number` | `object`
+  - `pTileSize`: The size of the tileset. `number` | `object` `pTileSize.width` and `pTileSize.height` when using an object.  
   - `desc`: Sets the tile size internally for this pathway system to reference. This is how pathway will determine node positions.
 
 This module expects the `VYLO` variable to be exposed globally.

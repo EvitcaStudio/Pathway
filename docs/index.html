@@ -39,7 +39,8 @@
 <h2 id="implementation">Implementation</h2><pre><code class="lang-js"><code class="source-code prettyprint">import { Pathway } from &apos;./pathway.min.mjs&apos;;</code>
 </code></pre>
 <h2 id="api">API</h2><h3 id="instance-pathwayweight">instance.pathwayWeight</h3><ul>
-<li><code>desc</code>: The weight of this instance in the pathfinder system, higher values will try to make the pathfinder generate paths that do not include this instance  </li>
+<li><code>type</code>: <code>number</code>  </li>
+<li><code>desc</code>: The weight of this instance in the pathfinder system, higher values will try to make the pathfinder generate paths that do not include this instance. A weight of <code>0</code> is converying that is is passable. A weight of <code>-1</code> means it is impassable. Weights are optional!       </li>
 </ul>
 <h3 id="pathway-to-pinstance--pdestination--poptions-">Pathway.to(pInstance, pDestination, pOptions)</h3><ul>
 <li><code>pInstance</code>: The instance to move. <code>object</code></li>
@@ -48,7 +49,7 @@
 <li><code>pOptions.diagonal</code>: Whether or not the pathfinder allows diagonal moves <code>boolean</code>  </li>
 <li><code>pOptions.mode</code>: How this instance will move. <code>collision</code> for moving with collisions in mind (movePos). <code>position</code> for moving with no collisions in mind (setPos). <code>string</code> </li>
 <li><code>pOptions.pixelsPerSecond</code>: The speed in pixels this instance moves per second. This setting only works when <code>pOptions.mode</code> is set to <code>position</code>.<code>number</code>   </li>
-<li><code>pOptions.ignore</code>: An array of diobs that will be ignored when calculating the path <code>array</code>  </li>
+<li><code>pOptions.exclude</code>: An array of diobs that will be excluded when calculating the path <code>array</code>  </li>
 <li><code>pOptions.minDistance</code>: The minimum distance this pathway system will use to calculate if you have reached the (next) node. <code>number</code>  </li>
 <li><code>pOptions.maxStuckCounter</code>: The maximum amount of ticks of pInstance being in the same position as the last tick before its considered stuck. <code>number</code>  <ul>
 <li><code>pOptions.onPathComplete</code>: Callback for when pInstance makes it to the <code>function</code>  </li>
@@ -64,7 +65,7 @@
 <li><code>desc</code>: Cancels the current path if there is one and stops this instance from moving    </li>
 </ul>
 <h3 id="pathway-settilesize-ptilesize-">Pathway.setTileSize(pTileSize)</h3><ul>
-<li><code>pTileSize</code>: The size of the tileset. <code>number</code> | <code>object</code></li>
+<li><code>pTileSize</code>: The size of the tileset. <code>number</code> | <code>object</code> <code>pTileSize.width</code> and <code>pTileSize.height</code> when using an object.  </li>
 <li><code>desc</code>: Sets the tile size internally for this pathway system to reference. This is how pathway will determine node positions.</li>
 </ul>
 <p>This module expects the <code>VYLO</code> variable to be exposed globally.</p>
