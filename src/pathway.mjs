@@ -562,7 +562,6 @@ class PathwaySingleton {
 		const instanceData = this.instanceWeakMap.get(pInstance);
 		if (!instanceData) {
 			this.logger.prefix('Pathway-Module').error('Instance data not found!');
-			pReject();
 			return;
 		}
 		

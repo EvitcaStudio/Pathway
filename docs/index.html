@@ -36,7 +36,18 @@
 </nav>
 
 <div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="pathway">Pathway</h1><p>A module that will enable pathfinding functionality in the Vylocity Game Engine   </p>
-<h2 id="implementation">Implementation</h2><pre><code class="lang-js"><code class="source-code prettyprint">import { Pathway } from &apos;./pathway.min.mjs&apos;;</code>
+<p>Uses <a href="https://github.com/prettymuchbryce/easystarjs">easystar</a> under the hood.</p>
+<h1 id="es-module">ES Module</h1><pre><code class="lang-js"><code class="source-code prettyprint">// Importing as an ES module
+import { Pathway } from &apos;./pathway.mjs&apos;;</code>
+</code></pre>
+<h1 id="iife--immediately-invoked-function-expression-">IIFE (Immediately Invoked Function Expression)</h1><pre><code class="lang-js"><code class="source-code prettyprint">&lt;!-- Including the IIFE bundle in an HTML file --&gt;
+&lt;script src=&quot;pathway.js&quot;&gt;&lt;/script&gt;
+
+// ...
+window.PathwayBundle.Pathway</code>
+</code></pre>
+<h1 id="commonjs--cjs--module">CommonJS (CJS) Module</h1><pre><code class="lang-js"><code class="source-code prettyprint">// Importing as a CommonJS module (Node.js)
+const { Pathway } = require(&apos;./pathway.cjs.js&apos;);</code>
 </code></pre>
 <h2 id="api">API</h2><h3 id="instance-pathwayweight">instance.pathwayWeight</h3><ul>
 <li><code>type</code>: <code>number</code>  </li>

@@ -1,10 +1,29 @@
 # Pathway
 A module that will enable pathfinding functionality in the Vylocity Game Engine   
 
-## Implementation 
+Uses [easystar](https://github.com/prettymuchbryce/easystarjs) under the hood.
+
+
+# ES Module
+```js
+// Importing as an ES module
+import { Pathway } from './pathway.mjs';
+```
+
+# IIFE (Immediately Invoked Function Expression)
+```js
+<!-- Including the IIFE bundle in an HTML file -->
+<script src="pathway.js"></script>
+
+// ...
+window.PathwayBundle.Pathway
+```
+
+# CommonJS (CJS) Module
 
 ```js
-import { Pathway } from './pathway.min.mjs';
+// Importing as a CommonJS module (Node.js)
+const { Pathway } = require('./pathway.cjs.js');
 ```
 
 ## API   
