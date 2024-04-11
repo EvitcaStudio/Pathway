@@ -134,7 +134,7 @@ class PathwaySingleton {
 	 */
 	to(pInstance, pDestination, pOptions) {
 		if (typeof(pInstance) === 'object') {
-			// If this instance is not on a mapname.
+			// If this instance is not on a map.
 			if (!pInstance.mapName) {
 				this.logger.prefix('Pathway-Module').error('Cannot generate a path. pInstance is not on a map.');
 				return;
@@ -192,7 +192,7 @@ class PathwaySingleton {
 			}
 
 			/**
-			 * An exclusion list of tiles.
+			 * An exclusion list of instances and tiles.
 			 * @type {Array}
 			 */
 			let excludeList = [];
@@ -245,13 +245,13 @@ class PathwaySingleton {
 					instanceData.events.onPathStuck = pOptions.onPathStuck;
 				}
 
-				// Copy the contents of the exclude array to the exclude list we manage.
+				// Copy the contents of the exclude array to the exclude array we manage.
 				if (Array.isArray(pOptions.exclude)) {
 					excludeList.push(...pOptions.exclude);
 				}
 			}
 
-			// We add the instance to the exclude list so that it is excluded.
+			// We add the instance to the exclude array so that it is excluded.
 			if (!excludeList.includes(pInstance)) {
 				excludeList.push(pInstance);
 			}
@@ -281,11 +281,12 @@ class PathwaySingleton {
 			// Get the end nodes position so we can get the destinationTile
 			const endNodeX = Utils.clamp(Utils.clamp(pDestination.x, 0, mapSize.x) * this.tileSize.width + this.tileSize.width / 2, 0, mapSize.xPos - this.tileSize.width);
 			const endNodeY = Utils.clamp(Utils.clamp(pDestination.y, 0, mapSize.y) * this.tileSize.height + this.tileSize.height / 2, 0, mapSize.yPos - this.tileSize.height);
-			// Get the end time tile
+			// Get the end tile
 			const destinationTile = VYLO.Map.getLocByPos(endNodeX, endNodeY, pInstance.mapName);
 			
 			// Make sure these have resolved to actual tiles.
 			if (originTile && destinationTile) {
+				// Check if the origin and end tile are accessible
 				if (this.isTileAccessible(originTile, excludeList) && this.isTileAccessible(destinationTile, excludeList)) {
 					// Get the start node from the originTile
 					let startNode = this.tileToNode(originTile);
@@ -297,12 +298,11 @@ class PathwaySingleton {
 					this.getPath(pInstance, { x: startNode.x, y: startNode.y }, { x: endNode.x, y: endNode.y });				
 				// If the origin tile or end tile is not accessible to be walked on then return no path found.
 				} else {
-					// So fire the path not found event.	
+					// Fire the path not found event.	
 					if (typeof(instanceData.events.onPathNotFound) === 'function') {
 						instanceData.events.onPathNotFound();
 					}
 					this.end(pInstance);
-					return;
 				}
 			} else {
 				this.logger.prefix('Pathway-Module').error('Origin tile or destination tile cannot be found.');
@@ -365,7 +365,7 @@ class PathwaySingleton {
 			instanceData.stuckCounter = 0;
 			// Reset the max stuck counter
 			instanceData.maxStuckCounter = PathwaySingleton.MAX_STUCK_COUNTER;
-			// Empty path(s) array
+			// Empty path array
 			instanceData.path.length = 0;
 			// Reset it to not being moved.
 			instanceData.moving = false;

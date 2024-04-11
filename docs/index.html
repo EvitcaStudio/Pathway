@@ -35,51 +35,54 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="pathway">Pathway</h1><p>A module that will enable pathfinding functionality in the Vylocity Game Engine   </p>
+<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="pathway-module">Pathway Module</h1><p>The Pathway module smoothly integrates pathfinding into the Vylocity Game Engine, allowing map instances to navigate environments more efficiently.</p>
 <p>Uses <a href="https://github.com/prettymuchbryce/easystarjs">easystar</a> under the hood.</p>
-<h1 id="es-module">ES Module</h1><pre><code class="lang-js"><code class="source-code prettyprint">// Importing as an ES module
-import { Pathway } from &apos;./pathway.mjs&apos;;</code>
+<h2 id="installation">Installation</h2><h3 id="es-module">ES Module</h3><pre><code class="lang-js"><code class="source-code prettyprint">import { Pathway } from &apos;./pathway.mjs&apos;;</code>
 </code></pre>
-<h1 id="iife--immediately-invoked-function-expression-">IIFE (Immediately Invoked Function Expression)</h1><pre><code class="lang-js"><code class="source-code prettyprint">&lt;!-- Including the IIFE bundle in an HTML file --&gt;
-&lt;script src=&quot;pathway.js&quot;&gt;&lt;/script&gt;
-
+<h3 id="iife--immediately-invoked-function-expression-">IIFE (Immediately Invoked Function Expression)</h3><pre><code class="lang-js"><code class="source-code prettyprint">&lt;script src=&quot;pathway.js&quot;&gt;&lt;/script&gt;;
 // ...
-window.PathwayBundle.Pathway</code>
+window.PathwayBundle.Pathway;</code>
 </code></pre>
-<h1 id="commonjs--cjs--module">CommonJS (CJS) Module</h1><pre><code class="lang-js"><code class="source-code prettyprint">// Importing as a CommonJS module (Node.js)
-const { Pathway } = require(&apos;./pathway.cjs.js&apos;);</code>
+<h3 id="commonjs--cjs--module">CommonJS (CJS) Module</h3><pre><code class="lang-js"><code class="source-code prettyprint">const { Pathway } = require(&apos;./pathway.cjs.js&apos;);</code>
 </code></pre>
-<h2 id="api">API</h2><h3 id="instance-pathwayweight">instance.pathwayWeight</h3><ul>
-<li><code>type</code>: <code>number</code>  </li>
-<li><code>desc</code>: The weight of this instance in the pathfinder system, higher values will try to make the pathfinder generate paths that do not include this instance. A weight of <code>0</code> is converying that is is passable. A weight of <code>-1</code> means it is impassable. Weights are optional!       </li>
+<h2 id="api">API</h2><h3 id="mapinstance-properties">MapInstance Properties</h3><h4 id="-code-pathwayweight--code-"><code>pathwayWeight</code></h4><ul>
+<li><strong>Type</strong>: <code>number</code></li>
+<li><strong>Description</strong>: Represents the importance of an element in pathfinding. Higher values indicate that paths should avoid this element. A weight of <code>0</code> means it&apos;s easy to traverse, while <code>-1</code> indicates an impassable obstacle. This property is optional.</li>
 </ul>
-<h3 id="pathway-to-pinstance--pdestination--poptions-">Pathway.to(pInstance, pDestination, pOptions)</h3><ul>
-<li><code>pInstance</code>: The instance to move. <code>object</code></li>
-<li><code>pDestination.x</code>: The xCoordinate to move to <code>integer</code>  </li>
-<li><code>pDestination.y</code>: The yCoordinate to move to <code>integer</code>  </li>
-<li><code>pOptions.diagonal</code>: Whether or not the pathfinder allows diagonal moves <code>boolean</code>  </li>
-<li><code>pOptions.mode</code>: How this instance will move. <code>collision</code> for moving with collisions in mind (movePos). <code>position</code> for moving with no collisions in mind (setPos). <code>string</code> </li>
-<li><code>pOptions.pixelsPerSecond</code>: The speed in pixels this instance moves per second. This setting only works when <code>pOptions.mode</code> is set to <code>position</code>.<code>number</code>   </li>
-<li><code>pOptions.exclude</code>: An array of diobs that will be excluded when calculating the path <code>array</code>  </li>
-<li><code>pOptions.minDistance</code>: The minimum distance this pathway system will use to calculate if you have reached the (next) node. <code>number</code>  </li>
-<li><code>pOptions.maxStuckCounter</code>: The maximum amount of ticks of pInstance being in the same position as the last tick before its considered stuck. <code>number</code>  <ul>
-<li><code>pOptions.onPathComplete</code>: Callback for when pInstance makes it to the <code>function</code>  </li>
-<li><code>pOptions.onPathFound</code>: Callback for when pInstance finds a path. The first parameter is the path that was generated. <code>function</code>  </li>
-<li><code>pOptions.onPathStuck</code>: Callback for when pInstance gets stuck on a path. <code>function</code>  </li>
-<li><code>pOptions.onPathNotFound</code>: Callback for when no path is found. <code>function</code>  </li>
+<h3 id="methods">Methods</h3><h4 id="-code-pathway-to-pinstance--pdestination--poptions---code-"><code>Pathway.to(pInstance, pDestination, pOptions)</code></h4><ul>
+<li><strong>Parameters</strong>:<ul>
+<li><code>pInstance</code>: The moving element.</li>
+<li><code>pDestination.x</code>: The destination&apos;s x-coordinate.</li>
+<li><code>pDestination.y</code>: The destination&apos;s y-coordinate.</li>
+<li><code>pOptions.diagonal</code>: Whether diagonal movement is allowed.</li>
+<li><code>pOptions.mode</code>: Movement style (<code>collision</code> considers obstacles, <code>position</code> ignores obstacles).</li>
+<li><code>pOptions.pixelsPerSecond</code>: Speed of movement in pixels per second (applies only in <code>position</code> mode).</li>
+<li><code>pOptions.exclude</code>: An array of obstacles to avoid when planning the path.</li>
+<li><code>pOptions.minDistance</code>: Minimum distance to determine node proximity.</li>
+<li><code>pOptions.maxStuckCounter</code>: Maximum consecutive ticks without movement before considering the instance stuck.</li>
+<li><code>pOptions.onPathComplete</code>: Callback executed when the element reaches its destination.</li>
+<li><code>pOptions.onPathFound</code>: Callback executed when a viable path is found.</li>
+<li><code>pOptions.onPathStuck</code>: Callback executed when an element gets stuck on its path.</li>
+<li><code>pOptions.onPathNotFound</code>: Callback executed when no path is found.</li>
 </ul>
 </li>
-<li><code>desc</code>: Moves <code>pInstance</code> to the provided coordinates by walking along a generated path free of obstacles.</li>
+<li><strong>Description</strong>: Guides an element to a destination along a clear path, avoiding obstacles as necessary.</li>
 </ul>
-<h3 id="pathway-end-pinstance-">Pathway.end(pInstance)</h3><ul>
-<li><code>pInstance</code>: The instance to end the pathfinding on.</li>
-<li><code>desc</code>: Cancels the current path if there is one and stops this instance from moving    </li>
+<h4 id="-code-pathway-end-pinstance---code-"><code>Pathway.end(pInstance)</code></h4><ul>
+<li><strong>Parameters</strong>:<ul>
+<li><code>pInstance</code>: The element to stop pathfinding for.</li>
 </ul>
-<h3 id="pathway-settilesize-ptilesize-">Pathway.setTileSize(pTileSize)</h3><ul>
-<li><code>pTileSize</code>: The size of the tileset. <code>number</code> | <code>object</code> <code>pTileSize.width</code> and <code>pTileSize.height</code> when using an object.  </li>
-<li><code>desc</code>: Sets the tile size internally for this pathway system to reference. This is how pathway will determine node positions.</li>
+</li>
+<li><strong>Description</strong>: Halts the current path and stops the element&apos;s movement.</li>
 </ul>
-<p>This module expects the <code>VYLO</code> variable to be exposed globally.</p>
+<h4 id="-code-pathway-settilesize-ptilesize---code-"><code>Pathway.setTileSize(pTileSize)</code></h4><ul>
+<li><strong>Parameters</strong>:<ul>
+<li><code>pTileSize</code>: The dimensions of the tileset.</li>
+</ul>
+</li>
+<li><strong>Description</strong>: Sets the size of tiles for the pathway system to reference.</li>
+</ul>
+<h3 id="global-dependency">Global Dependency</h3><p>Pathway relies on the <code>VYLO</code> variable being globally accessible.</p>
 </div>
 </div>
 
