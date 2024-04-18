@@ -77,6 +77,24 @@ class PathwaySingleton {
 	 */
 	static DEFAULT_PIXELS_PER_SECOND = 120;
 	/**
+	 * The default step size for this instance to use on the path.
+	 * @private
+	 * @type {number}
+	 */
+	static DEFAULT_STEP_SIZE = 2;
+	/**
+	 * The default step pixels per second to use.
+	 * @private
+	 * @type {number}
+	 */
+	static DEFAULT_STEP_PIXELS_PER_SECOND = 120;
+	/**
+	 * The base FPS to base calculations from.
+	 * @private
+	 * @type {number}
+	 */
+	static DEFAULT_BASE_FPS = 60;
+	/**
 	 * The minimum distance away from a node before this system determines it has made it to that node.
 	 * @private
 	 * @type {number}
@@ -161,9 +179,9 @@ class PathwaySingleton {
 	 * @param {Object} pOptions - An object of settings on how to move pInstance to pDestination.
 	 * @property {boolean} [pOptions.diagonal = false] - Whether or not the pathfinder allows diagonal moves.
 	 * @property {Array} pOptions.exclude - An array of diobs that will be excluded when calculating the path.
-	 * @property {number} [pOptions.minDistance = 2] = The minimum distance this pathway system will use to calculate if you have reached the (next) node.  
+	 * @property {number} [pOptions.minDistance = 2] = The minimum distance this pathway system will use to calculate if you have reached the (next) node. This option should be considered for advanced users only. Use with caution as this can cause issues.   
 	 * @property {number} [pOptions.maxStuckCounter = 100] - The maximum amount of ticks of pInstance being in the same position as the last tick before its considered stuck.
-	 * @property {string} [pOptions.mode = &apos;collision&apos;] - How this instance will move. `collision` for moving with collisions in mind (movePos). `position` for moving with no collisions in mind (setPos) Must use pOptions.pixelsPerSecond when using `position` mode. 
+	 * @property {string} [pOptions.mode = &apos;collision&apos;] - How this instance will move. `collision` for moving with collisions in mind (stepPos). `position` for moving with no collisions in mind (setPos) Must use pOptions.pixelsPerSecond when using `position` mode.  
 	 * @property {string} [pOptions.pixelsPerSecond = 120] - The speed in pixels this instance moves per second. This setting only works when pOptions.mode is set to `position`.   
 	 * @property {Function} pOptions.onPathComplete - Callback for when pInstance makes it to the destination node.
 	 * @property {Function} pOptions.onPathFound - Callback for when pInstance finds a path.
@@ -209,6 +227,7 @@ class PathwaySingleton {
 					moving: null,
 					mode: PathwaySingleton.DEFAULT_MODE,
 					pixelsPerSecond: PathwaySingleton.DEFAULT_PIXELS_PER_SECOND,
+					stepPixelsPerSecond: PathwaySingleton.DEFAULT_STEP_PIXELS_PER_SECOND,
 					minDistance: PathwaySingleton.DEFAULT_MINIMUM_DISTANCE,
 					events: {
 						onPathStuck: null,
@@ -261,10 +280,45 @@ class PathwaySingleton {
 					instanceData.pixelsPerSecond = pOptions.pixelsPerSecond;
 				}
 
+				// Assign stepSize
+				if (instanceData.mode === &apos;collision&apos;) {
+					// If the stepSize is set we use it
+					if (typeof(pInstance.moveSettings.stepSize) === &apos;number&apos;) {
+						instanceData.stepSize = pInstance.moveSettings.stepSize;
+					} else {
+						instanceData.stepSize = PathwaySingleton.DEFAULT_STEP_SIZE;
+					}
+					// We get the pixels in seconds for the step size
+					instanceData.stepPixelsPerSecond = instanceData.stepSize * PathwaySingleton.DEFAULT_BASE_FPS;
+				}
+
 				// Assign the min distance
 				if (typeof(pOptions.minDistance) === &apos;number&apos;) {
 					instanceData.minDistance = pOptions.minDistance;
+				} else {
+					// If no min distance was passed we check if a stepSize was passed and we use that. If the mode is position, we calculate a minDistance
+					// Using the stepSize for minDistance is the best way to prevent the instance from &quot;spiraling&quot; on the path. 
+					// Getting stuck briefly between nodes and &quot;spirals&quot;. Rare but it does happen sometimes due to overshooting the minDistance by the stepSize.
+					if (instanceData.mode === &apos;collision&apos;) {
+						if (instanceData.stepSize) {
+							instanceData.minDistance = instanceData.stepSize;
+						}
+					} else if (instanceData.mode === &apos;position&apos;) {
+						if (instanceData.pixelsPerSecond) {
+							// Get the step size and use it as the min distance.
+							const stepSize = instanceData.pixelsPerSecond / PathwaySingleton.DEFAULT_BASE_FPS;
+							instanceData.minDistance = stepSize;
+						}
+					}
 				}
+
+				// Reset events from previous call.
+				// This is reset here and not in `end` because events call after `end` is called.
+				// This is to ensure that calling `to` in an event works properly.
+				instanceData.events.onPathStuck = null;
+				instanceData.events.onPathComplete = null;
+				instanceData.events.onPathFound = null;
+				instanceData.events.onPathNotFound = null;
 
 				// Assign events
 				if (typeof(pOptions.onPathComplete) === &apos;function&apos;) {
@@ -319,7 +373,7 @@ class PathwaySingleton {
 			// Get the end nodes position so we can get the destinationTile
 			const endNodeX = Utils.clamp(Utils.clamp(pDestination.x, 0, mapSize.x) * this.tileSize.width + this.tileSize.width / 2, 0, mapSize.xPos - this.tileSize.width);
 			const endNodeY = Utils.clamp(Utils.clamp(pDestination.y, 0, mapSize.y) * this.tileSize.height + this.tileSize.height / 2, 0, mapSize.yPos - this.tileSize.height);
-			// Get the end time tile
+			// Get the end tile
 			const destinationTile = VYLO.Map.getLocByPos(endNodeX, endNodeY, pInstance.mapName);
 			
 			// Make sure these have resolved to actual tiles.
@@ -335,16 +389,14 @@ class PathwaySingleton {
 					this.getPath(pInstance, { x: startNode.x, y: startNode.y }, { x: endNode.x, y: endNode.y });				
 				// If the origin tile or end tile is not accessible to be walked on then return no path found.
 				} else {
+					this.end(pInstance);
 					// So fire the path not found event.	
 					if (typeof(instanceData.events.onPathNotFound) === &apos;function&apos;) {
 						instanceData.events.onPathNotFound();
 					}
-					this.end(pInstance);
-					return;
 				}
 			} else {
 				this.logger.prefix(&apos;Pathway-Module&apos;).error(&apos;Origin tile or destination tile cannot be found.&apos;);
-				return;
 			}
 		} else {
 			this.logger.prefix(&apos;Pathway-Module&apos;).error(&apos;Invalid type passed for pInstance. Expecting an object.&apos;);
@@ -385,6 +437,8 @@ class PathwaySingleton {
 				instanceData.easystar.cancelPath(instanceData.pathID);
 				instanceData.pathID = null;
 			}
+			// Remove the moving iconState. Reset it back to just the direction.
+			pInstance.iconState = pInstance.iconState.replace(&apos;move_&apos;, &apos;&apos;);
 			// Disable diagonals in the event they were enabled in a previous call
 			instanceData.easystar.disableDiagonals();
 			// Disable corner cutting in the event it was enabled in a previous call
@@ -394,11 +448,6 @@ class PathwaySingleton {
 			instanceData.trajectory.y = 0;
 			instanceData.trajectory.angle = 0;
 			instanceData.trajectory.nextNodePos = null;
-			// Reset events
-			instanceData.events.onPathStuck = null;
-			instanceData.events.onPathComplete = null;
-			instanceData.events.onPathFound = null;
-			instanceData.events.onPathNotFound = null;
 			// Reset stuck counter
 			instanceData.stuckCounter = 0;
 			// Reset the max stuck counter
@@ -409,6 +458,10 @@ class PathwaySingleton {
 			instanceData.moving = false;
 			// Reset the mode
 			instanceData.mode = &apos;collision&apos;;
+			// Reset the stepSize
+			instanceData.stepSize = PathwaySingleton.DEFAULT_STEP_SIZE;
+			// Reset the stepPixels per second
+			instanceData.stepPixelsPerSecond = PathwaySingleton.DEFAULT_STEP_PIXELS_PER_SECOND;
 			// Reset the pixels per second.
 			instanceData.pixelsPerSecond = PathwaySingleton.DEFAULT_PIXELS_PER_SECOND;
 			// Reset the min distance
@@ -436,6 +489,45 @@ class PathwaySingleton {
 		}
 	}
 	/**
+	 * Moves the specified instance to the next node.
+	 * @private
+	 * @param {Object} pInstance - The instance to move.
+	 * @param {Object} pInstanceData - The instance data for this instance.
+	 * @param {Object} pInstancePosition - The position of the instance.
+	 */
+	moveInstance(pInstance, pInstanceData, pInstancePosition) {
+		// Get the angle from the instance&apos;s position to the next node
+		pInstanceData.trajectory.angle = Utils.getAngle2(pInstancePosition, pInstanceData.trajectory.nextNodePos);
+		// Get the trajectory of where to move the instance based on the angle
+		pInstanceData.trajectory.x = Math.cos(pInstanceData.trajectory.angle);
+		pInstanceData.trajectory.y = -Math.sin(pInstanceData.trajectory.angle);
+		// Get the direction of the instance based on the angle to the next node
+		const direction = Utils.getDirection(pInstanceData.trajectory.angle);
+
+		if (pInstanceData.mode === &apos;collision&apos;) {
+			const oldStepSizeInPixels = pInstanceData.stepPixelsPerSecond;
+			// Get the current step size as it may have changed
+			const currentStepSizeInPixels = pInstance.moveSettings.stepSize * PathwaySingleton.DEFAULT_BASE_FPS;
+			// Store the current step pixels per second.
+			pInstance.stepPixelsPerSecond = currentStepSizeInPixels;
+			// Calculate interpolation factor (0 to 1)
+			// Currently it &quot;jumps&quot; directly to the change value.
+			const interpolationFactor = 1 - Math.pow(0, this.deltaTime);
+			// Smoothly interpolate between oldStepSizeInPixels and currentStepSizeInPixels using lerp
+			const speed = Utils.lerp(oldStepSizeInPixels, currentStepSizeInPixels, interpolationFactor) * this.deltaTime;
+			pInstance.stepPos(pInstanceData.trajectory.x * speed, pInstanceData.trajectory.y * speed, true, false);
+		} else if (pInstanceData.mode === &apos;position&apos;) {
+			const speed = pInstanceData.pixelsPerSecond * this.deltaTime; 
+			pInstance.setPos(pInstance.x + speed * pInstanceData.trajectory.x, pInstance.y + speed * pInstanceData.trajectory.y, pInstance.mapName);
+		}
+		// Set moving to true
+		pInstanceData.moving = true;
+		const moveIconState = `move_${direction}`;
+		if (pInstance.iconState !== moveIconState) {
+			pInstance.iconState = moveIconState;
+		}
+	}
+	/**
 	 * Updates active instances on the pathfinder.
 	 * @private
 	 */
@@ -457,7 +549,6 @@ class PathwaySingleton {
 			if (instanceData) {
 				// Calculate the path
 				instanceData.easystar.calculate();
-
 				// If this instance is being moved
 				if (Array.isArray(instanceData.path) &amp;&amp; (instanceData.path.length || instanceData.moving)) {
 					// Get the position of the instance
@@ -473,21 +564,8 @@ class PathwaySingleton {
 						};
 						// Store the next node position
 						instanceData.trajectory.nextNodePos = nodePos;
-						// Get the angle from the instance&apos;s position to the next node
-						instanceData.trajectory.angle = Utils.getAngle2(instancePosition, instanceData.trajectory.nextNodePos);
-						// Get the trajectory of where to move the instance based on the angle
-						instanceData.trajectory.x = Math.cos(instanceData.trajectory.angle);
-						instanceData.trajectory.y = -Math.sin(instanceData.trajectory.angle);
-						// Update the direction of the instance based on the angle to the next node
-						pInstance.dir = Utils.getDirection(instanceData.trajectory.angle);
-						// Move the instance with collision mode or positional mode
-						if (instanceData.mode === &apos;collision&apos;) {
-							pInstance.movePos(instanceData.trajectory.x, instanceData.trajectory.y);
-						} else if (instanceData.mode === &apos;position&apos;) {
-							const speed = instanceData.pixelsPerSecond * this.deltaTime;
-							pInstance.setPos(pInstance.x + speed * instanceData.trajectory.x, pInstance.y + speed * instanceData.trajectory.y, pInstance.mapName);
-						}
-						instanceData.moving = true;
+						// Move the instance
+						this.moveInstance(pInstance, instanceData, instancePosition);
 					} else {
 						// Get the distance from the instance&apos;s position to the next node&apos;s position.
 						const distance = Utils.getDistance(instancePosition, instanceData.trajectory.nextNodePos);
@@ -499,25 +577,15 @@ class PathwaySingleton {
 							instanceData.stuckCounter = 0;
 							// If there is no more nodes left in the path
 							if (!instanceData.path.length) {
+								this.end(pInstance);
 								// You have completed the path. Call the event function if supplied.
 								if (typeof(instanceData.events.onPathComplete) === &apos;function&apos;) {
 									instanceData.events.onPathComplete();
 								}
-								this.end(pInstance);
 							}
 						} else {
-							instanceData.trajectory.angle = Utils.getAngle2(instancePosition, instanceData.trajectory.nextNodePos);
-							instanceData.trajectory.x = Math.cos(instanceData.trajectory.angle);
-							instanceData.trajectory.y = -Math.sin(instanceData.trajectory.angle);
-							pInstance.dir = Utils.getDirection(instanceData.trajectory.angle);
-							// Move the instance with collision mode or positional mode
-							if (instanceData.mode === &apos;collision&apos;) {
-								pInstance.movePos(instanceData.trajectory.x, instanceData.trajectory.y);
-							} else if (instanceData.mode === &apos;position&apos;) {
-								const speed = instanceData.pixelsPerSecond * this.deltaTime;
-								pInstance.setPos(pInstance.x + speed * instanceData.trajectory.x, pInstance.y + speed * instanceData.trajectory.y, pInstance.mapName);
-							}
-							instanceData.moving = true;
+							// Move the instance
+							this.moveInstance(pInstance, instanceData, instancePosition);
 						}
 					}
 					// If the instance&apos;s position is in the same spot it was in the last tick
@@ -526,13 +594,12 @@ class PathwaySingleton {
 						instanceData.stuckCounter++;
 						// Chekck if the stuck counter is greater or equal to the max stuck counter
 						if (instanceData.stuckCounter &gt;= instanceData.maxStuckCounter) {
+							// End this pathfinding.
+							this.end(pInstance);
 							// Call the stuck event if defined.
 							if (typeof(instanceData.events.onPathStuck) === &apos;function&apos;) {
 								instanceData.events.onPathStuck();
 							}
-							// End this pathfinding.
-							this.end(pInstance);
-							return;
 						}
 					}
 					// Store the previous position as the position of this tick
@@ -629,12 +696,12 @@ class PathwaySingleton {
 					instanceData.events.onPathFound([...path]);
 				}
 			} else {
+				// If no path is found then we end the pathfinding on this instance.
+				this.end(pInstance);
 				// Call event when no path is found
 				if (typeof(instanceData.events.onPathNotFound) === &apos;function&apos;) {
 					instanceData.events.onPathNotFound();
 				}
-				// If no path is found then we end the pathfinding on this instance.
-				this.end(pInstance);
 			}
 		});
 		// Track pInstance as an active instance.
@@ -673,6 +740,17 @@ class PathwaySingleton {
 		} else {
 			this.logger.prefix(&apos;Pathway-Module&apos;).error(&apos;Invalid mapname found on pTile&apos;);
 		}
+	}
+	/**
+	 * Converts a node to a tile.
+	 * @private
+	 * @param {string} pMapName - The mapname where the tile should come from.
+	 * @param {Object} pNode - The node to convert into a tile.
+	 * @returns {Object} The tile.
+	 */
+	nodeToTile(pMapName, pNode) {
+		// We add 1 to the node because in VYLO xCoord and yCoord start at 1.
+		return VYLO.Map.getLoc(pNode.x + 1, pNode.y + 1, pMapName);
 	}
 	/**
 	 * Finds the index of a value in a 2D array.
