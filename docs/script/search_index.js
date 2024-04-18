@@ -378,6 +378,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/pathway.mjs~pathwaysingleton#moveinstance",
+    "class/src/pathway.mjs~PathwaySingleton.html#instance-method-moveInstance",
+    "src/pathway.mjs~PathwaySingleton#moveInstance",
+    "method"
+  ],
+  [
+    "src/pathway.mjs~pathwaysingleton#nodetotile",
+    "class/src/pathway.mjs~PathwaySingleton.html#instance-method-nodeToTile",
+    "src/pathway.mjs~PathwaySingleton#nodeToTile",
+    "method"
+  ],
+  [
     "src/pathway.mjs~pathwaysingleton#settilesize",
     "class/src/pathway.mjs~PathwaySingleton.html#instance-method-setTileSize",
     "src/pathway.mjs~PathwaySingleton#setTileSize",
@@ -432,6 +444,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/pathway.mjs~pathwaysingleton.default_base_fps",
+    "class/src/pathway.mjs~PathwaySingleton.html#static-member-DEFAULT_BASE_FPS",
+    "src/pathway.mjs~PathwaySingleton.DEFAULT_BASE_FPS",
+    "member"
+  ],
+  [
     "src/pathway.mjs~pathwaysingleton.default_minimum_distance",
     "class/src/pathway.mjs~PathwaySingleton.html#static-member-DEFAULT_MINIMUM_DISTANCE",
     "src/pathway.mjs~PathwaySingleton.DEFAULT_MINIMUM_DISTANCE",
@@ -447,6 +465,18 @@ window.esdocSearchIndex = [
     "src/pathway.mjs~pathwaysingleton.default_pixels_per_second",
     "class/src/pathway.mjs~PathwaySingleton.html#static-member-DEFAULT_PIXELS_PER_SECOND",
     "src/pathway.mjs~PathwaySingleton.DEFAULT_PIXELS_PER_SECOND",
+    "member"
+  ],
+  [
+    "src/pathway.mjs~pathwaysingleton.default_step_pixels_per_second",
+    "class/src/pathway.mjs~PathwaySingleton.html#static-member-DEFAULT_STEP_PIXELS_PER_SECOND",
+    "src/pathway.mjs~PathwaySingleton.DEFAULT_STEP_PIXELS_PER_SECOND",
+    "member"
+  ],
+  [
+    "src/pathway.mjs~pathwaysingleton.default_step_size",
+    "class/src/pathway.mjs~PathwaySingleton.html#static-member-DEFAULT_STEP_SIZE",
+    "src/pathway.mjs~PathwaySingleton.DEFAULT_STEP_SIZE",
     "member"
   ],
   [
