@@ -506,16 +506,12 @@ class PathwaySingleton {
 		const direction = Utils.getDirection(pInstanceData.trajectory.angle);
 
 		if (pInstanceData.mode === &apos;collision&apos;) {
-			const oldStepSizeInPixels = pInstanceData.stepPixelsPerSecond;
 			// Get the current step size as it may have changed
-			const currentStepSizeInPixels = pInstance.moveSettings.stepSize * PathwaySingleton.DEFAULT_BASE_FPS;
 			// Store the current step pixels per second.
-			pInstance.stepPixelsPerSecond = currentStepSizeInPixels;
-			// Calculate interpolation factor (0 to 1)
-			// Currently it &quot;jumps&quot; directly to the change value.
-			const interpolationFactor = 1 - Math.pow(0, this.deltaTime);
-			// Smoothly interpolate between oldStepSizeInPixels and currentStepSizeInPixels using lerp
-			const speed = Utils.lerp(oldStepSizeInPixels, currentStepSizeInPixels, interpolationFactor) * this.deltaTime;
+			// This value is for the most part static, but when it changes, it should be an instant change and not happen overtime.
+			pInstance.stepPixelsPerSecond = pInstance.moveSettings.stepSize * PathwaySingleton.DEFAULT_BASE_FPS;;
+			// Get the speed
+			const speed = pInstance.stepPixelsPerSecond * this.deltaTime;
 			pInstance.stepPos(pInstanceData.trajectory.x * speed, pInstanceData.trajectory.y * speed, true, false);
 		} else if (pInstanceData.mode === &apos;position&apos;) {
 			const speed = pInstanceData.pixelsPerSecond * this.deltaTime; 
@@ -523,6 +519,8 @@ class PathwaySingleton {
 		}
 		// Set moving to true
 		pInstanceData.moving = true;
+		// Reset stuck counter when it has moved.
+		pInstanceData.stuckCounter = 0;
 		const moveIconState = `move_${direction}`;
 		if (pInstance.iconState !== moveIconState) {
 			pInstance.iconState = moveIconState;
