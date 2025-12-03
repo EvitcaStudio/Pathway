@@ -486,6 +486,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/pathway.mjs~pathwaysingleton.default_translate_direction",
+    "class/src/pathway.mjs~PathwaySingleton.html#static-member-DEFAULT_TRANSLATE_DIRECTION",
+    "src/pathway.mjs~PathwaySingleton.DEFAULT_TRANSLATE_DIRECTION",
+    "member"
+  ],
+  [
     "src/pathway.mjs~pathwaysingleton.impassable_weight",
     "class/src/pathway.mjs~PathwaySingleton.html#static-member-IMPASSABLE_WEIGHT",
     "src/pathway.mjs~PathwaySingleton.IMPASSABLE_WEIGHT",

@@ -48,6 +48,7 @@ const { Pathway } = require('./pathway.cjs.js');
   - `pOptions.pixelsPerSecond`: Speed of movement in pixels per second (applies only in `position` mode).
   - `pOptions.exclude`: An array of obstacles to avoid when planning the path.
   - `pOptions.minDistance`: Minimum distance to determine node proximity.
+  - `pOptions.translateDirection`: Whether to automatically translate the diagonal direction animations from the 'east' and 'west' animations.
   - `pOptions.maxStuckCounter`: Maximum consecutive ticks without movement before considering the instance stuck.
   - `pOptions.onPathComplete`: Callback executed when the element reaches its destination.
   - `pOptions.onPathFound`: Callback executed when a viable path is found.

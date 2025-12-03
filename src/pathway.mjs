@@ -45,6 +45,12 @@ class PathwaySingleton {
 	 */
 	static DEFAULT_STEP_SIZE = 2;
 	/**
+	 * The default translate direction for this instance to use on the path.
+	 * @private
+	 * @type {boolean}
+	 */
+	static DEFAULT_TRANSLATE_DIRECTION = false;
+	/**
 	 * The default step pixels per second to use.
 	 * @private
 	 * @type {number}
@@ -124,13 +130,13 @@ class PathwaySingleton {
 	 * @private
 	 */
 	constructor() {
-        // Create a logger
-        /** The logger module this module uses to log errors / logs
-         * @private
-         * @type {Object}
-         */
-        this.logger = new Logger();
-        this.logger.registerType('Pathway-Module', '#ff6600');
+		// Create a logger
+		/** The logger module this module uses to log errors / logs
+		 * @private
+		 * @type {Object}
+		 */
+		this.logger = new Logger();
+		this.logger.registerType('Pathway-Module', '#ff6600');
 	}
 	/**
 	 * Moves pInstance to the destination position with pOptions in mind.
@@ -141,7 +147,8 @@ class PathwaySingleton {
 	 * @param {Object} pOptions - An object of settings on how to move pInstance to pDestination.
 	 * @property {boolean} [pOptions.diagonal = false] - Whether or not the pathfinder allows diagonal moves.
 	 * @property {Array} pOptions.exclude - An array of diobs that will be excluded when calculating the path.
-	 * @property {number} [pOptions.minDistance = 2] = The minimum distance this pathway system will use to calculate if you have reached the (next) node. This option should be considered for advanced users only. Use with caution as this can cause issues.   
+	 * @property {number} [pOptions.minDistance = 2] = The minimum distance this pathway system will use to calculate if you have reached the (next) node. This option should be considered for advanced users only. Use with caution as this can cause issues. 
+	 * @property {boolean} [pOptions.translateDirection = false] - Whether to automatically translate the diagonal direction animations from the 'east' and 'west' animations. 
 	 * @property {number} [pOptions.maxStuckCounter = 100] - The maximum amount of ticks of pInstance being in the same position as the last tick before its considered stuck.
 	 * @property {string} [pOptions.mode = 'collision'] - How this instance will move. `collision` for moving with collisions in mind (stepPos). `position` for moving with no collisions in mind (setPos) Must use pOptions.pixelsPerSecond when using `position` mode.  
 	 * @property {string} [pOptions.pixelsPerSecond = 120] - The speed in pixels this instance moves per second. This setting only works when pOptions.mode is set to `position`.   
@@ -151,7 +158,7 @@ class PathwaySingleton {
 	 * @property {Function} pOptions.onPathNotFound - Callback for when no path is found.
 	 */
 	to(pInstance, pDestination, pOptions) {
-		if (typeof(pInstance) === 'object') {
+		if (typeof (pInstance) === 'object') {
 			// If this instance is not on a map.
 			if (!pInstance.mapName) {
 				this.logger.prefix('Pathway-Module').error('Cannot generate a path. pInstance is not on a map.');
@@ -159,7 +166,7 @@ class PathwaySingleton {
 			}
 
 			// If there is no destination object passed return.
-			if (typeof(pDestination) !== 'object') {
+			if (typeof (pDestination) !== 'object') {
 				this.logger.prefix('Pathway-Module').error('Invalid type passed for pDestination. Expecting an object.');
 				return;
 			}
@@ -170,10 +177,10 @@ class PathwaySingleton {
 			if (!instanceData) {
 				// Set the instance data
 				instanceData = {
-					trajectory: { 
-						angle: 0, 
-						x: 0, 
-						y: 0, 
+					trajectory: {
+						angle: 0,
+						x: 0,
+						y: 0,
 						nextNodePos: null,
 					},
 					// The current position of the instance.
@@ -191,6 +198,7 @@ class PathwaySingleton {
 					pixelsPerSecond: PathwaySingleton.DEFAULT_PIXELS_PER_SECOND,
 					stepPixelsPerSecond: PathwaySingleton.DEFAULT_STEP_PIXELS_PER_SECOND,
 					minDistance: PathwaySingleton.DEFAULT_MINIMUM_DISTANCE,
+					translateDirection: PathwaySingleton.DEFAULT_TRANSLATE_DIRECTION,
 					events: {
 						onPathStuck: null,
 						onPathComplete: null,
@@ -217,9 +225,9 @@ class PathwaySingleton {
 			let excludeList = [];
 
 			// If there are options passed. Parse them.
-			if (typeof(pOptions) === 'object') {
+			if (typeof (pOptions) === 'object') {
 				// If max stuck counter is found in options, set it.
-				if (typeof(pOptions.maxStuckCounter) === 'number') {
+				if (typeof (pOptions.maxStuckCounter) === 'number') {
 					instanceData.maxStuckCounter = pOptions.maxStuckCounter;
 				}
 
@@ -238,14 +246,14 @@ class PathwaySingleton {
 				}
 
 				// Assign pixels per second 
-				if (typeof(pOptions.pixelsPerSecond) === 'number') {
+				if (typeof (pOptions.pixelsPerSecond) === 'number') {
 					instanceData.pixelsPerSecond = pOptions.pixelsPerSecond;
 				}
 
 				// Assign stepSize
 				if (instanceData.mode === 'collision') {
 					// If the stepSize is set we use it
-					if (typeof(pInstance.moveSettings.stepSize) === 'number') {
+					if (typeof (pInstance.moveSettings.stepSize) === 'number') {
 						instanceData.stepSize = pInstance.moveSettings.stepSize;
 					} else {
 						instanceData.stepSize = PathwaySingleton.DEFAULT_STEP_SIZE;
@@ -255,7 +263,7 @@ class PathwaySingleton {
 				}
 
 				// Assign the min distance
-				if (typeof(pOptions.minDistance) === 'number') {
+				if (typeof (pOptions.minDistance) === 'number') {
 					instanceData.minDistance = pOptions.minDistance;
 				} else {
 					// If no min distance was passed we check if a stepSize was passed and we use that. If the mode is position, we calculate a minDistance
@@ -274,6 +282,13 @@ class PathwaySingleton {
 					}
 				}
 
+				// Assign translateDirection
+				if (typeof (pOptions.translateDirection) === 'boolean') {
+					instanceData.translateDirection = pOptions.translateDirection;
+				} else {
+					instanceData.translateDirection = PathwaySingleton.DEFAULT_TRANSLATE_DIRECTION;
+				}
+
 				// Reset events from previous call.
 				// This is reset here and not in `end` because events call after `end` is called.
 				// This is to ensure that calling `to` in an event works properly.
@@ -283,19 +298,19 @@ class PathwaySingleton {
 				instanceData.events.onPathNotFound = null;
 
 				// Assign events
-				if (typeof(pOptions.onPathComplete) === 'function') {
+				if (typeof (pOptions.onPathComplete) === 'function') {
 					instanceData.events.onPathComplete = pOptions.onPathComplete;
 				}
 
-				if (typeof(pOptions.onPathFound) === 'function') {
+				if (typeof (pOptions.onPathFound) === 'function') {
 					instanceData.events.onPathFound = pOptions.onPathFound;
 				}
 
-				if (typeof(pOptions.onPathNotFound) === 'function') {
+				if (typeof (pOptions.onPathNotFound) === 'function') {
 					instanceData.events.onPathNotFound = pOptions.onPathNotFound;
 				}
 
-				if (typeof(pOptions.onPathStuck) === 'function') {
+				if (typeof (pOptions.onPathStuck) === 'function') {
 					instanceData.events.onPathStuck = pOptions.onPathStuck;
 				}
 
@@ -312,10 +327,10 @@ class PathwaySingleton {
 
 			// Build the 2D array grid that represents the map
 			const gridInfo = this.mapTilesToGrid(pInstance.mapName, excludeList);
-			
+
 			// Assign the grid to easystar
 			instanceData.easystar.setGrid(gridInfo.grid);
-			
+
 			// Assign the weight of each tile
 			gridInfo.weights.forEach((pWeight) => {
 				instanceData.easystar.setTileCost(pWeight, pWeight);
@@ -337,24 +352,24 @@ class PathwaySingleton {
 			const endNodeY = Utils.clamp(Utils.clamp(pDestination.y, 0, mapSize.y) * this.tileSize.height + this.tileSize.height / 2, 0, mapSize.yPos - this.tileSize.height);
 			// Get the end tile
 			const destinationTile = VYLO.Map.getLocByPos(endNodeX, endNodeY, pInstance.mapName);
-			
+
 			// Make sure these have resolved to actual tiles.
 			if (originTile && destinationTile) {
 				// Check if the origin and end tile are accessible
 				if (this.isTileAccessible(originTile, excludeList) && this.isTileAccessible(destinationTile, excludeList)) {
 					// Get the start node from the originTile
 					let startNode = this.tileToNode(originTile);
-					
+
 					// Get the end node from the destinationTile
 					let endNode = this.tileToNode(destinationTile);
 
 					// Generate the path for the player
-					this.getPath(pInstance, { x: startNode.x, y: startNode.y }, { x: endNode.x, y: endNode.y });				
-				// If the origin tile or end tile is not accessible to be walked on then return no path found.
+					this.getPath(pInstance, { x: startNode.x, y: startNode.y }, { x: endNode.x, y: endNode.y });
+					// If the origin tile or end tile is not accessible to be walked on then return no path found.
 				} else {
 					this.end(pInstance);
 					// So fire the path not found event.	
-					if (typeof(instanceData.events.onPathNotFound) === 'function') {
+					if (typeof (instanceData.events.onPathNotFound) === 'function') {
 						instanceData.events.onPathNotFound();
 					}
 				}
@@ -429,6 +444,8 @@ class PathwaySingleton {
 			instanceData.pixelsPerSecond = PathwaySingleton.DEFAULT_PIXELS_PER_SECOND;
 			// Reset the min distance
 			instanceData.minDistance = PathwaySingleton.DEFAULT_MINIMUM_DISTANCE;
+			// Reset the translateDirection
+			instanceData.translateDirection = PathwaySingleton.DEFAULT_TRANSLATE_DIRECTION;
 			// Stop instance from moving via VYLO API.
 			pInstance.move();
 			// Untrack pInstance as an active instance.
@@ -476,14 +493,24 @@ class PathwaySingleton {
 			const speed = pInstance.stepPixelsPerSecond * this.deltaTime;
 			pInstance.stepPos(pInstanceData.trajectory.x * speed, pInstanceData.trajectory.y * speed, true, false);
 		} else if (pInstanceData.mode === 'position') {
-			const speed = pInstanceData.pixelsPerSecond * this.deltaTime; 
+			const speed = pInstanceData.pixelsPerSecond * this.deltaTime;
 			pInstance.setPos(pInstance.x + speed * pInstanceData.trajectory.x, pInstance.y + speed * pInstanceData.trajectory.y, pInstance.mapName);
 		}
 		// Set moving to true
 		pInstanceData.moving = true;
 		// Reset stuck counter when it has moved.
 		pInstanceData.stuckCounter = 0;
-		const moveIconState = `move_${direction}`;
+		// Get the icon state to use
+		let suffix = direction;
+
+		if (pInstanceData.translateDirection) {
+			if (direction.includes('east')) suffix = 'east';
+			else if (direction.includes('west')) suffix = 'west';
+		}
+
+		const moveIconState = `move_${suffix}`;
+
+		// Update only if changed
 		if (pInstance.iconState !== moveIconState) {
 			pInstance.iconState = moveIconState;
 		}
@@ -519,9 +546,9 @@ class PathwaySingleton {
 						// Get the next node to travel to.
 						const node = instanceData.path.shift();
 						// Get the position of that node in real world coordinates. We subtract half of the tileSize to get the center of the node's posiiton.
-						const nodePos = { 
-							x: (node.x * this.tileSize.width) - this.tileSize.width / 2, 
-							y: (node.y * this.tileSize.height) - this.tileSize.height / 2 
+						const nodePos = {
+							x: (node.x * this.tileSize.width) - this.tileSize.width / 2,
+							y: (node.y * this.tileSize.height) - this.tileSize.height / 2
 						};
 						// Store the next node position
 						instanceData.trajectory.nextNodePos = nodePos;
@@ -540,7 +567,7 @@ class PathwaySingleton {
 							if (!instanceData.path.length) {
 								this.end(pInstance);
 								// You have completed the path. Call the event function if supplied.
-								if (typeof(instanceData.events.onPathComplete) === 'function') {
+								if (typeof (instanceData.events.onPathComplete) === 'function') {
 									instanceData.events.onPathComplete();
 								}
 							}
@@ -558,7 +585,7 @@ class PathwaySingleton {
 							// End this pathfinding.
 							this.end(pInstance);
 							// Call the stuck event if defined.
-							if (typeof(instanceData.events.onPathStuck) === 'function') {
+							if (typeof (instanceData.events.onPathStuck) === 'function') {
 								instanceData.events.onPathStuck();
 							}
 						}
@@ -576,17 +603,17 @@ class PathwaySingleton {
 	 * @param {number} pTileSize - The tilesize of the game.
 	 */
 	setTileSize(pTileSize) {
-		if (typeof(pTileSize) === 'number') {
+		if (typeof (pTileSize) === 'number') {
 			this.tileSize = { width: pTileSize, height: pTileSize };
-		} else if(typeof(pTileSize) === 'object') {
+		} else if (typeof (pTileSize) === 'object') {
 			const width = pTileSize.width;
 			const height = pTileSize.height;
 			// Assign the tilesize width
-			if (typeof(width) === 'number') {
+			if (typeof (width) === 'number') {
 				this.tileSize.width = width;
 			}
 			// Assign the tilesize height
-			if (typeof(height) === 'number') {
+			if (typeof (height) === 'number') {
 				this.tileSize.height = height;
 			}
 		} else {
@@ -630,7 +657,7 @@ class PathwaySingleton {
 			this.logger.prefix('Pathway-Module').error('Instance data not found!');
 			return;
 		}
-		
+
 		// Find the path
 		const pathID = instanceData.easystar.findPath(pOrigin.x, pOrigin.y, pDestination.x, pDestination.y, (pPath) => {
 			// Check if the path is valid.
@@ -653,14 +680,14 @@ class PathwaySingleton {
 				// Store the pathID
 				instanceData.pathID = pathID;
 				// Call event when path is found
-				if (typeof(instanceData.events.onPathFound) === 'function') {
+				if (typeof (instanceData.events.onPathFound) === 'function') {
 					instanceData.events.onPathFound([...path]);
 				}
 			} else {
 				// If no path is found then we end the pathfinding on this instance.
 				this.end(pInstance);
 				// Call event when no path is found
-				if (typeof(instanceData.events.onPathNotFound) === 'function') {
+				if (typeof (instanceData.events.onPathNotFound) === 'function') {
 					instanceData.events.onPathNotFound();
 				}
 			}
@@ -679,7 +706,7 @@ class PathwaySingleton {
 		let i = 0;
 		const result = [];
 		while (i < pArray.length) {
-			result.push(pArray.slice(i, i+= pLengthOfSubArray));
+			result.push(pArray.slice(i, i += pLengthOfSubArray));
 		}
 		return result;
 	}
@@ -690,7 +717,7 @@ class PathwaySingleton {
 	 * @returns {Object} The node.
 	 */
 	tileToNode(pTile) {
-		if (typeof(pTile.mapName) === 'string') {
+		if (typeof (pTile.mapName) === 'string') {
 			if (PathwaySingleton.storedMapTiles[pTile.mapName]) {
 				const index = this.getIndexOf2DArray(PathwaySingleton.storedMapTiles[pTile.mapName].tiles2d, pTile);
 				const node = { x: index[1], y: index[0] };
@@ -736,7 +763,7 @@ class PathwaySingleton {
 	 * @returns {Object|undefined} An object containing the grid created, an array of tiles that are to be accepted in the pathfinding system, and the weights of each tile.
 	 */
 	mapTilesToGrid(pMapName, pExclusionList) {
-		if (typeof(pMapName) === 'string') {
+		if (typeof (pMapName) === 'string') {
 			if (Array.isArray(pExclusionList)) {
 				// We check if this is a valid mapname found in VYLO.
 				if (VYLO.Map.getMaps().includes(pMapName)) {
@@ -761,7 +788,7 @@ class PathwaySingleton {
 
 					// This instance is impassible because it is dense and has no pathwayWeight, or it was explicitely set to be impassable.
 					const isImpassable = (pInstance) => (pInstance.pathwayWeight === PathwaySingleton.IMPASSABLE_WEIGHT) || pInstance.density && (!pInstance.pathwayWeight && pInstance.pathwayWeight !== PathwaySingleton.PASSABLE_WEIGHT);
-					
+
 					// Loop through the tiles array to build weights and accepted tile lists.
 					const grid = tilesArray.map((pTile) => {
 						// If the tile is in the exclude list, we simply say it is passable. This prevents the tile's contents from being searched. 
@@ -769,8 +796,8 @@ class PathwaySingleton {
 						if (pExclusionList.includes(pTile)) return PathwaySingleton.PASSABLE_WEIGHT;
 
 						// A weight of PathwaySingleton.PASSABLE_WEIGHT indicates no weight.
-						let weight = typeof(pTile.pathwayWeight) === 'number' ? pTile.pathwayWeight : PathwaySingleton.PASSABLE_WEIGHT;
-						
+						let weight = typeof (pTile.pathwayWeight) === 'number' ? pTile.pathwayWeight : PathwaySingleton.PASSABLE_WEIGHT;
+
 						// If this tile is not accessible, we cannot pass it, so we skip this tile.
 						if (!this.isTileAccessible(pTile, pExclusionList)) {
 							return PathwaySingleton.IMPASSABLE_WEIGHT;
@@ -786,7 +813,7 @@ class PathwaySingleton {
 								return PathwaySingleton.IMPASSABLE_WEIGHT;
 							} else {
 								// We accumulate the weight of instances
-								if (typeof(instance.pathwayWeight) === 'number') {
+								if (typeof (instance.pathwayWeight) === 'number') {
 									weight += instance.pathwayWeight;
 								}
 							}
@@ -801,10 +828,10 @@ class PathwaySingleton {
 						return weight;
 					});
 
-					return { 
-						'acceptedTiles': acceptedTiles, 
-						'grid': this.toTwoDimensionalArray(grid, mapSize.x), 
-						'weights': weights 
+					return {
+						'acceptedTiles': acceptedTiles,
+						'grid': this.toTwoDimensionalArray(grid, mapSize.x),
+						'weights': weights
 					};
 				} else {
 					this.logger.prefix('Pathway-Module').error('pMapName was not found in VYLO.');
@@ -827,7 +854,7 @@ const Pathway = new PathwaySingleton();
  * Check if this is a server environment
  * @ignore
  */
-const server = (typeof(window) === 'undefined');
+const server = (typeof (window) === 'undefined');
 /**
  * Update API bound to Pathway
  * @ignore
@@ -838,7 +865,7 @@ const update = Pathway.update.bind(Pathway);
 if (server) {
 	// Update interval
 	const updateInterval = setInterval(update, 16);
-// Otherwise we use raf
+	// Otherwise we use raf
 } else {
 	const updateLoop = () => {
 		update();
